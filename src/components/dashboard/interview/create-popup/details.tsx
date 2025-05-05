@@ -80,12 +80,13 @@ function DetailsPopup({
       generatedQuestionsResponse.questions.length > 0
     ) {
       updatedQuestions = generatedQuestionsResponse.questions
-        .filter((question: any) => question && typeof question === 'string')
-        .map((question: string) => ({
+        .filter((question: any) => question && question.question && typeof question.question === 'string')
+        .map((questionObj: any) => ({
           id: uuidv4(),
-          question,
+          question: questionObj.question,
           follow_up_count: 1,
-        }));
+        }))
+        .slice(0, Number(numQuestions));
       
       // If no valid questions returned, create at least one empty question
       if (updatedQuestions.length === 0) {
