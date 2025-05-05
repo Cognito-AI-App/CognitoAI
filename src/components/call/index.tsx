@@ -530,6 +530,7 @@ function Call({ interview }: InterviewProps) {
                         <FeedbackForm
                           email={email}
                           onSubmit={handleFeedbackSubmit}
+                          interview={interview}
                         />
                       </AlertDialogContent>
                     </AlertDialog>
