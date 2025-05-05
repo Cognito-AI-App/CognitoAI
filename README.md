@@ -1,4 +1,3 @@
-
 # CognitoAI - AI-Powered Automated User Interviews
 
 <!-- Optional: Add Logo Here -->
@@ -48,6 +47,7 @@ CognitoAI is a platform designed to automate the user interview process using ad
 
 *   **AI Interviewers:** Utilizes conversational AI (Retell AI, OpenAI) to conduct interviews.
 *   **Customizable Interviews:** Define interview objectives, descriptions, questions, and branding (logo, theme).
+*   **Coding Assessments:** Create and manage coding assessments with difficulty levels and test cases that can be linked to interviews.
 *   **Automated Question Generation:** Generate relevant interview questions based on objectives and context (e.g., from PDFs).
 *   **Transcript Analysis:** Automatically transcribes interviews and provides analysis.
 *   **Communication Analysis:** Scores and provides feedback on interviewee communication skills.
@@ -106,12 +106,15 @@ CognitoAI/
     │   ├── (client)/        # Routes requiring authentication (Client Dashboard)
     │   │   ├── layout.tsx   # Layout for client-side routes
     │   │   ├── dashboard/   # Main dashboard pages
+    │   │   │   ├── coding-questions/ # Coding questions dashboard
+    │   │   │   └── assessments/      # Assessments dashboard
     │   │   ├── interviews/  # Interview details and responses page
     │   │   ├── sign-in/     # Clerk Sign In page
     │   │   └── sign-up/     # Clerk Sign Up page
     │   ├── (user)/          # Public-facing routes for interviewees
     │   │   ├── layout.tsx   # Layout for user-facing routes
-    │   │   └── call/        # Interview call interface page
+    │   │   ├── call/        # Interview call interface page
+    │   │   └── assessment/  # Assessment interface page
     │   └── api/             # API Routes (Backend logic)
     │       ├── analyze-communication/
     │       ├── create-interview/
@@ -127,13 +130,17 @@ CognitoAI/
     │   ├── sideMenu.tsx     # Side navigation menu (Client)
     │   ├── call/            # Components specific to the interview call interface
     │   ├── dashboard/       # Components specific to the client dashboard
+    │   │   ├── assessments/ # Assessment management components
+    │   │   └── coding-questions/ # Coding question management components
     │   ├── loaders/         # Loading indicator components
     │   └── ui/              # Base UI components (from Shadcn/ui)
     ├── contexts/            # React Context API providers
     │   ├── clients.context.tsx
     │   ├── interviewers.context.tsx
     │   ├── interviews.context.tsx
-    │   └── responses.context.tsx
+    │   ├── responses.context.tsx
+    │   ├── coding-questions.context.tsx
+    │   └── assessments.context.tsx
     ├── lib/                 # Utility functions, constants, prompts
     │   ├── compose.tsx      # Helper for composing providers
     │   ├── constants.ts     # Application constants (e.g., prompts, defaults)
@@ -147,14 +154,18 @@ CognitoAI/
     │   ├── feedback.service.ts  # Handles user feedback submission
     │   ├── interviewers.service.ts # Interviewer data operations
     │   ├── interviews.service.ts   # Interview data operations
-    │   └── responses.service.ts    # Interview response data operations
+    │   ├── responses.service.ts    # Interview response data operations
+    │   ├── coding-questions.service.ts # Coding question data operations
+    │   └── assessments.service.ts     # Assessment data operations
     └── types/               # TypeScript type definitions
         ├── database.types.ts # Types generated from Supabase schema
         ├── interview.ts
         ├── interviewer.ts
         ├── organization.ts
         ├── response.ts
-        └── user.ts
+        ├── user.ts
+        ├── coding-question.ts
+        └── assessment.ts
 ```
 
 ## Getting Started
@@ -323,7 +334,10 @@ The database schema is defined in `supabase_schema.sql`. Key tables include:
 *   `organization`: Stores information about client organizations, including plan details.
 *   `user`: Stores user information linked to Clerk users and organizations.
 *   `interviewer`: Defines AI interviewer profiles, including their Retell `agent_id` and personality settings.
-*   `interview`: Stores details about each interview setup (name, objective, questions, associated interviewer, etc.).
+*   `interview`: Stores details about each interview setup (name, objective, questions, associated interviewer, etc.) and can optionally include an assessment.
+*   `coding_question`: Stores coding questions with descriptions, difficulty levels, and test cases.
+*   `assessment`: Defines coding assessments that can be linked to interviews, consisting of selected coding questions.
+*   `assessment_response`: Records candidate responses to coding assessments, including submitted code and test results.
 *   `response`: Records each interview response, including participant details, `call_id`, transcript (via `details`), analysis results (`analytics`), and status.
 *   `feedback`: Stores user feedback about the platform experience.
 

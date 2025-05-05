@@ -33,6 +33,7 @@
     *   [Security Considerations](#security-considerations)
     *   [Testing (Backend)](#testing-backend)
 4.  [AI Development Practices](#4-ai-development-practices)
+    *   [Coding Assessments](#coding-assessments)
     *   [Prompt Engineering](#prompt-engineering)
     *   [LLM Interaction (OpenAI)](#llm-interaction-openai)
     *   [Conversational AI (Retell)](#conversational-ai-retell)
@@ -193,6 +194,17 @@ Applies to changes within `src/app/api/`, `src/actions/`, `src/services/`, and d
     *   Modify the `supabase_schema.sql` file to reflect changes.
     *   Generate new TypeScript types using `supabase gen types typescript ...` (or similar command) and update `src/types/database.types.ts`.
     *   Apply schema changes to the Supabase instance (via SQL Editor or migrations tool).
+*   **Database Schema (Key Tables):**
+    *   **`organization`**: Client organizations
+    *   **`user`**: User profiles linked to Clerk users and organizations
+    *   **`interviewer`**: AI interviewer profiles
+    *   **`interview`**: Interview configuration, with optional `has_assessment` flag and `assessment_id` reference
+    *   **`response`**: Interview responses and analysis
+    *   **`feedback`**: Platform feedback
+    *   **`coding_question`**: Coding questions with difficulty, description, test cases (JSON) (NEW)
+    *   **`assessment`**: Assessments composed of selected coding questions (NEW)
+    *   **`assessment_response`**: Candidate responses to assessments (NEW)
+    *   **`difficulty`**: Enum type ('easy', 'medium', 'hard') for coding questions (NEW)
 
 ### Service Layer (`src/services`)
 
@@ -200,6 +212,14 @@ Applies to changes within `src/app/api/`, `src/actions/`, `src/services/`, and d
 *   **Structure:** Organize services by domain (e.g., `interviews.service.ts`, `analytics.service.ts`).
 *   **Reusability:** Services should be reusable by different API routes, server actions, or potentially other services.
 *   **Dependency Injection (Conceptual):** While not explicitly using a framework, think about dependencies (like the Supabase client) being implicitly available.
+*   **Key Services:**
+    *   **`clients.service.ts`**: User and organization operations
+    *   **`interviewers.service.ts`**: Interviewer CRUD operations
+    *   **`interviews.service.ts`**: Interview management, including assessment linking
+    *   **`responses.service.ts`**: Interview response and analysis handling
+    *   **`analytics.service.ts`**: Communication analysis and insights generation
+    *   **`coding-questions.service.ts`**: CRUD operations for coding questions (NEW)
+    *   **`assessments.service.ts`**: Assessment creation, management, and response handling (NEW)
 
 ### Error Handling
 
@@ -234,6 +254,25 @@ Applies to changes within `src/app/api/`, `src/actions/`, `src/services/`, and d
 ## 4. AI Development Practices
 
 Applies to changes related to LLMs (OpenAI), conversational AI (Retell), prompts (`src/lib/prompts/`), and AI-driven analysis (`src/services/analytics.service.ts`).
+
+### Coding Assessments
+
+*   **Overview:** The platform now supports coding assessments that can be attached to interviews.
+*   **Database Schema:**
+    *   `difficulty`: An enum type with values 'easy', 'medium', 'hard'.
+    *   `coding_question`: Stores questions with description, difficulty, starter code, and test cases.
+    *   `assessment`: Defines assessments composed of multiple coding questions.
+    *   `assessment_response`: Records candidate responses to assessments.
+    *   `interview` updates: Added `has_assessment` and `assessment_id` fields.
+*   **Components:**
+    *   **Question Management:** Dashboard for creating/editing coding questions with Markdown preview and test case editing.
+    *   **Assessment Management:** Creation/editing interface with question selection and difficulty filtering.
+    *   **Interview Integration:** Updated interview creation to optionally include assessment selection.
+*   **Development Guidelines:**
+    *   **Test Cases:** When adding test cases to coding questions, include both visible and hidden tests. Visible tests should provide examples, while hidden tests should verify edge cases.
+    *   **Markdown Support:** Use Markdown for question formatting to support code blocks, lists, tables, etc.
+    *   **Difficulty Levels:** Maintain consistent difficulty grading across questions using the `difficulty` enum.
+    *   **Code Validation:** Front-end should validate code submissions before sending to the backend.
 
 ### Prompt Engineering
 
