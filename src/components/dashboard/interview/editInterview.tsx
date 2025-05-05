@@ -27,6 +27,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useAssessments } from "@/contexts/assessments.context";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type EditInterviewProps = {
   interview: Interview | undefined;
@@ -35,6 +43,7 @@ type EditInterviewProps = {
 function EditInterview({ interview }: EditInterviewProps) {
   const { interviewers } = useInterviewers();
   const { fetchInterviews } = useInterviews();
+  const { assessments } = useAssessments();
 
   const [description, setDescription] = useState<string>(
     interview?.description || "",
@@ -56,6 +65,12 @@ function EditInterview({ interview }: EditInterviewProps) {
   );
   const [isAnonymous, setIsAnonymous] = useState<boolean>(
     interview?.is_anonymous || false,
+  );
+  const [hasAssessment, setHasAssessment] = useState<boolean>(
+    interview?.has_assessment || false
+  );
+  const [selectedAssessment, setSelectedAssessment] = useState<number | null>(
+    interview?.assessment_id || null
   );
 
   const [isClicked, setIsClicked] = useState(false);
@@ -109,6 +124,8 @@ function EditInterview({ interview }: EditInterviewProps) {
       time_duration: Number(duration),
       description: description,
       is_anonymous: isAnonymous,
+      has_assessment: hasAssessment,
+      assessment_id: hasAssessment ? selectedAssessment : null,
     };
 
     try {
@@ -301,6 +318,54 @@ function EditInterview({ interview }: EditInterviewProps) {
             be collected.
           </span>
         </label>
+        
+        <div className="flex flex-row justify-between w-[75%] ml-2 mt-2">
+          <div className="flex flex-row items-center">
+            <h3 className="text-sm font-medium mr-3">Include Coding Assessment:</h3>
+            <Switch
+              checked={hasAssessment}
+              onCheckedChange={setHasAssessment}
+              className={`ml-4 border-2 border-gray-300 ${
+                hasAssessment ? "bg-indigo-600" : "bg-white"
+              }`}
+            />
+          </div>
+        </div>
+
+        {hasAssessment && (
+          <div className="w-[75%] ml-2 mt-3">
+            <div className="flex flex-row items-start mb-3">
+              <h3 className="text-sm font-medium mr-3 mt-1">Select Assessment:</h3>
+              <div className="flex-1">
+                <Select
+                  value={selectedAssessment?.toString() || ""}
+                  onValueChange={(value) => setSelectedAssessment(Number(value))}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select an assessment" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {assessments.length === 0 ? (
+                      <SelectItem value="no_assessments" disabled>
+                        No assessments available
+                      </SelectItem>
+                    ) : (
+                      assessments.map((assessment) => (
+                        <SelectItem
+                          key={assessment.id}
+                          value={assessment.id.toString()}
+                        >
+                          {assessment.name} ({assessment.question_count} questions, {assessment.difficulty} difficulty)
+                        </SelectItem>
+                      ))
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+        )}
+        
         <div className="flex flex-row justify-between w-[75%] gap-3 ml-2">
           <div className="flex flex-row justify-center items-center mt-5 ">
             <h3 className="font-medium ">No. of Questions:</h3>
