@@ -57,6 +57,29 @@ CognitoAI is a platform designed to automate the user interview process using ad
 *   **User & Organization Management:** Supports multi-user organizations via Clerk authentication.
 *   **PDF Parsing:** Extracts text content from uploaded PDF documents (e.g., resumes, job descriptions).
 
+### Coding Assessments
+
+The platform includes a full-featured coding assessment system that can be added to interviews:
+
+* **Creation & Management:** Create coding questions with multiple test cases and difficulty levels. Group questions into assessments.
+* **Interview Integration:** Link assessments to interviews, allowing candidates to proceed to coding tests after the behavioral interview.
+* **Code Execution:** Execute code in multiple languages using Judge0 API, with real-time test results.
+* **Features:**
+  * Monaco code editor with syntax highlighting for 13+ programming languages
+  * Customizable starter code templates for each language
+  * Support for visible example tests and hidden edge case tests
+  * Automated scoring based on passed test cases
+  * Time limits and tab switch tracking to ensure assessment integrity
+  * Immediate feedback on compilation errors and test outcomes
+
+Upon completing the behavioral interview, candidates can proceed to the coding assessment where they:
+1. Select their preferred programming language
+2. Write code solutions for the given problems
+3. Run tests to verify their solutions
+4. Submit the assessment for scoring
+
+Assessment results are saved with the interview, allowing interviewers to review both the behavioral interview and coding performance in one place.
+
 ## Technology Stack
 
 *   **Framework:** Next.js 14 (App Router)
@@ -117,6 +140,8 @@ CognitoAI/
     │   │   ├── layout.tsx   # Layout for user-facing routes
     │   │   ├── call/        # Interview call interface page
     │   │   └── assessment/  # Assessment interface page
+    │   │       └── [interviewId]/    # Dynamic route for assessments
+    │   │           └── page.tsx      # Assessment page component
     │   └── api/             # API Routes (Backend logic)
     │       ├── analyze-communication/
     │       ├── create-interview/
@@ -131,9 +156,21 @@ CognitoAI/
     │   ├── providers.tsx    # Context and theme providers wrapper
     │   ├── sideMenu.tsx     # Side navigation menu (Client)
     │   ├── call/            # Components specific to the interview call interface
+    │   │   ├── index.tsx           # Main call component
+    │   │   ├── feedbackForm.tsx    # Feedback form with assessment redirect
+    │   │   ├── callInfo.tsx        # Call information display
+    │   │   └── tabSwitchPrevention.tsx # Detects tab switching during interview
+    │   ├── assessment/      # Components for coding assessment
+    │   │   ├── index.tsx           # Main assessment component
+    │   │   ├── editorPanel.tsx     # Monaco code editor component
+    │   │   ├── questionPanel.tsx   # Question display with markdown
+    │   │   ├── testCasePanel.tsx   # Test case execution and results
+    │   │   ├── codeTemplates.ts    # Starter code templates for different languages
+    │   │   └── languageOptions.ts  # Supported languages configuration
     │   ├── dashboard/       # Components specific to the client dashboard
     │   │   ├── assessments/ # Assessment management components
     │   │   └── coding-questions/ # Coding question management components
+    │   │       └── createQuestionModal.tsx # Modal for creating/editing questions
     │   ├── loaders/         # Loading indicator components
     │   └── ui/              # Base UI components (from Shadcn/ui)
     ├── contexts/            # React Context API providers
@@ -166,8 +203,8 @@ CognitoAI/
         ├── organization.ts
         ├── response.ts
         ├── user.ts
-        ├── coding-question.ts
-        └── assessment.ts
+        ├── coding-question.ts      # Types for coding questions
+        └── assessment.ts           # Types for assessments and responses
 ```
 
 ## Getting Started
@@ -239,6 +276,61 @@ The platform uses Judge0 API for code execution in coding assessments. You'll ne
    NEXT_PUBLIC_REACT_APP_RAPID_API_HOST=judge0-ce.p.rapidapi.com
    NEXT_PUBLIC_REACT_APP_RAPID_API_KEY=your-rapidapi-key
    ```
+
+## Setting Up the Assessment Feature
+
+To fully implement the coding assessment feature in your instance, follow these steps:
+
+### 1. Database Setup
+
+Ensure your database has the assessment-related tables by running the schema in `supabase_schema.sql`. The key tables are:
+- `coding_question`: Stores individual coding problems
+- `assessment`: Stores collections of coding questions
+- `assessment_response`: Stores candidate responses
+
+### 2. Frontend Configuration
+
+1. **Install Dependencies**: The assessment feature requires Monaco editor and related packages:
+   ```bash
+   yarn add @monaco-editor/react monaco-editor
+   ```
+
+2. **Environment Variables**: Configure Judge0 API environment variables as described above.
+
+### 3. Creating Questions & Assessments
+
+1. **Create Coding Questions**:
+   - Navigate to the Coding Questions dashboard
+   - Create questions with descriptions, test cases, and examples
+   - Use Markdown for formatting explanations and examples
+   - Define both visible and hidden test cases
+
+2. **Create Assessments**:
+   - Navigate to the Assessments dashboard
+   - Create an assessment and select questions to include
+   - Set difficulty level and time duration
+   - Activate the assessment
+
+3. **Link to Interviews**:
+   - When creating or editing an interview, enable the assessment option
+   - Select the assessment to be linked with the interview
+
+### 4. Testing the Feature
+
+Before deploying to production, we recommend testing the full assessment workflow:
+1. Create a test interview with an attached assessment
+2. Complete the behavioral interview
+3. Proceed to the coding assessment
+4. Test code execution with various languages
+5. Submit the assessment and verify results are properly stored
+
+### 5. Customization Options
+
+The assessment feature can be customized in several ways:
+- **Language Support**: Edit `languageOptions.ts` to add or remove programming languages
+- **Starter Templates**: Modify `codeTemplates.ts` to adjust starter code for each language
+- **UI Theming**: The Monaco editor supports both light and dark themes
+- **Time Limits**: Adjust assessment time duration based on question difficulty
 
 ### Cloning the Repository
 

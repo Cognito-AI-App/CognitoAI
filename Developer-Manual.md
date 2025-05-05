@@ -257,52 +257,200 @@ Applies to changes related to LLMs (OpenAI), conversational AI (Retell), prompts
 
 ### Coding Assessments
 
-*   **Overview:** The platform now supports coding assessments that can be attached to interviews.
+*   **Overview:** The platform now supports coding assessments that can be attached to interviews, providing a LeetCode-like experience integrated directly into the interview workflow.
+
+*   **Feature Flow:**
+    1. Interviewer creates coding questions with description, difficulty, and test cases
+    2. Interviewer creates an assessment by selecting questions and setting time limits
+    3. Interviewer links the assessment to an interview during interview creation/edit
+    4. Interviewee completes behavioral interview and is prompted to proceed to assessment
+    5. Interviewee completes coding assessment with timed challenges
+    6. Results are automatically scored and stored for interviewer review
+
 *   **Database Schema:**
     *   `difficulty`: An enum type with values 'easy', 'medium', 'hard'.
     *   `coding_question`: Stores questions with description, difficulty, starter code, and test cases.
+        ```sql
+        CREATE TABLE coding_question (
+            id SERIAL PRIMARY KEY,
+            created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+            title TEXT NOT NULL,
+            description TEXT NOT NULL,
+            input_format TEXT NOT NULL,
+            output_format TEXT NOT NULL,
+            example_explanation TEXT NOT NULL,
+            difficulty difficulty NOT NULL,
+            test_cases JSONB NOT NULL,
+            organization_id TEXT REFERENCES organization(id),
+            user_id TEXT REFERENCES "user"(id),
+            is_active BOOLEAN DEFAULT true
+        );
+        ```
     *   `assessment`: Defines assessments composed of multiple coding questions.
+        ```sql
+        CREATE TABLE assessment (
+            id SERIAL PRIMARY KEY,
+            created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+            name TEXT NOT NULL,
+            description TEXT,
+            difficulty difficulty NOT NULL,
+            question_count INTEGER NOT NULL,
+            time_duration TEXT NOT NULL,
+            questions INTEGER[] NOT NULL,
+            organization_id TEXT REFERENCES organization(id),
+            user_id TEXT REFERENCES "user"(id),
+            is_active BOOLEAN DEFAULT true
+        );
+        ```
     *   `assessment_response`: Records candidate responses to assessments.
-    *   `interview` updates: Added `has_assessment` and `assessment_id` fields.
+        ```sql
+        CREATE TABLE assessment_response (
+            id SERIAL PRIMARY KEY,
+            created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+            assessment_id INTEGER REFERENCES assessment(id),
+            interview_id TEXT REFERENCES interview(id),
+            name TEXT,
+            email TEXT,
+            responses JSONB,
+            score INTEGER,
+            total_score INTEGER,
+            is_completed BOOLEAN DEFAULT false,
+            tab_switch_count INTEGER
+        );
+        ```
+    *   `interview` updates: Added `has_assessment` and `assessment_id` fields to link interviews with assessments.
+
+*   **TypeScript Types:**
+    *   `CodingQuestion`: Represents a coding question with test cases.
+    *   `Assessment`: Represents an assessment consisting of multiple questions.
+    *   `AssessmentResponse`: Represents a candidate's response to an assessment.
+    *   `AssessmentQuestionResponse`: Represents response to an individual question.
+    *   `AssessmentQuestionResult`: Contains execution results for a question.
+
 *   **Components:**
     *   **Question Management:** Dashboard for creating/editing coding questions with Markdown preview and test case editing.
+        * `components/dashboard/codingQuestion/createQuestionModal.tsx`: Modal for creating and editing questions with live Markdown preview.
     *   **Assessment Management:** Creation/editing interface with question selection and difficulty filtering.
+        * `app/(client)/dashboard/assessments/page.tsx`: Assessment management dashboard.
     *   **Interview Integration:** Updated interview creation to optionally include assessment selection.
+        * Integration in interview creation/edit forms.
     *   **Assessment Execution:** Interface for candidates to take assessments with Monaco Editor and test execution.
+        * `app/(user)/assessment/[interviewId]/page.tsx`: Main assessment page for interviewees.
+        * `components/assessment/index.tsx`: Assessment component orchestrating the execution flow.
+
+*   **Assessment Component Structure:**
+    *   `assessment/index.tsx`: Main component that:
+        * Fetches the assessment data and questions
+        * Manages state for questions, responses, timer, language selection
+        * Orchestrates code execution via Judge0 API
+        * Handles submission and scoring
+    *   `assessment/editorPanel.tsx`: Monaco editor component for code editing with:
+        * Language selection and syntax highlighting
+        * Theme and font size customization
+        * Keyboard shortcuts for running code
+    *   `assessment/questionPanel.tsx`: Displays the question content using Markdown
+    *   `assessment/testCasePanel.tsx`: Displays test cases, execution results, and provides UI for running tests
+    *   `assessment/codeTemplates.ts`: Defines starter code templates for each programming language
+    *   `assessment/languageOptions.ts`: Defines all supported languages with their Judge0 API IDs
+
 *   **Code Editor Implementation:**
     *   **Monaco Editor:** Uses `@monaco-editor/react` for a feature-rich code editing experience.
+        * Syntax highlighting for different languages
+        * Line numbers, code folding, search/replace
+        * Auto-indentation and bracket matching
     *   **Language Support:** Dynamically adapts syntax highlighting and starter templates based on selected language.
-    *   **File Organization:**
-        *   `codeTemplates.ts`: Contains starter templates for different programming languages.
-        *   `languageOptions.ts`: Defines supported languages with their Judge0 API IDs and Monaco identifiers.
-        *   `editorPanel.tsx`: Handles the editor UI with language selection, theme, and code execution.
-        *   `testCasePanel.tsx`: Displays test cases and results for code execution.
+        * When user changes language, editor updates highlighting and editor model
+        * Each language has appropriate starter code with comments
+    *   **Custom Features:**
+        * Keyboard shortcuts (Ctrl+Enter to run code)
+        * Theme switching (light/dark)
+        * Font size adjustment
+
 *   **Code Execution with Judge0:**
     *   **API Integration:** Uses Judge0 API (via RapidAPI) to execute code against test cases.
+        * Implementation in `runCode` function within `assessment/index.tsx`
+        * Sends source code, language ID, input, and expected output
+        * Handles API response to determine test success/failure
+    *   **Request Flow:**
+        1. Submit code with test input to Judge0 API
+        2. Receive a token representing the submission
+        3. Poll for results using the token
+        4. Process execution results (stdout, stderr, compile errors)
+        5. Compare actual output with expected output
     *   **Test Case Handling:** Support for visible examples and hidden test cases.
+        * Visible test cases show both input and expected output
+        * Hidden test cases are used for scoring but inputs/outputs not shown to user
     *   **Result Processing:** Parsing and displaying execution results including output, errors, compilation issues.
+        * Tabbed interface for viewing standard output, errors, and compilation output
+        * Detailed error messages for debugging
     *   **Scoring:** Automatically calculates scores based on passed test cases.
+        * Percentage score based on number of passed test cases
+        * Stored with assessment response in database
+
 *   **Development Guidelines:**
     *   **Test Cases:** When adding test cases to coding questions, include both visible and hidden tests. Visible tests should provide examples, while hidden tests should verify edge cases.
-    *   **Markdown Support:** Use Markdown for question formatting to support code blocks, lists, tables, etc.
+    *   **Markdown Support:** Use Markdown for question formatting to support code blocks, lists, tables, etc. The platform uses ReactMarkdown for rendering.
     *   **Difficulty Levels:** Maintain consistent difficulty grading across questions using the `difficulty` enum.
     *   **Code Validation:** Front-end should validate code submissions before sending to the backend.
     *   **Error Handling:** Implement robust error handling for API calls and code execution.
     *   **Language Support:** When adding new languages, update both `languageOptions.ts` and `codeTemplates.ts`.
+    *   **Time Management:** Be mindful of timer implementation for assessments, ensuring accurate time tracking.
+    *   **Tab Switching:** Use the `tabSwitchPrevention` hook to track and handle tab switches during assessments.
+    *   **Accessibility:** Ensure color schemes have sufficient contrast and keyboard navigation works properly.
+
+*   **Extension Points:**
+    *   **Adding Languages:** To add support for new programming languages:
+        1. Add an entry to `languageOptions.ts` with correct Judge0 ID
+        2. Add a starter template to `codeTemplates.ts`
+        3. Test execution with simple examples
+    *   **Custom Test Case Types:** The system can be extended to support different types of test cases (e.g., input/output pairs, assertions, etc.).
+    *   **IDE Features:** Monaco editor supports extensions for additional IDE features like linting, auto-completion, etc.
+    *   **Code Analysis:** Future improvements could include plagiarism detection or code quality analysis.
 
 ### External Service Integration
 
 *   **Judge0 API:** Used for code execution in coding assessments.
     *   **Setup:** Requires RapidAPI subscription to Judge0 CE.
-    *   **Environment Variables:** Store API credentials in `.env` file.
+    *   **Environment Variables:** 
+        ```
+        NEXT_PUBLIC_REACT_APP_RAPID_API_URL=https://judge0-ce.p.rapidapi.com/submissions
+        NEXT_PUBLIC_REACT_APP_RAPID_API_HOST=judge0-ce.p.rapidapi.com
+        NEXT_PUBLIC_REACT_APP_RAPID_API_KEY=your-rapidapi-key
+        ```
     *   **Implementation:** See `runCode` function in `assessment/index.tsx` for integration reference.
     *   **Request Format:** Send code, language ID, stdin, and expected output to execute tests.
+        ```typescript
+        const formData = {
+          source_code: sourceCode,
+          language_id: languageId,
+          stdin: testCase.input,
+          expected_output: testCase.output,
+          base64_encoded: false
+        };
+        ```
     *   **Response Handling:** Parse execution results to determine if tests pass and extract any errors.
+    *   **Rate Limiting:** Be aware of RapidAPI rate limits for Judge0 API and implement appropriate error handling.
+    *   **Timeout Handling:** Implement polling with a reasonable timeout for long-running code execution.
+
 *   **Monaco Editor:** Used for code editing in assessments.
     *   **Setup:** Installed via `@monaco-editor/react`.
     *   **Customization:** Supports themes, language switching, and shortcut configuration.
     *   **Performance:** Uses refs to maintain editor state and prevent unnecessary rerenders.
     *   **Language Integration:** Dynamically sets language mode when user changes language selection.
+    *   **Editor Options:** Configure via the `options` prop:
+        ```typescript
+        <Editor
+          options={{
+            fontSize: fontSize,
+            minimap: { enabled: false },
+            scrollBeyondLastLine: false,
+            automaticLayout: true,
+            tabSize: 2,
+            wordWrap: "on",
+            readOnly: isSubmitting,
+          }}
+        />
+        ```
 
 ### Prompt Engineering
 
