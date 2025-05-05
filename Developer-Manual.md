@@ -268,11 +268,41 @@ Applies to changes related to LLMs (OpenAI), conversational AI (Retell), prompts
     *   **Question Management:** Dashboard for creating/editing coding questions with Markdown preview and test case editing.
     *   **Assessment Management:** Creation/editing interface with question selection and difficulty filtering.
     *   **Interview Integration:** Updated interview creation to optionally include assessment selection.
+    *   **Assessment Execution:** Interface for candidates to take assessments with Monaco Editor and test execution.
+*   **Code Editor Implementation:**
+    *   **Monaco Editor:** Uses `@monaco-editor/react` for a feature-rich code editing experience.
+    *   **Language Support:** Dynamically adapts syntax highlighting and starter templates based on selected language.
+    *   **File Organization:**
+        *   `codeTemplates.ts`: Contains starter templates for different programming languages.
+        *   `languageOptions.ts`: Defines supported languages with their Judge0 API IDs and Monaco identifiers.
+        *   `editorPanel.tsx`: Handles the editor UI with language selection, theme, and code execution.
+        *   `testCasePanel.tsx`: Displays test cases and results for code execution.
+*   **Code Execution with Judge0:**
+    *   **API Integration:** Uses Judge0 API (via RapidAPI) to execute code against test cases.
+    *   **Test Case Handling:** Support for visible examples and hidden test cases.
+    *   **Result Processing:** Parsing and displaying execution results including output, errors, compilation issues.
+    *   **Scoring:** Automatically calculates scores based on passed test cases.
 *   **Development Guidelines:**
     *   **Test Cases:** When adding test cases to coding questions, include both visible and hidden tests. Visible tests should provide examples, while hidden tests should verify edge cases.
     *   **Markdown Support:** Use Markdown for question formatting to support code blocks, lists, tables, etc.
     *   **Difficulty Levels:** Maintain consistent difficulty grading across questions using the `difficulty` enum.
     *   **Code Validation:** Front-end should validate code submissions before sending to the backend.
+    *   **Error Handling:** Implement robust error handling for API calls and code execution.
+    *   **Language Support:** When adding new languages, update both `languageOptions.ts` and `codeTemplates.ts`.
+
+### External Service Integration
+
+*   **Judge0 API:** Used for code execution in coding assessments.
+    *   **Setup:** Requires RapidAPI subscription to Judge0 CE.
+    *   **Environment Variables:** Store API credentials in `.env` file.
+    *   **Implementation:** See `runCode` function in `assessment/index.tsx` for integration reference.
+    *   **Request Format:** Send code, language ID, stdin, and expected output to execute tests.
+    *   **Response Handling:** Parse execution results to determine if tests pass and extract any errors.
+*   **Monaco Editor:** Used for code editing in assessments.
+    *   **Setup:** Installed via `@monaco-editor/react`.
+    *   **Customization:** Supports themes, language switching, and shortcut configuration.
+    *   **Performance:** Uses refs to maintain editor state and prevent unnecessary rerenders.
+    *   **Language Integration:** Dynamically sets language mode when user changes language selection.
 
 ### Prompt Engineering
 

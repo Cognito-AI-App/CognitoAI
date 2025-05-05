@@ -6,29 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Play } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
-
-// Define languages available
-const languageOptions = [
-  { id: 63, name: "JavaScript (Node.js 12.14.0)", value: "javascript" },
-  { id: 71, name: "Python (3.8.1)", value: "python" },
-  { id: 50, name: "C (GCC 9.2.0)", value: "c" },
-  { id: 54, name: "C++ (GCC 9.2.0)", value: "cpp" },
-  { id: 51, name: "C# (Mono 6.6.0.161)", value: "csharp" },
-  { id: 62, name: "Java (OpenJDK 13.0.1)", value: "java" },
-  { id: 78, name: "Kotlin (1.3.70)", value: "kotlin" },
-  { id: 74, name: "TypeScript (3.7.4)", value: "typescript" },
-  { id: 72, name: "Ruby (2.7.0)", value: "ruby" },
-  { id: 73, name: "Rust (1.40.0)", value: "rust" },
-  { id: 60, name: "Go (1.13.5)", value: "go" },
-  { id: 68, name: "PHP (7.4.1)", value: "php" },
-  { id: 79, name: "Swift (5.2.3)", value: "swift" },
-];
+import { languageOptions, LanguageOption } from './languageOptions';
 
 type EditorPanelProps = {
   code: string;
-  language: { id: number; name: string; value: string };
+  language: LanguageOption;
   onCodeChange: (code: string) => void;
-  onLanguageChange: (language: { id: number; name: string; value: string }) => void;
+  onLanguageChange: (language: LanguageOption) => void;
   onRunCode: () => void;
   isSubmitting: boolean;
 };

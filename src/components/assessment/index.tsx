@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { useTabSwitchPrevention } from "@/components/call/tabSwitchPrevention";
 import { useParams, useRouter } from "next/navigation";
 import { getStarterCode } from "./codeTemplates";
+import { getDefaultLanguage, LanguageOption } from "./languageOptions";
 
 type AssessmentProps = {
   interview: Interview;
@@ -37,11 +38,7 @@ const Assessment = ({ interview }: AssessmentProps) => {
   const [assessment, setAssessment] = useState<AssessmentType | null>(null);
   const [questions, setQuestions] = useState<CodingQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-  const [currentLanguage, setCurrentLanguage] = useState<{ id: number; name: string; value: string; }>({
-    id: 63, // Default to JavaScript (Node.js)
-    name: "JavaScript (Node.js 12.14.0)",
-    value: "javascript"
-  });
+  const [currentLanguage, setCurrentLanguage] = useState<LanguageOption>(getDefaultLanguage());
   const [code, setCode] = useState<string>("");
   const [responses, setResponses] = useState<AssessmentQuestionResponse[]>([]);
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
@@ -197,7 +194,7 @@ const Assessment = ({ interview }: AssessmentProps) => {
   };
 
   // Handle language change
-  const handleLanguageChange = (language: { id: number; name: string; value: string }) => {
+  const handleLanguageChange = (language: LanguageOption) => {
     setCurrentLanguage(language);
     
     // The code update will be handled by the useEffect that watches for language changes

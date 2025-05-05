@@ -69,6 +69,8 @@ CognitoAI is a platform designed to automate the user interview process using ad
 *   **Database:** Supabase (PostgreSQL)
 *   **Conversational AI:** Retell AI SDK, OpenAI API (GPT-4o)
 *   **LLM Integration:** Langchain (PDF Loading, Prompt Templating)
+*   **Code Editor:** Monaco Editor (@monaco-editor/react)
+*   **Code Execution:** Judge0 API (via RapidAPI)
 *   **API:** Next.js API Routes
 *   **Containerization:** Docker, Docker Compose
 *   **Linting/Formatting:** ESLint, Prettier
@@ -182,6 +184,7 @@ Follow these steps to set up and run the project locally.
     *   Supabase (URL, Anon Key)
     *   Retell AI (API Key)
     *   OpenAI (API Key)
+    *   Judge0 API via RapidAPI (API Key)
 
 ## Clerk Setup ([Clerk](https://clerk.com/))
 
@@ -223,6 +226,19 @@ We use OpenAI to generate questions for interviews and analyze responses. This w
 
 1. Go to [OpenAI](https://platform.openai.com/api-keys) and create an API key
 2. Add the API key to the `.env` file in `OPENAI_API_KEY`
+
+## Judge0 Setup (Code Execution)
+
+The platform uses Judge0 API for code execution in coding assessments. You'll need to set up RapidAPI credentials:
+
+1. Go to [RapidAPI](https://rapidapi.com/) and create an account.
+2. Subscribe to [Judge0 CE API](https://rapidapi.com/judge0-official/api/judge0-ce/).
+3. Add the following environment variables to your `.env` file:
+   ```
+   NEXT_PUBLIC_REACT_APP_RAPID_API_URL=https://judge0-ce.p.rapidapi.com/submissions
+   NEXT_PUBLIC_REACT_APP_RAPID_API_HOST=judge0-ce.p.rapidapi.com
+   NEXT_PUBLIC_REACT_APP_RAPID_API_KEY=your-rapidapi-key
+   ```
 
 ### Cloning the Repository
 
