@@ -36,6 +36,8 @@ import {
 } from "@/components/ui/select";
 import { CandidateStatus } from "@/lib/enum";
 import LoaderWithText from "@/components/loaders/loader-with-text/loaderWithText";
+import { AssessmentService } from "@/services/assessments.service";
+import { AssessmentResponse } from "@/types/assessment";
 
 interface Props {
   params: {
@@ -66,6 +68,7 @@ function InterviewHome({ params, searchParams }: Props) {
   const [iconColor, seticonColor] = useState<string>("#4F46E5");
   const { organization } = useOrganization();
   const [filterStatus, setFilterStatus] = useState<string>("ALL");
+  const [assessmentResponses, setAssessmentResponses] = useState<AssessmentResponse[]>([]);
 
   const seeInterviewPreviewPage = () => {
     const protocol = base_url?.includes("localhost") ? "http" : "https";
@@ -138,6 +141,25 @@ function InterviewHome({ params, searchParams }: Props) {
     fetchResponses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const fetchAssessmentResponses = async () => {
+      if (interview?.id && interview.has_assessment) {
+        try {
+          const responses = await AssessmentService.getAssessmentResponsesForInterview(interview.id);
+          if (responses) {
+            setAssessmentResponses(responses);
+          }
+        } catch (error) {
+          console.error("Error fetching assessment responses:", error);
+        }
+      }
+    };
+
+    if (interview?.has_assessment) {
+      fetchAssessmentResponses();
+    }
+  }, [interview]);
 
   const handleDeleteResponse = (deletedCallId: string) => {
     if (responses) {
@@ -510,7 +532,16 @@ function InterviewHome({ params, searchParams }: Props) {
                                       <TooltipTrigger asChild>
                                         <div className="w-6 h-6 rounded-full bg-white border-2 border-indigo-500 flex items-center justify-center">
                                           <span className="text-indigo-500 text-xs font-semibold">
-                                            {response?.analytics?.overallScore}
+                                            {(() => {
+                                              const behavioralScore = response?.analytics?.overallScore || 0;
+                                              const assessmentResponse = assessmentResponses.find(ar => ar.email === response.email);
+                                              const codingScore = assessmentResponse?.score || null;
+
+                                              if (codingScore !== null) {
+                                                return Math.round((behavioralScore + codingScore) / 2);
+                                              }
+                                              return behavioralScore;
+                                            })()}
                                           </span>
                                         </div>
                                       </TooltipTrigger>
