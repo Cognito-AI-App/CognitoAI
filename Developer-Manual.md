@@ -126,6 +126,57 @@ Applies to changes within `src/app/(client)/`, `src/app/(user)/`, `src/component
 *   **File Structure:** For complex components, consider grouping related files (e.g., component, styles, types) in a dedicated folder.
 *   **Props:** Use TypeScript interfaces for defining component props. Keep prop names clear and descriptive.
 
+### Assessment Dashboard Components
+
+*   **DataTable (`src/components/dashboard/interview/dataTable.tsx`):**
+    *   **Purpose:** Displays candidate results with sortable columns for different score types
+    *   **Key Properties:**
+        * `data`: Array of `TableData` objects containing all score types
+        * `interviewId`: Used for linking to detailed candidate views
+    *   **Score Handling:**
+        * Displays behavioral scores as "Behavioral Score"
+        * Displays coding assessment scores as "Coding Score" 
+        * Calculates and displays combined scores as "Overall Score"
+        * Provides sorting functionality for all score types
+        * Handles null values for candidates missing either score type
+    *   **UI Features:**
+        * Color coding based on score values
+        * Tooltips for additional information
+        * Expandable summary text on hover
+
+*   **SummaryInfo (`src/components/dashboard/interview/summaryInfo.tsx`):**
+    *   **Purpose:** Shows interview overview with candidate list and statistics
+    *   **Score Calculation:**
+        * Fetches assessment responses for all candidates
+        * Matches responses to candidates based on email
+        * Calculates combined scores by averaging behavioral and coding scores
+        * Prepares data for the DataTable component
+    *   **Data Flow:**
+        ```typescript
+        // Find assessment response for each candidate
+        const assessmentResponse = assessmentResponses.find(
+          (ar) => ar.email === response.email
+        );
+        
+        // Calculate combined score
+        let combinedScore = behavioralScore;
+        if (codingScore !== null) {
+          combinedScore = Math.round((behavioralScore + codingScore) / 2);
+        }
+        ```
+
+*   **Candidate List (`src/app/(client)/interviews/[interviewId]/page.tsx`):**
+    *   **Purpose:** Displays list of candidates with status indicators and scores
+    *   **Score Implementation:**
+        * Fetches assessment responses for interview
+        * Calculates combined score on-the-fly for each candidate
+        * Displays combined score in candidate badge
+        * Shows tooltip indicating "Overall Score"
+    *   **UI Considerations:**
+        * Compact display with essential information
+        * Visual indicators for unread responses
+        * Color-coded status markers
+
 ### Styling (Tailwind & Shadcn/ui)
 
 *   **Primary Method:** Use Tailwind CSS utility classes directly in your JSX.
@@ -550,6 +601,55 @@ Applies to changes related to LLMs (OpenAI), conversational AI (Retell), prompts
 *   **Question Generation AI (OpenAI):** Creates interview questions based on context
 
 Each AI component has dedicated prompts, API integrations, and UI components tailored to its specific use case.
+
+### Assessment Score Implementation
+
+*   **Scoring Calculation:**
+    *   **Question Level:** Each coding question tracks passed and total test cases:
+        ```typescript
+        {
+          passed_test_cases: number,  // Number of tests passed
+          total_test_cases: number,   // Total number of tests
+          score: number               // Percentage (passed/total * 100)
+        }
+        ```
+    *   **Assessment Level:** Overall coding score is calculated as the average percentage across all questions
+        ```typescript
+        const percentageScore = totalTestCases > 0 
+          ? Math.round((totalPassedTestCases / totalTestCases) * 100) 
+          : 0;
+        ```
+    *   **Combined Score:** Averages the behavioral interview score with the coding assessment score
+        ```typescript
+        // For candidates with both scores
+        const combinedScore = Math.round((behavioralScore + codingScore) / 2);
+        ```
+
+*   **UI Implementation:**
+    *   **Assessment Results:** Candidates see a detailed breakdown after completing an assessment:
+        * Overall coding score 
+        * Individual question scores with passed/total test case counts
+        * Color-coded indicators for performance levels (red < 50%, yellow 50-79%, green ≥ 80%)
+    *   **Dashboard Integration:** 
+        * Data table showing separate columns for behavioral, coding, and combined scores
+        * Candidate list displaying the combined score for each candidate
+        * Detailed view showing all scores with breakdowns
+
+*   **Data Flow:**
+    *   Assessment responses stored in `assessment_response` table with full test results
+    *   Components fetch both behavioral responses and assessment responses separately
+    *   Scoring calculations performed at component level based on fetched data
+    *   Presentational components receive pre-calculated scores for display
+
+*   **Performance Considerations:**
+    *   Score calculations happen once at submission time and are stored in database
+    *   Combined scores are calculated on-the-fly in UI components to ensure latest data
+    *   Graceful handling of missing scores (e.g., candidates who only completed one part)
+
+*   **Extensibility:**
+    *   The scoring system is designed to be easily extended with additional metrics
+    *   New score types can be added to the table columns by following the existing pattern
+    *   Weighted scoring could be implemented by adjusting the averaging formula
 
 ---
 
