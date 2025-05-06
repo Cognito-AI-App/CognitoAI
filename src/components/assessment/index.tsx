@@ -13,6 +13,7 @@ import { ArrowLeftIcon, ArrowRightIcon, ClockIcon, XCircleIcon, CheckCircleIcon 
 import EditorPanel from "./editorPanel";
 import QuestionPanel from "./questionPanel";
 import TestCasePanel from "./testCasePanel";
+import AIChatPanel from "./aiChatPanel";
 import {
   Dialog,
   DialogContent,
@@ -546,6 +547,28 @@ const Assessment = ({ interview }: AssessmentProps) => {
     }
   };
 
+  // Add handler for applying AI-generated code
+  const handleApplyAICode = (generatedCode: string) => {
+    // Update the local code state
+    setCode(generatedCode);
+    
+    // Make sure responses array is initialized
+    if (responses.length === 0 || currentQuestionIndex < 0) return;
+    
+    // Update responses array
+    const updatedResponses = [...responses];
+    if (updatedResponses[currentQuestionIndex]) {
+      updatedResponses[currentQuestionIndex] = {
+        ...updatedResponses[currentQuestionIndex],
+        code: generatedCode,
+        language: currentLanguage.value
+      };
+      setResponses(updatedResponses);
+    }
+    
+    toast.success("AI code applied to editor");
+  };
+
   // Render completion screen
   const renderCompletionScreen = () => {
     return (
@@ -592,16 +615,24 @@ const Assessment = ({ interview }: AssessmentProps) => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-full">
-        <p>Loading assessment...</p>
+      <div className="h-[88vh] flex items-center justify-center">
+        <div className="text-center">
+          <div className="mb-4">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+          </div>
+          <p>Loading assessment...</p>
+        </div>
       </div>
     );
   }
 
   if (!assessment) {
     return (
-      <div className="flex justify-center items-center h-full">
-        <p>No assessment found for this interview.</p>
+      <div className="h-[88vh] flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">No Assessment Available</h2>
+          <p>This interview doesn't have an assessment attached.</p>
+        </div>
       </div>
     );
   }
@@ -619,37 +650,45 @@ const Assessment = ({ interview }: AssessmentProps) => {
       <Dialog open={isInfoDialogOpen} onOpenChange={setIsInfoDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Enter Your Information</DialogTitle>
+            <DialogTitle>Start Assessment</DialogTitle>
             <DialogDescription>
-              Please provide your name and email to start the assessment.
+              You are about to start the coding assessment for {interview.name}. You will have {assessment.time_duration} minutes to complete {assessment.question_count} {assessment.question_count === 1 ? "question" : "questions"}.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium">Name</label>
+          <div className="space-y-4 mt-4">
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium mb-1">
+                Your Name
+              </label>
               <input
-                id="name"
                 type="text"
+                id="name"
+                className="w-full p-2 border rounded-md"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full p-2 border rounded-md"
-                placeholder="Your name"
+                placeholder="John Doe"
               />
             </div>
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">Email</label>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium mb-1">
+                Your Email
+              </label>
               <input
-                id="email"
                 type="email"
+                id="email"
+                className="w-full p-2 border rounded-md"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-2 border rounded-md"
-                placeholder="Your email"
+                placeholder="john@example.com"
               />
             </div>
-          </div>
-          <div className="flex justify-end">
-            <Button onClick={startAssessment}>Start Assessment</Button>
+            <Button 
+              className="w-full" 
+              onClick={startAssessment}
+              disabled={!name || !email}
+            >
+              Start Assessment
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -705,42 +744,44 @@ const Assessment = ({ interview }: AssessmentProps) => {
         </div>
 
         {/* Main content */}
-        <div className="flex flex-1 overflow-hidden">
-          {/* Question panel */}
-          <div className="w-2/5 overflow-auto border-r">
-            {currentQuestion && (
-              <QuestionPanel question={currentQuestion} />
+        <div className="grid grid-cols-12 gap-4 flex-1">
+          <div className="col-span-3 bg-white rounded-lg border shadow overflow-hidden">
+            {questions[currentQuestionIndex] && (
+              <QuestionPanel question={questions[currentQuestionIndex]} />
             )}
           </div>
-
-          {/* Editor and test panel */}
-          <div className="w-3/5 flex flex-col">
-            <Tabs defaultValue="editor" className="flex-1 flex flex-col">
-              <TabsList className="mx-4 mt-2">
-                <TabsTrigger value="editor">Code Editor</TabsTrigger>
-                <TabsTrigger value="tests">Test Results</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="editor" className="flex-1 p-4 overflow-hidden">
-                <EditorPanel
-                  code={code}
-                  language={currentLanguage}
-                  onCodeChange={handleCodeChange}
-                  onLanguageChange={handleLanguageChange}
-                  onRunCode={() => handleRunTests()}
-                  isSubmitting={submitting}
-                />
-              </TabsContent>
-              
-              <TabsContent value="tests" className="flex-1 p-4 overflow-auto">
+          
+          <div className="col-span-6 flex flex-col space-y-4">
+            <div className="flex-1">
+              <EditorPanel
+                code={code}
+                language={currentLanguage}
+                onCodeChange={handleCodeChange}
+                onLanguageChange={handleLanguageChange}
+                onRunCode={() => handleRunTests()}
+                isSubmitting={submitting}
+              />
+            </div>
+            <div className="h-1/3 bg-white rounded-lg border shadow p-4 overflow-hidden">
+              {questions[currentQuestionIndex] && responses[currentQuestionIndex] && (
                 <TestCasePanel
-                  question={currentQuestion}
-                  result={responses[currentQuestionIndex]?.result}
+                  question={questions[currentQuestionIndex]}
+                  result={responses[currentQuestionIndex].result}
                   onRunTest={handleRunTests}
                   isSubmitting={submitting}
                 />
-              </TabsContent>
-            </Tabs>
+              )}
+            </div>
+          </div>
+          
+          <div className="col-span-3 bg-white rounded-lg border shadow overflow-hidden">
+            {questions[currentQuestionIndex] && (
+              <AIChatPanel 
+                question={questions[currentQuestionIndex]}
+                onApplyCode={handleApplyAICode}
+                questionIndex={currentQuestionIndex}
+              />
+            )}
           </div>
         </div>
       </div>
