@@ -744,16 +744,16 @@ const Assessment = ({ interview }: AssessmentProps) => {
         </div>
 
         {/* Main content */}
-        <div className="grid grid-cols-12 gap-4 flex-1">
+        <div className="grid grid-cols-12 gap-4 flex-1 overflow-hidden">
           <div className="col-span-3 bg-white rounded-lg border shadow overflow-hidden">
             {questions[currentQuestionIndex] && (
               <QuestionPanel question={questions[currentQuestionIndex]} />
             )}
           </div>
           
-          <div className="col-span-6 flex flex-col">
-            <Tabs defaultValue="editor" className="flex-1 flex flex-col">
-              <TabsList className="justify-start mb-2">
+          <div className="col-span-6 flex flex-col overflow-hidden">
+            <Tabs defaultValue="editor" className="flex-1 flex flex-col overflow-hidden">
+              <TabsList className="justify-start mb-2 shrink-0">
                 <TabsTrigger value="editor">Code Editor</TabsTrigger>
                 <TabsTrigger value="tests">Test Results</TabsTrigger>
               </TabsList>

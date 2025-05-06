@@ -181,8 +181,8 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
         </div>
       </div>
       
-      <div className="flex flex-col h-full">
-        <div className="flex-1 overflow-auto p-4 space-y-4">
+      <div className="flex flex-col flex-1 overflow-hidden">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map((message, index) => (
             <div
               key={index}
@@ -217,7 +217,7 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
           <div ref={messagesEndRef} />
         </div>
         
-        <div className="p-4 border-t mt-auto">
+        <div className="p-4 border-t mt-auto shrink-0">
           <div className="flex gap-2">
             <Input
               ref={inputRef}
