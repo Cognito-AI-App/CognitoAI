@@ -64,6 +64,12 @@ The platform includes a full-featured coding assessment system that can be added
 * **Creation & Management:** Create coding questions with multiple test cases and difficulty levels. Group questions into assessments.
 * **Interview Integration:** Link assessments to interviews, allowing candidates to proceed to coding tests after the behavioral interview.
 * **Code Execution:** Execute code in multiple languages using Judge0 API, with real-time test results.
+* **AI Coding Assistant:** Integrated AI assistant that helps candidates generate code solutions for assessment questions:
+  * Maintains separate conversation history for each question
+  * Generates clean, working code based on the question requirements
+  * Offers one-click code application to the editor
+  * Uses OpenAI to provide intelligent coding suggestions
+  * Optimized prompts ensure code-only responses without explanations or comments
 * **Features:**
   * Monaco code editor with syntax highlighting for 13+ programming languages
   * Customizable starter code templates for each language
@@ -144,6 +150,7 @@ CognitoAI/
     │   │           └── page.tsx      # Assessment page component
     │   └── api/             # API Routes (Backend logic)
     │       ├── analyze-communication/
+    │       ├── coding-assistant/     # OpenAI code generation endpoint for AI assistant
     │       ├── create-interview/
     │       ├── create-interviewer/
     │       ├── generate-insights/
@@ -165,6 +172,7 @@ CognitoAI/
     │   │   ├── editorPanel.tsx     # Monaco code editor component
     │   │   ├── questionPanel.tsx   # Question display with markdown
     │   │   ├── testCasePanel.tsx   # Test case execution and results
+    │   │   ├── aiChatPanel.tsx     # AI coding assistant chat interface
     │   │   ├── codeTemplates.ts    # Starter code templates for different languages
     │   │   └── languageOptions.ts  # Supported languages configuration
     │   ├── dashboard/       # Components specific to the client dashboard
@@ -187,6 +195,8 @@ CognitoAI/
     │   ├── logger.ts        # Simple logging utility
     │   ├── utils.ts         # General utility functions (cn, date formatting, etc.)
     │   └── prompts/         # LLM prompt templates
+    │       ├── codingAssistant.ts   # Prompts for the AI coding assistant
+    │       └── other prompt files...
     ├── services/            # Data fetching and business logic services
     │   ├── analytics.service.ts # Handles communication/overall analysis
     │   ├── clients.service.ts   # User/Organization data operations

@@ -27,7 +27,7 @@ const TestCasePanel: React.FC<TestCasePanelProps> = ({
   const hiddenTestCount = question.test_cases.length - visibleTestCases.length;
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col p-3">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-semibold text-lg">Test Cases</h3>
         <div className="flex items-center gap-2">

@@ -41,7 +41,7 @@ ${question.example_explanation}
   `;
 
   return (
-    <div className="p-4 overflow-auto h-full">
+    <div className="h-full overflow-y-auto p-4">
       <div className="prose max-w-none prose-slate prose-headings:font-bold">
         <ReactMarkdown>
           {formattedContent}

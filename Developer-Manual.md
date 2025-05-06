@@ -267,6 +267,39 @@ Applies to changes related to LLMs (OpenAI), conversational AI (Retell), prompts
     5. Interviewee completes coding assessment with timed challenges
     6. Results are automatically scored and stored for interviewer review
 
+*   **AI Coding Assistant:**
+    *   Assessments now include an AI coding assistant panel that helps candidates generate code solutions
+    *   The assistant uses OpenAI (GPT-4o) to provide code suggestions based on the candidate's specific requests
+    *   Key features:
+        *   Per-question chat history maintained throughout the assessment
+        *   "Apply Code" button to paste AI-generated code directly into the editor
+        *   "Clear History" button to reset the conversation for the current question
+        *   Focused on generating clean, working code without explanations or comments
+        *   Does NOT know the question details - candidates must articulate their needs
+        *   Uses the candidate's current code as context to provide relevant assistance
+    *   Implementation:
+        *   Uses a dedicated API endpoint (`/api/coding-assistant`)
+        *   Prompts optimized for code generation in `src/lib/prompts/codingAssistant.ts`
+        *   Chat panel component in `src/components/assessment/aiChatPanel.tsx`
+        *   Stateful conversations maintained via React refs to persist across question changes
+        *   No database persistence required as chats are session-based per assessment
+        *   Passes current code to the API for contextual assistance
+    *   Architecture Design:
+        *   Three-column layout: Question Panel, Editor+Test Panel, AI Chat Panel
+        *   React component maintains isolated chat history for each question using Map data structure
+        *   OpenAI API integration uses system prompts to enforce code-only responses
+        *   Clean handoff between AI and editor via the Apply Code function
+        *   Pedagogically sound approach - candidates must understand and articulate the problem
+    *   Extension Guidelines:
+        *   Adding more advanced features to the AI (e.g., code explanation, optimization suggestions):
+          1. Update `codingAssistant.ts` with additional prompt sections and instructions
+          2. Modify the `aiChatPanel.tsx` to include new UI controls for these features
+          3. Extend the API route to support new parameters for these features
+        *   Supporting additional LLM providers:
+          1. Create provider-specific API handlers in the backend
+          2. Implement adapter pattern in `coding-assistant/route.ts` to support multiple providers
+          3. Add provider selection in environment variables or UI if needed
+
 *   **Database Schema:**
     *   `difficulty`: An enum type with values 'easy', 'medium', 'hard'.
     *   `coding_question`: Stores questions with description, difficulty, starter code, and test cases.
@@ -510,6 +543,15 @@ Applies to changes related to LLMs (OpenAI), conversational AI (Retell), prompts
 *   **(Aspirational)** Test prompt variations and their outputs.
 *   **(Aspirational)** Write tests for parsing logic that handles AI responses.
 *   **(Aspirational)** Test fallback mechanisms when AI services fail.
+
+### AI Components Overview
+
+*   **Interview AI (Retell):** Powers the conversational interview experience
+*   **Analytics AI (OpenAI):** Analyzes interview responses and provides insights
+*   **Coding Assistant AI (OpenAI):** Helps candidates generate code solutions during assessments
+*   **Question Generation AI (OpenAI):** Creates interview questions based on context
+
+Each AI component has dedicated prompts, API integrations, and UI components tailored to its specific use case.
 
 ---
 
