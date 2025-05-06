@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AssessmentService } from "@/services/assessments.service";
 import { CodingQuestionService } from "@/services/codingQuestions.service";
+import CodeExecutionService from "@/services/codeExecution.service";
 import { Assessment as AssessmentType, AssessmentQuestionResponse, AssessmentResponse } from "@/types/assessment";
 import { CodingQuestion } from "@/types/codingQuestion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -232,7 +233,13 @@ const Assessment = ({ interview }: AssessmentProps) => {
     }
     
     try {
-      const result = await runCode(
+      // Make sure we have code to run
+      if (!currentResponse.code || !currentResponse.code.trim()) {
+        toast.error("Please write some code before running tests");
+        return;
+      }
+      
+      const result = await CodeExecutionService.executeCode(
         currentResponse.code, 
         currentLanguage.id, 
         testCases
@@ -257,172 +264,6 @@ const Assessment = ({ interview }: AssessmentProps) => {
       toast.error("Failed to run tests. Please try again.");
     } finally {
       setSubmitting(false);
-    }
-  };
-
-  // Helper function to run code with Judge0
-  const runCode = async (sourceCode: string, languageId: number, testCases: any[]): Promise<any> => {
-    // Make sure we have code to run
-    if (!sourceCode || !sourceCode.trim()) {
-      toast.error("Please write some code before running tests");
-      throw new Error("No code to run");
-    }
-    
-    let passedCount = 0;
-    let firstFailureOutput = null;
-    
-    try {
-      // Process each test case
-      for (let i = 0; i < testCases.length; i++) {
-        const testCase = testCases[i];
-        
-        // Check if Judge0 is available
-        try {
-          // Log key parameters for debugging
-          console.log('Running test case:', {
-            testInput: testCase.input,
-            expectedOutput: testCase.output,
-            language: languageId
-          });
-          
-          // Prepare the request data - send raw code without base64 encoding
-          const formData = {
-            source_code: sourceCode,
-            language_id: languageId,
-            stdin: testCase.input,
-            expected_output: testCase.output,
-            base64_encoded: false
-          };
-          
-          console.log('Sending to Judge0:', formData);
-          
-          // Make API call to Judge0
-          const response = await fetch(`${process.env.NEXT_PUBLIC_REACT_APP_RAPID_API_URL}`, {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json',
-              'X-RapidAPI-Host': process.env.NEXT_PUBLIC_REACT_APP_RAPID_API_HOST || '',
-              'X-RapidAPI-Key': process.env.NEXT_PUBLIC_REACT_APP_RAPID_API_KEY || '',
-            },
-            body: JSON.stringify(formData)
-          });
-          
-          if (!response.ok) {
-            throw new Error(`API error: ${response.status}`);
-          }
-          
-          const data = await response.json();
-          const token = data.token;
-          
-          if (!token) {
-            throw new Error('No token returned from Judge0 API');
-          }
-          
-          console.log('Received token:', token);
-          
-          // Poll until execution is complete
-          let executionResult;
-          let attempts = 0;
-          const maxAttempts = 10;
-          
-          while (attempts < maxAttempts) {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            const resultResponse = await fetch(
-              `${process.env.NEXT_PUBLIC_REACT_APP_RAPID_API_URL}/${token}`, 
-              {
-                headers: {
-                  'X-RapidAPI-Host': process.env.NEXT_PUBLIC_REACT_APP_RAPID_API_HOST || '',
-                  'X-RapidAPI-Key': process.env.NEXT_PUBLIC_REACT_APP_RAPID_API_KEY || '',
-                }
-              }
-            );
-            
-            if (!resultResponse.ok) {
-              throw new Error(`Failed to fetch execution result: ${resultResponse.status}`);
-            }
-            
-            executionResult = await resultResponse.json();
-            console.log('Execution result:', executionResult);
-            
-            if (executionResult.status.id !== 1 && executionResult.status.id !== 2) {
-              // Status is neither "In Queue" nor "Processing"
-              break;
-            }
-            
-            attempts++;
-          }
-          
-          if (attempts >= maxAttempts) {
-            throw new Error('Execution timed out');
-          }
-          
-          // Check if test passed
-          if (executionResult.status.id === 3) { // Status "Accepted"
-            const stdout = executionResult.stdout || '';
-            const expectedOutput = testCase.output.trim();
-            
-            console.log('Output comparison:', {
-              actual: stdout.trim(),
-              expected: expectedOutput
-            });
-            
-            if (stdout.trim() === expectedOutput) {
-              passedCount++;
-            } else if (firstFailureOutput === null) {
-              firstFailureOutput = {
-                status: executionResult.status.description,
-                stdout: stdout,
-                stderr: executionResult.stderr || null,
-                compile_output: executionResult.compile_output || null,
-                time: executionResult.time,
-                memory: executionResult.memory
-              };
-            }
-          } else if (firstFailureOutput === null) {
-            firstFailureOutput = {
-              status: executionResult.status.description,
-              stdout: executionResult.stdout || null,
-              stderr: executionResult.stderr || null,
-              compile_output: executionResult.compile_output || null,
-              time: executionResult.time,
-              memory: executionResult.memory
-            };
-          }
-        } catch (error) {
-          console.error('Error executing test case:', error);
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-          toast.error(`Error running test case ${i+1}: ${errorMessage}`);
-          
-          if (firstFailureOutput === null) {
-            firstFailureOutput = {
-              status: 'Error',
-              stdout: null,
-              stderr: errorMessage,
-              compile_output: null,
-              time: null,
-              memory: null
-            };
-          }
-        }
-      }
-      
-      // Return an object with all necessary information
-      return {
-        status: firstFailureOutput ? firstFailureOutput.status : "Accepted",
-        stdout: firstFailureOutput ? firstFailureOutput.stdout : null,
-        stderr: firstFailureOutput ? firstFailureOutput.stderr : null,
-        compile_output: firstFailureOutput ? firstFailureOutput.compile_output : null,
-        time: firstFailureOutput ? firstFailureOutput.time : null,
-        memory: firstFailureOutput ? firstFailureOutput.memory : null,
-        passed_test_cases: passedCount,
-        total_test_cases: testCases.length
-      };
-    } catch (error) {
-      console.error("Error executing code:", error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      toast.error(`Error executing code: ${errorMessage}`);
-      throw error;
     }
   };
 

@@ -153,6 +153,7 @@ CognitoAI/
     │       ├── coding-assistant/     # OpenAI code generation endpoint for AI assistant
     │       ├── create-interview/
     │       ├── create-interviewer/
+    │       ├── execute-code/         # Judge0 code execution endpoint for assessments
     │       ├── generate-insights/
     │       ├── generate-interview-questions/
     │       ├── get-call/
@@ -200,6 +201,7 @@ CognitoAI/
     ├── services/            # Data fetching and business logic services
     │   ├── analytics.service.ts # Handles communication/overall analysis
     │   ├── clients.service.ts   # User/Organization data operations
+    │   ├── codeExecution.service.ts # Handles code execution via Judge0 
     │   ├── feedback.service.ts  # Handles user feedback submission
     │   ├── interviewers.service.ts # Interviewer data operations
     │   ├── interviews.service.ts   # Interview data operations
@@ -439,6 +441,7 @@ The backend logic is primarily handled via Next.js API Routes located in `src/ap
 *   `/api/analyze-communication`: Analyzes the communication skills from a transcript using OpenAI.
 *   `/api/create-interview`: Creates a new interview record in the database.
 *   `/api/create-interviewer`: Creates default interviewer profiles and associated Retell agents.
+*   `/api/execute-code`: Handles code execution via Judge0 for assessments.
 *   `/api/generate-insights`: Generates high-level insights from multiple call summaries for an interview.
 *   `/api/generate-interview-questions`: Generates interview questions using OpenAI based on provided context.
 *   `/api/get-call`: Retrieves call details from Retell and performs analysis if not already done.

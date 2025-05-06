@@ -202,7 +202,7 @@ function CallInfo({
           <div className="w-full bg-gray-200 rounded-full h-2.5 my-2">
             <div 
               className="bg-indigo-600 h-2.5 rounded-full" 
-              style={{ width: `${(response.score / response.total_score) * 100}%` }}
+              style={{ width: `${((response.score ?? 0) / (response.total_score ?? 1)) * 100}%` }}
             ></div>
           </div>
         </div>
@@ -217,7 +217,7 @@ function CallInfo({
             <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
               <div 
                 className="bg-indigo-600 h-2 rounded-full" 
-                style={{ width: `${(questionResponse.result.passed_test_cases / questionResponse.result.total_test_cases) * 100}%` }}
+                style={{ width: `${((questionResponse.result.passed_test_cases ?? 0) / (questionResponse.result.total_test_cases ?? 1)) * 100}%` }}
               ></div>
             </div>
           </div>

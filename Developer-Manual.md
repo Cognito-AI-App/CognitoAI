@@ -450,17 +450,15 @@ Applies to changes related to LLMs (OpenAI), conversational AI (Retell), prompts
         NEXT_PUBLIC_REACT_APP_RAPID_API_HOST=judge0-ce.p.rapidapi.com
         NEXT_PUBLIC_REACT_APP_RAPID_API_KEY=your-rapidapi-key
         ```
-    *   **Implementation:** See `runCode` function in `assessment/index.tsx` for integration reference.
-    *   **Request Format:** Send code, language ID, stdin, and expected output to execute tests.
-        ```typescript
-        const formData = {
-          source_code: sourceCode,
-          language_id: languageId,
-          stdin: testCase.input,
-          expected_output: testCase.output,
-          base64_encoded: false
-        };
-        ```
+    *   **Implementation:** 
+        * API route: `src/app/api/execute-code/route.ts` handles all Judge0 interactions
+        * Service layer: `src/services/codeExecution.service.ts` provides an interface to the API
+        * Components use the service to execute code without direct API knowledge
+    *   **Request Flow:**
+        1. Component calls `CodeExecutionService.executeCode()` with code, language, and test cases
+        2. Service sends request to internal API endpoint
+        3. API route handles Judge0 interactions (submission, polling for results)
+        4. Results are returned through the same path in reverse
     *   **Response Handling:** Parse execution results to determine if tests pass and extract any errors.
     *   **Rate Limiting:** Be aware of RapidAPI rate limits for Judge0 API and implement appropriate error handling.
     *   **Timeout Handling:** Implement polling with a reasonable timeout for long-running code execution.
