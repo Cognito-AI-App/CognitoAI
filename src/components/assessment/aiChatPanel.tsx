@@ -181,7 +181,7 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
         </div>
       </div>
       
-      <CardContent className="p-0 flex-1 flex flex-col">
+      <div className="flex flex-col h-full">
         <div className="flex-1 overflow-auto p-4 space-y-4">
           {messages.map((message, index) => (
             <div
@@ -203,8 +203,6 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
               </div>
             </div>
           ))}
-          <div ref={messagesEndRef} />
-          
           {isLoading && (
             <div className="flex justify-start">
               <div className="max-w-[80%] rounded-lg p-3 bg-slate-100">
@@ -216,6 +214,7 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
               </div>
             </div>
           )}
+          <div ref={messagesEndRef} />
         </div>
         
         <div className="p-4 border-t mt-auto">
@@ -237,7 +236,7 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
             </Button>
           </div>
         </div>
-      </CardContent>
+      </div>
     </Card>
   );
 };

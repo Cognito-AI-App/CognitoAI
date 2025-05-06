@@ -167,7 +167,7 @@ const EditorPanel = ({
         </Button>
       </div>
       
-      <CardContent className="p-0 flex-1">
+      <div className="flex-1 min-h-0">
         <Editor
           height="100%"
           width="100%"
@@ -186,7 +186,7 @@ const EditorPanel = ({
             readOnly: isSubmitting,
           }}
         />
-      </CardContent>
+      </div>
     </Card>
   );
 };

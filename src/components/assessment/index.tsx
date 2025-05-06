@@ -751,27 +751,35 @@ const Assessment = ({ interview }: AssessmentProps) => {
             )}
           </div>
           
-          <div className="col-span-6 flex flex-col space-y-4">
-            <div className="flex-1">
-              <EditorPanel
-                code={code}
-                language={currentLanguage}
-                onCodeChange={handleCodeChange}
-                onLanguageChange={handleLanguageChange}
-                onRunCode={() => handleRunTests()}
-                isSubmitting={submitting}
-              />
-            </div>
-            <div className="h-1/3 bg-white rounded-lg border shadow p-4 overflow-hidden">
-              {questions[currentQuestionIndex] && responses[currentQuestionIndex] && (
-                <TestCasePanel
-                  question={questions[currentQuestionIndex]}
-                  result={responses[currentQuestionIndex].result}
-                  onRunTest={handleRunTests}
+          <div className="col-span-6 flex flex-col">
+            <Tabs defaultValue="editor" className="flex-1 flex flex-col">
+              <TabsList className="justify-start mb-2">
+                <TabsTrigger value="editor">Code Editor</TabsTrigger>
+                <TabsTrigger value="tests">Test Results</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="editor" className="flex-1 overflow-hidden data-[state=active]:flex-1">
+                <EditorPanel
+                  code={code}
+                  language={currentLanguage}
+                  onCodeChange={handleCodeChange}
+                  onLanguageChange={handleLanguageChange}
+                  onRunCode={() => handleRunTests()}
                   isSubmitting={submitting}
                 />
-              )}
-            </div>
+              </TabsContent>
+              
+              <TabsContent value="tests" className="flex-1 overflow-auto data-[state=active]:flex-1">
+                {questions[currentQuestionIndex] && responses[currentQuestionIndex] && (
+                  <TestCasePanel
+                    question={questions[currentQuestionIndex]}
+                    result={responses[currentQuestionIndex].result}
+                    onRunTest={handleRunTests}
+                    isSubmitting={submitting}
+                  />
+                )}
+              </TabsContent>
+            </Tabs>
           </div>
           
           <div className="col-span-3 bg-white rounded-lg border shadow overflow-hidden">
