@@ -5,7 +5,7 @@ import { Analytics, CallData } from "@/types/response";
 import axios from "axios";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import ReactAudioPlayer from "react-audio-player";
-import { DownloadIcon, TrashIcon } from "lucide-react";
+import { DownloadIcon, TrashIcon, Code } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { ResponseService } from "@/services/responses.service";
@@ -36,6 +36,8 @@ import {
 } from "@/components/ui/select";
 import { CandidateStatus } from "@/lib/enum";
 import { ArrowLeft } from "lucide-react";
+import { AssessmentService } from "@/services/assessments.service";
+import { AssessmentResponse } from "@/types/assessment";
 
 type CallProps = {
   call_id: string;
@@ -59,6 +61,8 @@ function CallInfo({
   const [candidateStatus, setCandidateStatus] = useState<string>("");
   const [interviewId, setInterviewId] = useState<string>("");
   const [tabSwitchCount, setTabSwitchCount] = useState<number>();
+  const [assessmentResponses, setAssessmentResponses] = useState<AssessmentResponse[]>([]);
+  const [hasAssessment, setHasAssessment] = useState(false);
 
   useEffect(() => {
     const fetchResponses = async () => {
@@ -124,6 +128,26 @@ function CallInfo({
     }
   }, [call, name]);
 
+  useEffect(() => {
+    const fetchAssessmentResponses = async () => {
+      if (interviewId) {
+        try {
+          const responses = await AssessmentService.getAssessmentResponsesForInterview(interviewId);
+          if (responses && responses.length > 0) {
+            setAssessmentResponses(responses);
+            setHasAssessment(true);
+          }
+        } catch (error) {
+          console.error("Error fetching assessment responses:", error);
+        }
+      }
+    };
+
+    if (interviewId) {
+      fetchAssessmentResponses();
+    }
+  }, [interviewId]);
+
   const onDeleteResponseClick = async () => {
     try {
       const response = await ResponseService.getResponseByCallId(call_id);
@@ -152,6 +176,54 @@ function CallInfo({
         duration: 3000,
       });
     }
+  };
+
+  // Function to render assessment results
+  const renderAssessmentResults = () => {
+    if (!hasAssessment || assessmentResponses.length === 0) {
+      return null;
+    }
+
+    // Get the most recent assessment response
+    const response = assessmentResponses[0];
+    
+    return (
+      <div className="bg-white rounded-xl p-4 mb-6 shadow-sm">
+        <div className="flex items-center gap-2 mb-4">
+          <Code className="text-indigo-600" size={20} />
+          <h3 className="font-semibold text-lg">Coding Assessment Results</h3>
+        </div>
+        
+        <div className="mb-4">
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-gray-600">Overall Score</span>
+            <span className="font-semibold">{response.score}/{response.total_score}</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2.5 my-2">
+            <div 
+              className="bg-indigo-600 h-2.5 rounded-full" 
+              style={{ width: `${(response.score / response.total_score) * 100}%` }}
+            ></div>
+          </div>
+        </div>
+        
+        {response.responses && Array.isArray(response.responses) && response.responses.map((questionResponse: any, index: number) => (
+          <div key={index} className="border-t pt-4 mt-4">
+            <h4 className="font-medium mb-2">Question {index + 1}</h4>
+            <div className="flex justify-between text-sm mb-1">
+              <span>Language: {questionResponse.language}</span>
+              <span className="font-medium">{questionResponse.result.passed_test_cases}/{questionResponse.result.total_test_cases} tests passed</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+              <div 
+                className="bg-indigo-600 h-2 rounded-full" 
+                style={{ width: `${(questionResponse.result.passed_test_cases / questionResponse.result.total_test_cases) * 100}%` }}
+              ></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -436,6 +508,16 @@ function CallInfo({
               />
             </ScrollArea>
           </div>
+          <div className="bg-slate-50 rounded-2xl p-4 my-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 m-3">
+              <div className="bg-white p-4 shadow-sm rounded-xl">
+                <p className="font-semibold mb-4">Call Statistics</p>
+                {/* ...existing code... */}
+              </div>
+              {/* ...existing code... */}
+            </div>
+          </div>
+          {hasAssessment && renderAssessmentResults()}
         </>
       )}
     </div>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { FeedbackData } from "@/types/response";
+import { Interview } from "@/types/interview";
 
 enum SatisfactionLevel {
   Positive = "😀",
@@ -12,9 +13,10 @@ enum SatisfactionLevel {
 interface FeedbackFormProps {
   onSubmit: (data: Omit<FeedbackData, "interview_id">) => void;
   email: string;
+  interview?: Interview;
 }
 
-export function FeedbackForm({ onSubmit, email }: FeedbackFormProps) {
+export function FeedbackForm({ onSubmit, email, interview }: FeedbackFormProps) {
   const [satisfaction, setSatisfaction] = useState<SatisfactionLevel>(
     SatisfactionLevel.Moderate,
   );
@@ -32,6 +34,14 @@ export function FeedbackForm({ onSubmit, email }: FeedbackFormProps) {
 
   return (
     <div className="p-4">
+      <h3 className="text-lg font-semibold mb-4">
+        Thank you for participating in this interview!
+      </h3>
+      
+      <p className="text-gray-600 mb-4">
+        We would love to hear your feedback about the platform.
+      </p>
+      
       <h3 className="text-lg font-semibold mb-4">
         Are you satisfied with the platform?
       </h3>

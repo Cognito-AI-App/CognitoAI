@@ -25,7 +25,7 @@ function QuestionsPopup({ interviewData, setProceed, setOpen }: Props) {
     interviewData.questions,
   );
   const [description, setDescription] = useState<string>(
-    interviewData.description.trim(),
+    interviewData.description ? interviewData.description.trim() : ""
   );
   const { fetchInterviews } = useInterviews();
 
@@ -174,7 +174,11 @@ function QuestionsPopup({ interviewData, setProceed, setOpen }: Props) {
             isClicked ||
             questions.length < interviewData.question_count ||
             description.trim() === "" ||
-            questions.some((question) => question.question.trim() === "")
+            questions.some((question) => {
+              return !question.question || 
+                     typeof question.question !== 'string' || 
+                     question.question.trim() === "";
+            })
           }
           className="bg-indigo-600 hover:bg-indigo-800 mr-5 mt-2"
           onClick={() => {

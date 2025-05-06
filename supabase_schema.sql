@@ -1,6 +1,9 @@
 -- Create enum type for plan
 CREATE TYPE plan AS ENUM ('free', 'pro', 'free_trial_over');
 
+-- Create enum type for difficulty
+CREATE TYPE difficulty AS ENUM ('easy', 'medium', 'hard');
+
 -- Create tables
 CREATE TABLE organization (
     id TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -32,6 +35,35 @@ CREATE TABLE interviewer (
     speed INTEGER NOT NULL
 );
 
+CREATE TABLE coding_question (
+    id SERIAL PRIMARY KEY,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    input_format TEXT NOT NULL,
+    output_format TEXT NOT NULL,
+    example_explanation TEXT NOT NULL,
+    difficulty difficulty NOT NULL,
+    test_cases JSONB NOT NULL,
+    organization_id TEXT REFERENCES organization(id),
+    user_id TEXT REFERENCES "user"(id),
+    is_active BOOLEAN DEFAULT true
+);
+
+CREATE TABLE assessment (
+    id SERIAL PRIMARY KEY,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+    name TEXT NOT NULL,
+    description TEXT,
+    difficulty difficulty NOT NULL,
+    question_count INTEGER NOT NULL,
+    time_duration TEXT NOT NULL,
+    questions INTEGER[] NOT NULL,
+    organization_id TEXT REFERENCES organization(id),
+    user_id TEXT REFERENCES "user"(id),
+    is_active BOOLEAN DEFAULT true
+);
+
 CREATE TABLE interview (
     id TEXT PRIMARY KEY,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
@@ -54,7 +86,23 @@ CREATE TABLE interview (
     respondents TEXT[],
     question_count INTEGER,
     response_count INTEGER,
-    time_duration TEXT
+    time_duration TEXT,
+    has_assessment BOOLEAN DEFAULT false,
+    assessment_id INTEGER REFERENCES assessment(id)
+);
+
+CREATE TABLE assessment_response (
+    id SERIAL PRIMARY KEY,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+    assessment_id INTEGER REFERENCES assessment(id),
+    interview_id TEXT REFERENCES interview(id),
+    name TEXT,
+    email TEXT,
+    responses JSONB,
+    score INTEGER,
+    total_score INTEGER,
+    is_completed BOOLEAN DEFAULT false,
+    tab_switch_count INTEGER
 );
 
 CREATE TABLE response (

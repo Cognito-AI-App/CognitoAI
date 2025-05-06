@@ -37,6 +37,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { InterviewerService } from "@/services/interviewers.service";
+import { useRouter } from "next/navigation";
+import { AssessmentService } from "@/services/assessments.service";
 
 const webClient = new RetellWebClient();
 
@@ -72,6 +74,8 @@ function Call({ interview }: InterviewProps) {
   const [name, setName] = useState<string>("");
   const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
   const [isOldUser, setIsOldUser] = useState<boolean>(false);
+  const [hasCompletedAssessment, setHasCompletedAssessment] = useState<boolean>(false);
+  const [isAssessmentEligible, setIsAssessmentEligible] = useState<boolean>(false);
   const [callId, setCallId] = useState<string>("");
   const { tabSwitchCount } = useTabSwitchPrevention();
   const [isFeedbackSubmitted, setIsFeedbackSubmitted] = useState(false);
@@ -83,6 +87,7 @@ function Call({ interview }: InterviewProps) {
   const [currentTimeDuration, setCurrentTimeDuration] = useState<string>("0");
 
   const lastUserResponseRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
 
   const handleFeedbackSubmit = async (
     formData: Omit<FeedbackData, "interview_id">,
@@ -207,13 +212,39 @@ function Call({ interview }: InterviewProps) {
     const oldUserEmails: string[] = (
       await ResponseService.getAllEmails(interview.id)
     ).map((item) => item.email);
-    const OldUser =
-      oldUserEmails.includes(email) ||
+    
+    // Check if this user has already responded to this interview
+    const userHasResponded = oldUserEmails.includes(email) ||
       (interview?.respondents && !interview?.respondents.includes(email));
-
-    if (OldUser) {
-      setIsOldUser(true);
+    
+    // If user has already responded, check if they've completed the assessment
+    if (userHasResponded) {
+      if (interview?.has_assessment && interview?.assessment_id) {
+        try {
+          // Check if this user has completed the assessment
+          const assessmentResponses = await AssessmentService.getAssessmentResponsesForEmail(email, interview.id);
+          const assessmentCompleted = assessmentResponses && assessmentResponses.length > 0 && 
+                                     assessmentResponses[0].is_completed;
+          
+          if (assessmentCompleted) {
+            // User has completed both behavioral and assessment
+            setIsOldUser(true);
+            setHasCompletedAssessment(true);
+          } else {
+            // User has only completed behavioral, show assessment button
+            setIsOldUser(true);
+            setIsAssessmentEligible(true);
+          }
+        } catch (error) {
+          console.error("Error checking assessment status:", error);
+          setIsOldUser(true);
+        }
+      } else {
+        // No assessment for this interview
+        setIsOldUser(true);
+      }
     } else {
+      // New user, proceed with behavioral interview
       const registerCallResponse: registerCallResponseType = await axios.post(
         "/api/register-call",
         { dynamic_data: data, interviewer_id: interview?.interviewer_id },
@@ -513,7 +544,29 @@ function Call({ interview }: InterviewProps) {
                     </p>
                   </div>
 
-                  {!isFeedbackSubmitted && (
+                  {interview?.has_assessment && interview?.assessment_id && (
+                    <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
+                      <p className="font-medium text-blue-800 mb-2">
+                        This interview includes a coding assessment.
+                      </p>
+                      <p className="text-sm text-blue-700 mb-4">
+                        Please proceed to the coding assessment to complete the entire process.
+                      </p>
+                      <Button
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white mb-4"
+                        onClick={() => {
+                          // Store user info in sessionStorage to avoid re-entering in assessment
+                          sessionStorage.setItem('interview_user_name', name);
+                          sessionStorage.setItem('interview_user_email', email);
+                          router.push(`/assessment/${interview.id}`);
+                        }}
+                      >
+                        Proceed to Coding Assessment
+                      </Button>
+                    </div>
+                  )}
+
+                  {!isFeedbackSubmitted && !interview?.has_assessment && (
                     <AlertDialog
                       open={isDialogOpen}
                       onOpenChange={setIsDialogOpen}
@@ -530,6 +583,7 @@ function Call({ interview }: InterviewProps) {
                         <FeedbackForm
                           email={email}
                           onSubmit={handleFeedbackSubmit}
+                          interview={interview}
                         />
                       </AlertDialogContent>
                     </AlertDialog>
@@ -543,14 +597,44 @@ function Call({ interview }: InterviewProps) {
                   <div className="p-2 font-normal text-base mb-4 whitespace-pre-line">
                     <CheckCircleIcon className="h-[2rem] w-[2rem] mx-auto my-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-indigo-500 " />
                     <p className="text-lg font-semibold text-center">
-                      You have already responded in this interview or you are
-                      not eligible to respond. Thank you!
+                      {isAssessmentEligible 
+                        ? "You have already completed the behavioral interview."
+                        : "You have already responded in this interview or you are not eligible to respond. Thank you!"}
                     </p>
-                    <p className="text-center">
-                      {"\n"}
-                      You can close this tab now.
-                    </p>
+                    {isAssessmentEligible && (
+                      <p className="text-center mt-2">
+                        Please proceed to the coding assessment.
+                      </p>
+                    )}
+                    {!isAssessmentEligible && (
+                      <p className="text-center">
+                        {"\n"}
+                        You can close this tab now.
+                      </p>
+                    )}
                   </div>
+                  
+                  {isAssessmentEligible && interview?.has_assessment && interview?.assessment_id && (
+                    <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
+                      <p className="font-medium text-blue-800 mb-2">
+                        This interview includes a coding assessment.
+                      </p>
+                      <p className="text-sm text-blue-700 mb-4">
+                        Please proceed to the coding assessment to complete the entire process.
+                      </p>
+                      <Button
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white mb-4"
+                        onClick={() => {
+                          // Store user info in sessionStorage to avoid re-entering in assessment
+                          sessionStorage.setItem('interview_user_name', name);
+                          sessionStorage.setItem('interview_user_email', email);
+                          router.push(`/assessment/${interview.id}`);
+                        }}
+                      >
+                        Proceed to Coding Assessment
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
