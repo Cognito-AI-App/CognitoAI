@@ -269,23 +269,27 @@ Applies to changes related to LLMs (OpenAI), conversational AI (Retell), prompts
 
 *   **AI Coding Assistant:**
     *   Assessments now include an AI coding assistant panel that helps candidates generate code solutions
-    *   The assistant uses OpenAI (GPT-4o) to provide code suggestions based on the current question
+    *   The assistant uses OpenAI (GPT-4o) to provide code suggestions based on the candidate's specific requests
     *   Key features:
         *   Per-question chat history maintained throughout the assessment
         *   "Apply Code" button to paste AI-generated code directly into the editor
         *   "Clear History" button to reset the conversation for the current question
         *   Focused on generating clean, working code without explanations or comments
+        *   Does NOT know the question details - candidates must articulate their needs
+        *   Uses the candidate's current code as context to provide relevant assistance
     *   Implementation:
         *   Uses a dedicated API endpoint (`/api/coding-assistant`)
         *   Prompts optimized for code generation in `src/lib/prompts/codingAssistant.ts`
         *   Chat panel component in `src/components/assessment/aiChatPanel.tsx`
         *   Stateful conversations maintained via React refs to persist across question changes
         *   No database persistence required as chats are session-based per assessment
+        *   Passes current code to the API for contextual assistance
     *   Architecture Design:
         *   Three-column layout: Question Panel, Editor+Test Panel, AI Chat Panel
         *   React component maintains isolated chat history for each question using Map data structure
         *   OpenAI API integration uses system prompts to enforce code-only responses
         *   Clean handoff between AI and editor via the Apply Code function
+        *   Pedagogically sound approach - candidates must understand and articulate the problem
     *   Extension Guidelines:
         *   Adding more advanced features to the AI (e.g., code explanation, optimization suggestions):
           1. Update `codingAssistant.ts` with additional prompt sections and instructions

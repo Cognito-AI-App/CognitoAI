@@ -780,6 +780,7 @@ const Assessment = ({ interview }: AssessmentProps) => {
                 question={questions[currentQuestionIndex]}
                 onApplyCode={handleApplyAICode}
                 questionIndex={currentQuestionIndex}
+                currentCode={code}
               />
             )}
           </div>

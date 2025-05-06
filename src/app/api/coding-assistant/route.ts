@@ -9,7 +9,7 @@ const openai = new OpenAI({
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { messages, question } = body;
+    const { messages, currentCode } = body;
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json(
@@ -18,8 +18,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // Create the system message with the coding problem details
-    const systemMessage = generateSystemMessage(question);
+    // Create the system message with the user's current code for context
+    const systemMessage = generateSystemMessage(currentCode || "");
 
     // Format messages for OpenAI
     const formattedMessages = [

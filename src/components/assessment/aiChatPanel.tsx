@@ -16,12 +16,14 @@ interface AIChatPanelProps {
   question: CodingQuestion;
   onApplyCode: (code: string) => void;
   questionIndex: number;
+  currentCode: string;
 }
 
 const AIChatPanel: React.FC<AIChatPanelProps> = ({
   question,
   onApplyCode,
   questionIndex,
+  currentCode,
 }) => {
   const [input, setInput] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -44,13 +46,13 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
       const initialMessages: Message[] = [
         {
           role: "assistant",
-          content: `I'm your coding assistant for this question. Ask me to help you solve: "${question.title}". I'll generate code only, which you can apply to the editor.`,
+          content: "I'm your coding assistant. Ask me specific questions about code implementation and I'll generate code to help you. I'll only provide code without explanations.",
         },
       ];
       messagesMapRef.current.set(questionIndex, initialMessages);
       setMessages(initialMessages);
     }
-  }, [question, questionIndex]);
+  }, [questionIndex]);
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -79,18 +81,7 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
     setIsLoading(true);
 
     try {
-      // Format the question content for the AI
-      const questionContent = `
-      Title: ${question.title}
-      Description: ${question.description}
-      Input Format: ${question.input_format}
-      Output Format: ${question.output_format}
-      Example Input: ${question.test_cases.filter(tc => !tc.is_hidden)[0]?.input || ""}
-      Example Output: ${question.test_cases.filter(tc => !tc.is_hidden)[0]?.output || ""}
-      Explanation: ${question.example_explanation}
-      `;
-
-      // Send to the API
+      // Send to the API with current code for context
       const response = await fetch("/api/coding-assistant", {
         method: "POST",
         headers: {
@@ -98,7 +89,7 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
         },
         body: JSON.stringify({
           messages: updatedMessages,
-          question: questionContent,
+          currentCode: currentCode,
         }),
       });
 
@@ -148,7 +139,7 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
     const initialMessages: Message[] = [
       {
         role: "assistant",
-        content: `I'm your coding assistant for this question. Ask me to help you solve: "${question.title}". I'll generate code only, which you can apply to the editor.`,
+        content: "I'm your coding assistant. Ask me specific questions about code implementation and I'll generate code to help you. I'll only provide code without explanations.",
       },
     ];
     setMessages(initialMessages);
@@ -234,7 +225,7 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask for help with this problem..."
+              placeholder="Ask for help with your code..."
               disabled={isLoading}
               className="flex-1"
             />
