@@ -158,7 +158,7 @@ const TestCasePanel: React.FC<TestCasePanelProps> = ({
                     <span className="text-sm">
                       {hiddenTestCount} hidden test case{hiddenTestCount > 1 ? 's' : ''}
                     </span>
-                    <Badge variant={result?.passed_test_cases === result?.total_test_cases ? "success" : "destructive"}>
+                    <Badge variant={result?.passed_test_cases === result?.total_test_cases ? "secondary" : "destructive"}>
                       {result?.passed_test_cases === result?.total_test_cases ? "All Passed" : "Not All Passed"}
                     </Badge>
                   </div>
