@@ -130,9 +130,16 @@ function CallInfo({
 
   useEffect(() => {
     const fetchAssessmentResponses = async () => {
-      if (interviewId) {
+      if (interviewId && email) {
         try {
-          const responses = await AssessmentService.getAssessmentResponsesForInterview(interviewId);
+          // First try to get responses filtered by email for this specific candidate
+          let responses = await AssessmentService.getAssessmentResponsesForEmail(email, interviewId);
+          
+          // If no responses found by email, fallback to all responses for the interview
+          if (!responses || responses.length === 0) {
+            responses = await AssessmentService.getAssessmentResponsesForInterview(interviewId);
+          }
+          
           if (responses && responses.length > 0) {
             setAssessmentResponses(responses);
             setHasAssessment(true);
@@ -143,10 +150,10 @@ function CallInfo({
       }
     };
 
-    if (interviewId) {
+    if (interviewId && email) {
       fetchAssessmentResponses();
     }
-  }, [interviewId]);
+  }, [interviewId, email]);
 
   const onDeleteResponseClick = async () => {
     try {
@@ -187,41 +194,128 @@ function CallInfo({
     // Get the most recent assessment response
     const response = assessmentResponses[0];
     
+    // Calculate completion status
+    const isComplete = response.is_completed;
+    const tabSwitches = response.tab_switch_count || 0;
+    
     return (
-      <div className="bg-white rounded-xl p-4 mb-6 shadow-sm">
-        <div className="flex items-center gap-2 mb-4">
-          <Code className="text-indigo-600" size={20} />
-          <h3 className="font-semibold text-lg">Coding Assessment Results</h3>
-        </div>
+      <div className="bg-slate-200 rounded-2xl min-h-[120px] p-4 px-5 my-3">
+        <p className="font-semibold my-2 mb-4">Coding Assessment</p>
         
-        <div className="mb-4">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-600">Overall Score</span>
-            <span className="font-semibold">{response.score}/{response.total_score}</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2.5 my-2">
-            <div 
-              className="bg-indigo-600 h-2.5 rounded-full" 
-              style={{ width: `${((response.score ?? 0) / (response.total_score ?? 1)) * 100}%` }}
-            ></div>
-          </div>
-        </div>
-        
-        {response.responses && Array.isArray(response.responses) && response.responses.map((questionResponse: any, index: number) => (
-          <div key={index} className="border-t pt-4 mt-4">
-            <h4 className="font-medium mb-2">Question {index + 1}</h4>
-            <div className="flex justify-between text-sm mb-1">
-              <span>Language: {questionResponse.language}</span>
-              <span className="font-medium">{questionResponse.result.passed_test_cases}/{questionResponse.result.total_test_cases} tests passed</span>
+        <div className="bg-slate-50 rounded-2xl p-4">
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center">
+              <Code className="text-indigo-600 mr-2" size={20} />
+              <h3 className="font-semibold text-lg">Results Summary</h3>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
-              <div 
-                className="bg-indigo-600 h-2 rounded-full" 
-                style={{ width: `${((questionResponse.result.passed_test_cases ?? 0) / (questionResponse.result.total_test_cases ?? 1)) * 100}%` }}
-              ></div>
+            <div className="flex items-center gap-3">
+              {isComplete ? (
+                <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                  Completed
+                </span>
+              ) : (
+                <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
+                  <div className="w-2 h-2 bg-yellow-500 rounded-full mr-1"></div>
+                  Incomplete
+                </span>
+              )}
+              
+              {tabSwitches > 0 && (
+                <span className="bg-orange-100 text-orange-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full mr-1"></div>
+                  {tabSwitches} tab switch{tabSwitches !== 1 ? 'es' : ''}
+                </span>
+              )}
             </div>
           </div>
-        ))}
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div className="bg-white p-4 rounded-lg shadow-sm">
+              <div className="text-sm text-gray-600 mb-1">Overall Score</div>
+              <div className={`text-3xl font-bold ${
+                (response.score || 0) >= 80 ? 'text-green-600' : 
+                (response.score || 0) >= 50 ? 'text-yellow-600' : 
+                'text-red-600'
+              }`}>
+                {response.score || 0}%
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                <div 
+                  className={`h-1.5 rounded-full ${
+                    (response.score || 0) >= 80 ? 'bg-green-600' : 
+                    (response.score || 0) >= 50 ? 'bg-yellow-500' : 
+                    'bg-red-600'
+                  }`} 
+                  style={{ width: `${response.score || 0}%` }}
+                ></div>
+              </div>
+            </div>
+            
+            <div className="md:col-span-2 bg-white p-4 rounded-lg shadow-sm">
+              <div className="text-sm text-gray-600 mb-2">Questions Overview</div>
+              <div className="flex flex-wrap gap-2">
+                {response.responses && Array.isArray(response.responses) && 
+                  response.responses.map((questionResponse: any, index: number) => {
+                    const passRate = questionResponse.result.total_test_cases > 0
+                      ? Math.round((questionResponse.result.passed_test_cases / questionResponse.result.total_test_cases) * 100)
+                      : 0;
+                    
+                    return (
+                      <div key={index} className="inline-flex items-center gap-1">
+                        <div className={`w-3 h-3 rounded-full ${
+                          passRate >= 80 ? 'bg-green-500' : 
+                          passRate >= 50 ? 'bg-yellow-500' : 
+                          'bg-red-500'
+                        }`}></div>
+                        <span className="text-xs font-medium">Q{index + 1}: {passRate}%</span>
+                      </div>
+                    );
+                  })
+                }
+              </div>
+            </div>
+          </div>
+          
+          {response.responses && Array.isArray(response.responses) && response.responses.map((questionResponse: any, index: number) => {
+            const passRate = questionResponse.result.total_test_cases > 0
+              ? Math.round((questionResponse.result.passed_test_cases / questionResponse.result.total_test_cases) * 100)
+              : 0;
+              
+            return (
+              <div key={index} className="border-t border-gray-200 pt-4 mt-4">
+                <div className="flex justify-between items-start mb-2">
+                  <h4 className="font-medium">Question {index + 1}{questionResponse.question_title ? `: ${questionResponse.question_title}` : ''}</h4>
+                  <span className={`px-2 py-1 text-xs rounded-full font-medium ${
+                    passRate >= 80 ? 'bg-green-100 text-green-800' : 
+                    passRate >= 50 ? 'bg-yellow-100 text-yellow-800' : 
+                    'bg-red-100 text-red-800'
+                  }`}>
+                    {questionResponse.result.passed_test_cases}/{questionResponse.result.total_test_cases} tests passed
+                  </span>
+                </div>
+                <div className="flex justify-between items-center text-sm mb-1">
+                  <span>Language: <code className="bg-gray-100 px-1 py-0.5 rounded text-xs">{questionResponse.language}</code></span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                  <div 
+                    className={`h-2 rounded-full ${
+                      passRate >= 80 ? 'bg-green-600' : 
+                      passRate >= 50 ? 'bg-yellow-500' : 
+                      'bg-red-600'
+                    }`}
+                    style={{ width: `${passRate}%` }}
+                  ></div>
+                </div>
+                {(questionResponse.result.stderr || questionResponse.result.compile_output) && (
+                  <div className="mt-2 text-xs text-red-600 bg-red-50 p-2 rounded">
+                    {questionResponse.result.compile_output || questionResponse.result.stderr}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   };
@@ -481,6 +575,9 @@ function CallInfo({
               </div>
             </div>
           </div>
+          {/* Coding Assessment Results */}
+          {hasAssessment && renderAssessmentResults()}
+
           {analytics &&
             analytics.questionSummaries &&
             analytics.questionSummaries.length > 0 && (
@@ -508,16 +605,6 @@ function CallInfo({
               />
             </ScrollArea>
           </div>
-          <div className="bg-slate-50 rounded-2xl p-4 my-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 m-3">
-              <div className="bg-white p-4 shadow-sm rounded-xl">
-                <p className="font-semibold mb-4">Call Statistics</p>
-                {/* ...existing code... */}
-              </div>
-              {/* ...existing code... */}
-            </div>
-          </div>
-          {hasAssessment && renderAssessmentResults()}
         </>
       )}
     </div>

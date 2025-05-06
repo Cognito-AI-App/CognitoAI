@@ -20,6 +20,8 @@ import DataTable, {
   TableData,
 } from "@/components/dashboard/interview/dataTable";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { AssessmentService } from "@/services/assessments.service";
+import { AssessmentResponse } from "@/types/assessment";
 
 type SummaryProps = {
   responses: Response[];
@@ -59,6 +61,7 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
     incomplete: 0,
     partial: 0,
   });
+  const [assessmentResponses, setAssessmentResponses] = useState<AssessmentResponse[]>([]);
 
   const totalResponses = responses.length;
 
@@ -71,17 +74,55 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
 
   const [tableData, setTableData] = useState<TableData[]>([]);
 
+  // Fetch all assessment responses for this interview
+  useEffect(() => {
+    const fetchAssessmentData = async () => {
+      if (interview?.id) {
+        try {
+          const responses = await AssessmentService.getAssessmentResponsesForInterview(interview.id);
+          if (responses) {
+            setAssessmentResponses(responses);
+          }
+        } catch (error) {
+          console.error("Error fetching assessment responses:", error);
+        }
+      }
+    };
+
+    if (interview?.has_assessment) {
+      fetchAssessmentData();
+    }
+  }, [interview]);
+
   const prepareTableData = (responses: Response[]): TableData[] => {
-    return responses.map((response) => ({
-      call_id: response.call_id,
-      name: response.name || "Anonymous",
-      overallScore: response.analytics?.overallScore || 0,
-      communicationScore: response.analytics?.communication?.score || 0,
-      callSummary:
-        response.analytics?.softSkillSummary ||
-        response.details?.call_analysis?.call_summary ||
-        "No summary available",
-    }));
+    return responses.map((response) => {
+      // Find assessment response for this candidate if it exists
+      const assessmentResponse = assessmentResponses.find(
+        (ar) => ar.email === response.email
+      );
+      
+      const behavioralScore = response.analytics?.overallScore || 0;
+      const codingScore = assessmentResponse?.score || null;
+      
+      // Calculate combined score (average of behavioral and coding if both exist)
+      let combinedScore = behavioralScore;
+      if (codingScore !== null) {
+        combinedScore = Math.round((behavioralScore + codingScore) / 2);
+      }
+      
+      return {
+        call_id: response.call_id,
+        name: response.name || "Anonymous",
+        combinedScore: combinedScore,
+        overallScore: behavioralScore,
+        codingScore: codingScore,
+        communicationScore: response.analytics?.communication?.score || 0,
+        callSummary:
+          response.analytics?.softSkillSummary ||
+          response.details?.call_analysis?.call_summary ||
+          "No summary available",
+      };
+    });
   };
 
   useEffect(() => {
@@ -168,7 +209,7 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
 
     const preparedData = prepareTableData(responses);
     setTableData(preparedData);
-  }, [responses]);
+  }, [responses, assessmentResponses]);
 
   return (
     <div className="h-screen z-[10] mx-2">

@@ -30,6 +30,7 @@ export type AssessmentResponse = {
 
 export type AssessmentQuestionResponse = {
   question_id: number;
+  question_title?: string;
   code: string;
   language: string;
   result: AssessmentQuestionResult;

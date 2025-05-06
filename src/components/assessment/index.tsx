@@ -272,15 +272,50 @@ const Assessment = ({ interview }: AssessmentProps) => {
     if (!assessment) return null;
     
     try {
+      // Calculate total score based on responses
+      let totalPassedTestCases = 0;
+      let totalTestCases = 0;
+      
+      // Process current responses and make sure they're up to date
+      const finalResponses = [...responses];
+      
+      // Make sure the current question's code is saved in responses
+      finalResponses[currentQuestionIndex] = {
+        ...finalResponses[currentQuestionIndex],
+        code: code,
+        language: currentLanguage.value
+      };
+      
+      // Calculate total score and add question titles to responses
+      finalResponses.forEach((response, index) => {
+        // Add test results data
+        totalPassedTestCases += response.result.passed_test_cases || 0;
+        totalTestCases += response.result.total_test_cases || 0;
+        
+        // Find corresponding question and add title
+        const question = questions.find(q => q.id === response.question_id);
+        if (question) {
+          finalResponses[index] = {
+            ...finalResponses[index],
+            question_title: question.title // Add question title to response
+          };
+        }
+      });
+      
+      // Calculate percentage score (0-100)
+      const percentageScore = totalTestCases > 0 
+        ? Math.round((totalPassedTestCases / totalTestCases) * 100) 
+        : 0;
+      
       const payload = {
         assessment_id: assessment.id,
         interview_id: interview.id,
         name: name,
         email: email,
-        responses: [],
-        score: 0,
-        total_score: questions.length,
-        is_completed: false,
+        responses: finalResponses,
+        score: percentageScore,
+        total_score: 100, // We're using percentage, so total is always 100
+        is_completed: true,
         tab_switch_count: tabSwitchCount
       };
       
@@ -301,7 +336,10 @@ const Assessment = ({ interview }: AssessmentProps) => {
     
     try {
       setSubmitting(true);
-      await createAssessmentResponse();
+      const response = await createAssessmentResponse();
+      if (response) {
+        setAssessmentResponse(response);
+      }
       setIsCompleted(true);
       toast.success("Assessment submitted successfully!");
     } catch (error) {
@@ -414,27 +452,72 @@ const Assessment = ({ interview }: AssessmentProps) => {
   const renderCompletionScreen = () => {
     return (
       <div className="flex flex-col items-center justify-center h-full">
-        <div className="w-full max-w-lg text-center p-6 bg-white rounded-lg shadow-md">
+        <div className="w-full max-w-2xl text-center p-6 bg-white rounded-lg shadow-md">
           <CheckCircleIcon className="mx-auto h-16 w-16 text-green-500 mb-4" />
           <h2 className="text-2xl font-bold mb-4">Assessment Completed!</h2>
           <p className="mb-6">
             Thank you for completing the assessment. Your responses have been recorded.
           </p>
-          <p className="text-lg font-semibold mb-2">
-            Your Score: {assessmentResponse?.score || 0}/100
-          </p>
+          
+          {/* Overall Score */}
+          <div className="mb-6 p-4 bg-indigo-50 rounded-lg">
+            <h3 className="text-xl font-semibold mb-2">Your Overall Score</h3>
+            <div className="text-3xl font-bold text-indigo-600">
+              {assessmentResponse?.score || 0}/100
+            </div>
+          </div>
+          
+          {/* Per Question Breakdown */}
+          {assessmentResponse?.responses && assessmentResponse.responses.length > 0 && (
+            <div className="mt-6 text-left">
+              <h3 className="text-lg font-semibold mb-3 text-center">Score Breakdown</h3>
+              <div className="space-y-3">
+                {assessmentResponse.responses.map((response, index) => {
+                  const question = questions.find(q => q.id === response.question_id);
+                  const percentScore = response.result.total_test_cases > 0
+                    ? Math.round((response.result.passed_test_cases / response.result.total_test_cases) * 100)
+                    : 0;
+                  
+                  return (
+                    <div key={index} className="p-3 border rounded-md flex flex-col">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="font-medium">Question {index + 1}: {question?.title || 'Unknown'}</span>
+                        <span className={`px-2 py-1 rounded-full text-sm font-medium ${
+                          percentScore >= 80 ? 'bg-green-100 text-green-800' : 
+                          percentScore >= 50 ? 'bg-yellow-100 text-yellow-800' : 
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {response.result.passed_test_cases}/{response.result.total_test_cases} Tests Passed
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2.5">
+                        <div 
+                          className={`h-2.5 rounded-full ${
+                            percentScore >= 80 ? 'bg-green-600' : 
+                            percentScore >= 50 ? 'bg-yellow-500' : 
+                            'bg-red-600'
+                          }`} 
+                          style={{ width: `${percentScore}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
           
           {!isFeedbackSubmitted ? (
             <Button 
               onClick={() => setIsFeedbackDialogOpen(true)}
-              className="mt-4 bg-indigo-600 text-white"
+              className="mt-6 bg-indigo-600 text-white"
             >
               Provide Feedback
             </Button>
           ) : (
             <Button 
               onClick={() => router.push(`/call/${interviewId}`)}
-              className="mt-4"
+              className="mt-6"
             >
               Return to Interview
             </Button>

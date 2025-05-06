@@ -77,6 +77,12 @@ The platform includes a full-featured coding assessment system that can be added
   * Automated scoring based on passed test cases
   * Time limits and tab switch tracking to ensure assessment integrity
   * Immediate feedback on compilation errors and test outcomes
+* **Comprehensive Scoring System:**
+  * Individual scoring for each coding question based on test case success
+  * Overall coding assessment score calculation (percentage of passed tests)
+  * Combined candidate evaluation that averages behavioral interview and coding scores
+  * Complete score breakdown visible in interviewer dashboard
+  * Color-coded performance indicators for easy evaluation
 
 Upon completing the behavioral interview, candidates can proceed to the coding assessment where they:
 1. Select their preferred programming language
@@ -84,7 +90,7 @@ Upon completing the behavioral interview, candidates can proceed to the coding a
 3. Run tests to verify their solutions
 4. Submit the assessment for scoring
 
-Assessment results are saved with the interview, allowing interviewers to review both the behavioral interview and coding performance in one place.
+Assessment results are saved with the interview, allowing interviewers to review both the behavioral interview and coding performance in one place, with a combined overall score that reflects both aspects of the evaluation.
 
 ## Technology Stack
 
