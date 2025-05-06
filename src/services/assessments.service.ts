@@ -201,4 +201,28 @@ export const AssessmentService = {
       return [];
     }
   },
+
+  getAssessmentResponsesForEmail: async (
+    email: string,
+    interviewId: string
+  ): Promise<AssessmentResponse[]> => {
+    try {
+      const { data, error } = await supabase
+        .from("assessment_response")
+        .select("*")
+        .eq("email", email)
+        .eq("interview_id", interviewId)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching assessment responses for email:", error);
+        return [];
+      }
+
+      return data || [];
+    } catch (error) {
+      console.error("Error in getAssessmentResponsesForEmail:", error);
+      return [];
+    }
+  },
 }; 

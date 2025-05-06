@@ -25,6 +25,9 @@ import { useTabSwitchPrevention } from "@/components/call/tabSwitchPrevention";
 import { useParams, useRouter } from "next/navigation";
 import { getStarterCode } from "./codeTemplates";
 import { getDefaultLanguage, LanguageOption } from "./languageOptions";
+import { FeedbackForm } from "@/components/call/feedbackForm";
+import { FeedbackService } from "@/services/feedback.service";
+import { FeedbackData } from "@/types/response";
 
 type AssessmentProps = {
   interview: Interview;
@@ -49,12 +52,24 @@ const Assessment = ({ interview }: AssessmentProps) => {
   const [isInfoDialogOpen, setIsInfoDialogOpen] = useState<boolean>(true);
   const { tabSwitchCount } = useTabSwitchPrevention();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState<boolean>(false);
+  const [isFeedbackSubmitted, setIsFeedbackSubmitted] = useState<boolean>(false);
 
   // Fetch assessment details based on the assessment_id in the interview
   useEffect(() => {
     const fetchAssessmentData = async () => {
       if (interview.assessment_id) {
         try {
+          // Get user info from sessionStorage if available
+          const storedName = sessionStorage.getItem('interview_user_name');
+          const storedEmail = sessionStorage.getItem('interview_user_email');
+          
+          if (storedName && storedEmail) {
+            setName(storedName);
+            setEmail(storedEmail);
+            setIsInfoDialogOpen(false); // Skip info dialog if we have the data
+          }
+          
           const assessmentData = await AssessmentService.getAssessment(interview.assessment_id);
           if (assessmentData) {
             setAssessment(assessmentData);
@@ -410,34 +425,29 @@ const Assessment = ({ interview }: AssessmentProps) => {
     }
   };
 
-  // Create assessment response
+  // Create assessment response with user info
   const createAssessmentResponse = async () => {
-    if (!assessment) return;
+    if (!assessment) return null;
     
     try {
-      // Calculate total score
-      const totalScore = responses.reduce((acc, response) => acc + response.result.score, 0);
-      const averageScore = Math.round(totalScore / responses.length);
-      
-      const responseData = await AssessmentService.createAssessmentResponse({
+      const payload = {
         assessment_id: assessment.id,
         interview_id: interview.id,
         name: name,
         email: email,
-        responses: responses,
-        score: averageScore,
-        total_score: 100,
-        is_completed: true,
-        tab_switch_count: tabSwitchCount,
-      });
+        responses: [],
+        score: 0,
+        total_score: questions.length,
+        is_completed: false,
+        tab_switch_count: tabSwitchCount
+      };
       
-      if (responseData) {
-        setAssessmentResponse(responseData);
-        return responseData;
-      }
+      const response = await AssessmentService.createAssessmentResponse(payload);
+      setAssessmentResponse(response);
+      return response;
     } catch (error) {
       console.error("Error creating assessment response:", error);
-      throw error;
+      return null;
     }
   };
 
@@ -491,8 +501,15 @@ const Assessment = ({ interview }: AssessmentProps) => {
     }
   };
   
-  // Start assessment after getting user info
+  // Start assessment after getting user info (if not already provided)
   const startAssessment = () => {
+    // If name and email were already set from sessionStorage, just close the dialog
+    if (name.trim() && email.trim()) {
+      setIsInfoDialogOpen(false);
+      return;
+    }
+    
+    // Otherwise validate the entered data
     if (!name.trim() || !email.trim()) {
       toast.error("Please enter your name and email");
       return;
@@ -506,6 +523,27 @@ const Assessment = ({ interview }: AssessmentProps) => {
     }
     
     setIsInfoDialogOpen(false);
+  };
+  
+  // Function to handle feedback submission
+  const handleFeedbackSubmit = async (formData: Omit<FeedbackData, "interview_id">) => {
+    try {
+      const result = await FeedbackService.submitFeedback({
+        ...formData,
+        interview_id: interview.id
+      });
+
+      if (result) {
+        toast.success("Thank you for your feedback!");
+        setIsFeedbackSubmitted(true);
+        setIsFeedbackDialogOpen(false);
+      } else {
+        toast.error("Failed to submit feedback. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      toast.error("An error occurred. Please try again later.");
+    }
   };
 
   // Render completion screen
@@ -521,12 +559,32 @@ const Assessment = ({ interview }: AssessmentProps) => {
           <p className="text-lg font-semibold mb-2">
             Your Score: {assessmentResponse?.score || 0}/100
           </p>
-          <Button 
-            onClick={() => router.push(`/call/${interviewId}`)}
-            className="mt-4"
-          >
-            Return to Interview
-          </Button>
+          
+          {!isFeedbackSubmitted ? (
+            <Button 
+              onClick={() => setIsFeedbackDialogOpen(true)}
+              className="mt-4 bg-indigo-600 text-white"
+            >
+              Provide Feedback
+            </Button>
+          ) : (
+            <Button 
+              onClick={() => router.push(`/call/${interviewId}`)}
+              className="mt-4"
+            >
+              Return to Interview
+            </Button>
+          )}
+          
+          <Dialog open={isFeedbackDialogOpen} onOpenChange={setIsFeedbackDialogOpen}>
+            <DialogContent>
+              <FeedbackForm
+                email={email}
+                onSubmit={handleFeedbackSubmit}
+                interview={interview}
+              />
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     );
