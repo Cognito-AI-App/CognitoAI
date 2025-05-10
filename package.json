@@ -49,6 +49,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "cognitoai-app": "file:",
     "embla-carousel-react": "^8.0.0-rc22",
     "framer-motion": "^11.3.21",
     "fs": "^0.0.1-security",
