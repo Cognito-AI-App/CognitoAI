@@ -217,14 +217,14 @@ function DetailsPopup({
           />
 
           <div className="flex flex-row justify-between w-full mt-5">
-            <div className="flex flex-row items-center">
+            {/* <div className="flex flex-row items-center">
               <h3 className="text-sm font-medium mr-3">Anonymous Interview:</h3>
               <Switch
                 checked={isAnonymous}
                 onCheckedChange={setIsAnonymous}
                 className="bg-indigo-600"
               />
-            </div>
+            </div> */}
             <FileUpload
               isUploaded={isUploaded}
               setIsUploaded={setIsUploaded}
