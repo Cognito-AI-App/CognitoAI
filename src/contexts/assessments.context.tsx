@@ -32,9 +32,10 @@ export const AssessmentsProvider: React.FC<{ children: React.ReactNode }> = ({
   const fetchAssessments = async () => {
     setLoading(true);
     try {
-      if (organization?.id) {
-        const fetchedAssessments = await AssessmentService.getAssessmentsForOrganization(
-          organization.id
+      if (userId) {
+        const fetchedAssessments = await AssessmentService.getAssessmentsForUserOrOrganization(
+          userId,
+          organization?.id || null
         );
         setAssessments(fetchedAssessments);
       } else {
@@ -49,10 +50,13 @@ export const AssessmentsProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    if (organization?.id) {
+    if (userId) {
       fetchAssessments();
+    } else {
+      setLoading(false);
+      setAssessments([]);
     }
-  }, [organization?.id]);
+  }, [userId, organization?.id]);
 
   return (
     <AssessmentsContext.Provider

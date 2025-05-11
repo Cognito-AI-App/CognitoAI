@@ -156,7 +156,7 @@ const CreateQuestionModal: React.FC<Props> = ({
   };
 
   const handleSubmit = async () => {
-    if (!userId || !organization?.id) {
+    if (!userId) {
       toast.error("Authentication error. Please try again.");
       return;
     }
@@ -196,7 +196,7 @@ const CreateQuestionModal: React.FC<Props> = ({
         await CodingQuestionService.createQuestion(
           formData,
           userId,
-          organization.id
+          organization?.id || null
         );
         toast.success("Question created successfully");
       }
