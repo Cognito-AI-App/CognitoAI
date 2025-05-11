@@ -11,7 +11,7 @@ export interface Quote {
 
 export interface InterviewBase {
   user_id: string;
-  organization_id: string;
+  organization_id: string | null;
   name: string;
   interviewer_id: bigint;
   objective: string;
