@@ -233,7 +233,7 @@ const CreateAssessmentModal: React.FC<Props> = ({
             </div>
 
             <div>
-              <Label htmlFor="description">Description (Optional)</Label>
+              <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
                 name="description"
@@ -276,54 +276,51 @@ const CreateAssessmentModal: React.FC<Props> = ({
               </div>
             </div>
 
-            <div>
-              <Label className="mb-2 block">Selected Questions: {formData.questions.length}</Label>
-              <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open}
-                    className="w-full justify-between"
-                  >
-                    Select questions
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[400px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search questions..." />
-                    <CommandList>
-                      <CommandEmpty>No questions found.</CommandEmpty>
-                      <CommandGroup>
-                        {availableQuestions.map((question) => (
-                          <CommandItem
-                            key={question.id}
-                            value={question.title}
-                            onSelect={() => {
-                              handleQuestionToggle(question.id);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                formData.questions.includes(question.id)
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            <span className="flex-1 truncate">{question.title}</span>
-                            <Badge className={difficultyColors[question.difficulty]}>
-                              {question.difficulty}
-                            </Badge>
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            </div>
+<div>
+  <Label className="mb-2 block">Selected Questions: {formData.questions.length}</Label>
+  <Popover open={open} onOpenChange={setOpen}>
+    <PopoverTrigger asChild>
+      <Button
+        variant="outline"
+        role="combobox"
+        aria-expanded={open}
+        className="w-full justify-between"
+      >
+        Select questions
+        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+      </Button>
+    </PopoverTrigger>
+    <PopoverContent className="w-[400px] p-0">
+      <Command>
+        <CommandInput placeholder="Search questions..." />
+        <CommandList>
+          <CommandEmpty>No questions found.</CommandEmpty>
+          <CommandGroup>
+            {availableQuestions.map((question) => (
+              <CommandItem
+                key={question.id}
+                value={question.title}
+                onSelect={() => handleQuestionToggle(question.id)}
+                className="flex items-center"
+              >
+                <input
+                  type="checkbox"
+                  checked={formData.questions.includes(question.id)}
+                  onChange={() => handleQuestionToggle(question.id)}
+                  className="mr-2"
+                />
+                <span className="flex-1 truncate">{question.title}</span>
+                <Badge className={difficultyColors[question.difficulty]}>
+                  {question.difficulty}
+                </Badge>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      </Command>
+    </PopoverContent>
+  </Popover>
+</div>
 
             {formData.questions.length > 0 && (
               <div>
