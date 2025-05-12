@@ -3,7 +3,7 @@ import pathlib
 from typing import List, Set
 
 # Files, folders and extensions to ignore
-ignored_files = {"yarn.lock", "temp.py", "temp.txt", "temp_init.txt", "README.md", "Developer-Manual.md"}
+ignored_files = {"yarn.lock", "temp.py", "temp.txt", "temp_init.txt", "package-lock.json"}
 ignored_folders = {"node_modules", ".vscode", ".git", ".next"}
 ignored_extensions = {".png", ".wav", ".ico", ".svg", ".webp"}
 

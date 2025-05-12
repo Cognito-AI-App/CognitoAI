@@ -32,9 +32,10 @@ export const CodingQuestionsProvider: React.FC<{ children: React.ReactNode }> = 
   const fetchCodingQuestions = async () => {
     setLoading(true);
     try {
-      if (organization?.id) {
-        const questions = await CodingQuestionService.getQuestionsForOrganization(
-          organization.id
+      if (userId) {
+        const questions = await CodingQuestionService.getQuestionsForUserOrOrganization(
+          userId,
+          organization?.id || null
         );
         setCodingQuestions(questions);
       } else {
@@ -49,10 +50,13 @@ export const CodingQuestionsProvider: React.FC<{ children: React.ReactNode }> = 
   };
 
   useEffect(() => {
-    if (organization?.id) {
+    if (userId) {
       fetchCodingQuestions();
+    } else {
+      setLoading(false);
+      setCodingQuestions([]);
     }
-  }, [organization?.id]);
+  }, [userId, organization?.id]);
 
   return (
     <CodingQuestionsContext.Provider

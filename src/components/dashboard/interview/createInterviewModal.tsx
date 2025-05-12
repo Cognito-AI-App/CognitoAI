@@ -11,7 +11,7 @@ interface Props {
 
 const CreateEmptyInterviewData = (): InterviewBase => ({
   user_id: "",
-  organization_id: "",
+  organization_id: null,
   name: "",
   interviewer_id: BigInt(0),
   objective: "",
@@ -21,6 +21,8 @@ const CreateEmptyInterviewData = (): InterviewBase => ({
   questions: [],
   description: "",
   response_count: BigInt(0),
+  has_assessment: false,
+  assessment_id: null,
 });
 
 function CreateInterviewModal({ open, setOpen }: Props) {

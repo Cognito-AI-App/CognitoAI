@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useOrganization } from "@clerk/nextjs";
+import { useOrganization, useUser } from "@clerk/nextjs";
 import InterviewCard from "@/components/dashboard/interview/interviewCard";
 import CreateInterviewCard from "@/components/dashboard/interview/createInterviewCard";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
@@ -10,17 +10,20 @@ import { ClientService } from "@/services/clients.service";
 import { ResponseService } from "@/services/responses.service";
 import { useInterviews } from "@/contexts/interviews.context";
 import Modal from "@/components/dashboard/Modal";
-import { Gem, Plus } from "lucide-react";
+import { Gem, Plus, Users, Building, UserPlus } from "lucide-react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 function Interviews() {
   const { interviews, interviewsLoading } = useInterviews();
-  const { organization } = useOrganization();
+  const { organization, isLoaded: isOrgLoaded } = useOrganization();
+  const { user } = useUser();
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPlan, setCurrentPlan] = useState<string>("");
   const [allowedResponsesCount, setAllowedResponsesCount] =
     useState<number>(10);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState<boolean>(false);
+  const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
 
   function InterviewsLoader() {
     return (
@@ -35,6 +38,13 @@ function Interviews() {
   }
 
   useEffect(() => {
+    // Check if user has an organization when the component mounts
+    if (isOrgLoaded && user && !organization) {
+      setIsOrgModalOpen(true);
+    }
+  }, [isOrgLoaded, organization, user]);
+
+  useEffect(() => {
     const fetchOrganizationData = async () => {
       try {
         if (organization?.id) {
@@ -42,7 +52,7 @@ function Interviews() {
           if (data?.plan) {
             setCurrentPlan(data.plan);
             if (data.plan === "free_trial_over") {
-              setIsModalOpen(true);
+              setIsUpgradeModalOpen(true);
             }
           }
           if (data?.allowed_responses_count) {
@@ -116,8 +126,8 @@ function Interviews() {
             <InterviewsLoader />
           ) : (
             <>
-              {isModalOpen && (
-                <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+              {isUpgradeModalOpen && (
+                <Modal open={isUpgradeModalOpen} onClose={() => setIsUpgradeModalOpen(false)}>
                   <div className="flex flex-col space-y-4">
                     <div className="flex justify-center text-indigo-600">
                       <Gem />
@@ -166,6 +176,35 @@ function Interviews() {
                   </div>
                 </Modal>
               )}
+
+              {isOrgModalOpen && (
+                <Modal open={isOrgModalOpen} onClose={() => setIsOrgModalOpen(false)}>
+                  <div className="flex flex-col space-y-4">
+                    <div className="flex justify-center text-indigo-600">
+                      <Users size={32} />
+                    </div>
+                    <h3 className="text-xl font-semibold text-center">
+                      No Organization Selected
+                    </h3>
+                    <p className="text-center">
+                      You are currently using CognitoAI without an organization. 
+                      While all features will work, creating an organization would allow you 
+                      to share interviews, questions, and assessments with your team.
+                    </p>
+                    <p className="text-sm text-center text-gray-500 mt-2">
+                      You can create or join an organization anytime from your user profile.
+                    </p>
+                    <div className="flex justify-center mt-4">
+                      <Button 
+                        onClick={() => setIsOrgModalOpen(false)}
+                      >
+                        Got it
+                      </Button>
+                    </div>
+                  </div>
+                </Modal>
+              )}
+
               {interviews.map((item) => (
                 <InterviewCard
                   id={item.id}

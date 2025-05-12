@@ -83,9 +83,10 @@ const CreateAssessmentModal: React.FC<Props> = ({
 
   useEffect(() => {
     const loadQuestions = async () => {
-      if (organization?.id) {
-        const questions = await CodingQuestionService.getQuestionsForOrganization(
-          organization.id
+      if (userId) {
+        const questions = await CodingQuestionService.getQuestionsForUserOrOrganization(
+          userId,
+          organization?.id || null
         );
         setAvailableQuestions(questions);
       }
@@ -94,7 +95,7 @@ const CreateAssessmentModal: React.FC<Props> = ({
     if (isOpen) {
       loadQuestions();
     }
-  }, [isOpen, organization?.id]);
+  }, [isOpen, userId, organization?.id]);
 
   useEffect(() => {
     const loadAssessment = async () => {
@@ -162,7 +163,7 @@ const CreateAssessmentModal: React.FC<Props> = ({
   };
 
   const handleSubmit = async () => {
-    if (!userId || !organization?.id) {
+    if (!userId) {
       toast.error("Authentication error. Please try again.");
       return;
     }
@@ -172,12 +173,12 @@ const CreateAssessmentModal: React.FC<Props> = ({
       toast.error("Name is required");
       return;
     }
-    if (formData.questions.length === 0) {
-      toast.error("You must select at least one question");
+    if (!formData.description || !formData.description.trim()) {
+      toast.error("Description is required");
       return;
     }
-    if (!formData.time_duration.trim() || Number(formData.time_duration) <= 0) {
-      toast.error("Time duration must be greater than 0");
+    if (formData.questions.length === 0) {
+      toast.error("You must select at least one question");
       return;
     }
 
@@ -190,7 +191,7 @@ const CreateAssessmentModal: React.FC<Props> = ({
         await AssessmentService.createAssessment(
           formData,
           userId,
-          organization.id
+          organization?.id || null
         );
         toast.success("Assessment created successfully");
       }
@@ -236,7 +237,7 @@ const CreateAssessmentModal: React.FC<Props> = ({
               <Textarea
                 id="description"
                 name="description"
-                value={formData.description}
+                value={formData.description || ""}
                 onChange={handleInputChange}
                 placeholder="Describe the purpose of this assessment"
                 rows={3}

@@ -46,7 +46,7 @@ export const AssessmentService = {
   createAssessment: async (
     assessment: AssessmentFormData,
     user_id: string,
-    organization_id: string
+    organization_id: string | null
   ): Promise<Assessment | null> => {
     try {
       const { data, error } = await supabase
@@ -129,6 +129,52 @@ export const AssessmentService = {
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentsForOrganization:", error);
+      return [];
+    }
+  },
+  
+  getAssessmentsForUser: async (userId: string): Promise<Assessment[]> => {
+    try {
+      const { data, error } = await supabase
+        .from("assessment")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching user assessments:", error);
+        return [];
+      }
+
+      return data || [];
+    } catch (error) {
+      console.error("Error in getAssessmentsForUser:", error);
+      return [];
+    }
+  },
+  
+  getAssessmentsForUserOrOrganization: async (userId: string, organizationId: string | null): Promise<Assessment[]> => {
+    try {
+      let query = supabase
+        .from("assessment")
+        .select("*");
+      
+      if (organizationId) {
+        query = query.or(`organization_id.eq.${organizationId},user_id.eq.${userId}`);
+      } else {
+        query = query.eq("user_id", userId);
+      }
+      
+      const { data, error } = await query.order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching assessments:", error);
+        return [];
+      }
+
+      return data || [];
+    } catch (error) {
+      console.error("Error in getAssessmentsForUserOrOrganization:", error);
       return [];
     }
   },

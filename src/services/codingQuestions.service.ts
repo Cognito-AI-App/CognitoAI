@@ -46,7 +46,7 @@ export const CodingQuestionService = {
   createQuestion: async (
     question: CodingQuestionFormData,
     user_id: string,
-    organization_id: string
+    organization_id: string | null
   ): Promise<CodingQuestion | null> => {
     try {
       const { data, error } = await supabase
@@ -133,4 +133,50 @@ export const CodingQuestionService = {
       return [];
     }
   },
+  
+  getQuestionsForUser: async (userId: string): Promise<CodingQuestion[]> => {
+    try {
+      const { data, error } = await supabase
+        .from("coding_question")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching user questions:", error);
+        return [];
+      }
+
+      return data || [];
+    } catch (error) {
+      console.error("Error in getQuestionsForUser:", error);
+      return [];
+    }
+  },
+  
+  getQuestionsForUserOrOrganization: async (userId: string, organizationId: string | null): Promise<CodingQuestion[]> => {
+    try {
+      let query = supabase
+        .from("coding_question")
+        .select("*");
+      
+      if (organizationId) {
+        query = query.or(`organization_id.eq.${organizationId},user_id.eq.${userId}`);
+      } else {
+        query = query.eq("user_id", userId);
+      }
+      
+      const { data, error } = await query.order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching questions:", error);
+        return [];
+      }
+
+      return data || [];
+    } catch (error) {
+      console.error("Error in getQuestionsForUserOrOrganization:", error);
+      return [];
+    }
+  }
 }; 

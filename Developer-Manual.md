@@ -241,6 +241,10 @@ Applies to changes within `src/app/api/`, `src/actions/`, `src/services/`, and d
 *   **Service Layer Abstraction:** All direct database queries should be encapsulated within functions in the `src/services/` directory. API routes/actions should call these service functions.
 *   **Error Handling:** Check for errors returned by Supabase calls and handle them gracefully (log the error, return appropriate API response).
 *   **Query Efficiency:** Write efficient SQL queries. Use Supabase's features like `.select()` projections to fetch only necessary data. Be mindful of joins and potential performance bottlenecks.
+*   **User/Organization Handling:** Services should support fetching data for either:
+    *   Organization members (data shared across the organization)
+    *   Individual users (personal data not associated with any organization)
+    *   Use the `.or()` condition with both `user_id` and `organization_id` for optimal queries: `.or("organization_id.eq.${organizationId},user_id.eq.${userId}")` 
 *   **Schema Changes:**
     *   Modify the `supabase_schema.sql` file to reflect changes.
     *   Generate new TypeScript types using `supabase gen types typescript ...` (or similar command) and update `src/types/database.types.ts`.

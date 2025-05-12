@@ -22,11 +22,15 @@ export async function POST(req: Request, res: Response) {
         ?.toLowerCase()
         .replace(/\s/g, "-");
       readableSlug = `${orgNameSlug}-${interviewNameSlug}`;
+    } else {
+      // For users without an organization, use the interview name as the slug
+      const interviewNameSlug = payload.name?.toLowerCase().replace(/\s/g, "-");
+      readableSlug = `${interviewNameSlug}-${url_id.substring(0, 8)}`;
     }
 
     const newInterview = await InterviewService.createInterview({
       ...payload,
-      url: url,
+      url,
       id: url_id,
       readable_slug: readableSlug,
     });
@@ -38,7 +42,7 @@ export async function POST(req: Request, res: Response) {
       { status: 200 },
     );
   } catch (err) {
-    logger.error("Error creating interview");
+    logger.error("Error creating interview", err as object);
 
     return NextResponse.json(
       { error: "Internal server error" },
