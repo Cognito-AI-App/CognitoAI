@@ -121,10 +121,30 @@ Applies to changes within `src/app/(client)/`, `src/app/(user)/`, `src/component
     *   Reusable base UI elements (often from Shadcn): `src/components/ui/`
     *   App-specific reusable components: `src/components/` (e.g., `Navbar`, `SideMenu`)
     *   Feature-specific components: `src/components/<feature>/` (e.g., `src/components/dashboard/interview/InterviewCard.tsx`)
+    *   Landing page components: `src/components/landing/` (e.g., `Header`, `Hero`, `Features`)
     *   Page-specific components (if not reusable): Co-locate within the `src/app/.../page.tsx` directory or a subfolder if complex.
 *   **Naming:** Use `PascalCase` for component file names and function/class names (e.g., `InterviewCard.tsx`, `function InterviewCard(...)`).
 *   **File Structure:** For complex components, consider grouping related files (e.g., component, styles, types) in a dedicated folder.
 *   **Props:** Use TypeScript interfaces for defining component props. Keep prop names clear and descriptive.
+
+### Landing Page Components
+
+*   **Structure:** Landing page components are organized in `src/components/landing/` with a clean export structure via `index.ts`
+*   **Key Components:**
+    *   **`Header`**: Navigation with authentication-aware CTAs, responsive mobile menu
+    *   **`Hero`**: Main value proposition with dynamic CTAs based on auth state
+    *   **`Features`**: Grid-based feature showcase with icons and descriptions
+    *   **`HowItWorks`**: Step-by-step process explanation with visual flow
+    *   **`Screenshots`**: Interactive gallery with category filtering and navigation
+    *   **`Contact`**: Contact information and form with validation
+    *   **`Footer`**: Company information, links, and social media
+*   **Design Principles:**
+    *   **Responsive First:** All components built mobile-first with progressive enhancement
+    *   **Performance:** Optimized images, lazy loading, and efficient re-renders
+    *   **Accessibility:** Proper ARIA labels, keyboard navigation, and semantic HTML
+    *   **SEO:** Structured data, meta tags, and semantic markup
+*   **Authentication Integration:** Components adapt based on Clerk authentication state
+*   **Contact Management:** Contact details stored in `src/lib/contact.ts` for easy updates
 
 ### Assessment Dashboard Components
 
@@ -204,7 +224,11 @@ Applies to changes within `src/app/(client)/`, `src/app/(user)/`, `src/component
 
 *   **Navigation:** Use the Next.js `Link` component (`<Link href="...">`) for declarative navigation between pages.
 *   **Programmatic Navigation:** Use the `useRouter` hook from `next/navigation` for imperative navigation (e.g., after a form submission).
-*   **Route Structure:** Follow the App Router conventions defined in `src/app/`. Use route groups (`(client)`, `(user)`) and dynamic segments (`[interviewId]`).
+*   **Route Structure:** Follow the App Router conventions defined in `src/app/`. Use route groups and dynamic segments:
+    *   **`(public)`**: Public routes including landing page (no authentication required)
+    *   **`(client)`**: Protected routes for authenticated users (dashboard, interviews, etc.)
+    *   **`(user)`**: Public-facing routes for interviewees (call interface, assessments)
+    *   **Dynamic segments**: Use `[interviewId]` pattern for parameterized routes
 
 ### Accessibility (A11y)
 

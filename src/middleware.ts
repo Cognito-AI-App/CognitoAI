@@ -6,11 +6,16 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up(.*)",
   "/interview(.*)",
   "/call(.*)",
+  "/assessment(.*)",
   "/api/register-call(.*)",
   "/api/get-call(.*)",
   "/api/generate-interview-questions(.*)",
   "/api/create-interviewer(.*)",
   "/api/analyze-communication(.*)",
+  "/api/execute-code(.*)",
+  "/api/coding-assistant(.*)",
+  "/api/contact-message(.*)",
+  "/api/newsletter-subscription(.*)",
 ]);
 
 const isProtectedRoute = createRouteMatcher([

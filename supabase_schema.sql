@@ -130,3 +130,41 @@ CREATE TABLE feedback (
     feedback TEXT,
     satisfaction INTEGER
 );
+
+
+-- Contact Messages Table
+-- Stores messages submitted through the contact form
+CREATE TABLE contact_message (
+    id SERIAL PRIMARY KEY,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    company TEXT,
+    phone TEXT,
+    subject TEXT,
+    message TEXT NOT NULL,
+    is_read BOOLEAN DEFAULT false,
+    responded_at TIMESTAMP WITH TIME ZONE,
+    notes TEXT
+);
+
+-- Newsletter Subscriptions Table
+-- Stores email addresses for newsletter subscriptions
+CREATE TABLE newsletter_subscription (
+    id SERIAL PRIMARY KEY,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+    email TEXT NOT NULL UNIQUE,
+    is_active BOOLEAN DEFAULT true,
+    unsubscribed_at TIMESTAMP WITH TIME ZONE,
+    source TEXT DEFAULT 'landing_page'
+);
+
+-- Add indexes for better performance
+CREATE INDEX idx_contact_message_email ON contact_message(email);
+CREATE INDEX idx_contact_message_created_at ON contact_message(created_at);
+CREATE INDEX idx_contact_message_is_read ON contact_message(is_read);
+
+CREATE INDEX idx_newsletter_subscription_email ON newsletter_subscription(email);
+CREATE INDEX idx_newsletter_subscription_is_active ON newsletter_subscription(is_active);
+CREATE INDEX idx_newsletter_subscription_created_at ON newsletter_subscription(created_at); 

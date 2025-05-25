@@ -56,6 +56,7 @@ CognitoAI is a platform designed to automate the user interview process using ad
 *   **Response Management:** View individual responses, recordings, transcripts, and analytics.
 *   **User & Organization Management:** Supports multi-user organizations via Clerk authentication.
 *   **PDF Parsing:** Extracts text content from uploaded PDF documents (e.g., resumes, job descriptions).
+*   **Professional Landing Page:** Beautiful, responsive landing page with features showcase, screenshots gallery, and contact information.
 
 ### Coding Assessments
 
@@ -91,6 +92,24 @@ Upon completing the behavioral interview, candidates can proceed to the coding a
 4. Submit the assessment for scoring
 
 Assessment results are saved with the interview, allowing interviewers to review both the behavioral interview and coding performance in one place, with a combined overall score that reflects both aspects of the evaluation.
+
+### Landing Page
+
+The platform features a professional, responsive landing page that serves as the entry point for new users:
+
+* **Modern Design:** Clean, professional design with smooth animations and responsive layout
+* **Features Showcase:** Comprehensive overview of platform capabilities with interactive elements
+* **Screenshots Gallery:** Interactive gallery showcasing the application interface with category filtering
+* **Process Explanation:** Step-by-step guide on how CognitoAI works from setup to insights
+* **Contact Integration:** Contact form and information with direct links to email, phone, and LinkedIn
+* **Authentication Integration:** Seamless integration with Clerk authentication, showing appropriate CTAs based on user state
+* **SEO Optimized:** Proper meta tags, structured data, and semantic HTML for search engine optimization
+
+The landing page is built with:
+* **Responsive Design:** Mobile-first approach ensuring great experience across all devices
+* **Performance Optimized:** Fast loading with optimized images and efficient component structure
+* **Accessibility:** WCAG compliant with proper ARIA labels and keyboard navigation
+* **Component Architecture:** Modular components for easy maintenance and updates
 
 ## Technology Stack
 
@@ -140,6 +159,9 @@ CognitoAI/
     ├── actions/             # Server Actions (e.g., parse-pdf.ts)
     ├── app/                 # Next.js App Router directory
     │   ├── globals.css      # Global CSS styles
+    │   ├── (public)/        # Public routes (Landing page)
+    │   │   ├── layout.tsx   # Layout for public routes
+    │   │   └── page.tsx     # Landing page
     │   ├── (client)/        # Routes requiring authentication (Client Dashboard)
     │   │   ├── layout.tsx   # Layout for client-side routes
     │   │   ├── dashboard/   # Main dashboard pages
@@ -157,18 +179,29 @@ CognitoAI/
     │   └── api/             # API Routes (Backend logic)
     │       ├── analyze-communication/
     │       ├── coding-assistant/     # OpenAI code generation endpoint for AI assistant
+    │       ├── contact-message/      # Contact form submission endpoint
     │       ├── create-interview/
     │       ├── create-interviewer/
     │       ├── execute-code/         # Judge0 code execution endpoint for assessments
     │       ├── generate-insights/
     │       ├── generate-interview-questions/
     │       ├── get-call/
+    │       ├── newsletter-subscription/ # Newsletter subscription endpoint
     │       ├── register-call/
     │       └── response-webhook/ # (Potentially for Retell events)
     ├── components/          # Reusable UI components
     │   ├── navbar.tsx       # Top navigation bar (Client)
     │   ├── providers.tsx    # Context and theme providers wrapper
     │   ├── sideMenu.tsx     # Side navigation menu (Client)
+    │   ├── landing/         # Landing page components
+    │   │   ├── header.tsx   # Landing page header with navigation
+    │   │   ├── hero.tsx     # Hero section with main CTA
+    │   │   ├── features.tsx # Features showcase section
+    │   │   ├── how-it-works.tsx # Process explanation section
+    │   │   ├── screenshots.tsx  # Application screenshots gallery
+    │   │   ├── contact.tsx  # Contact information and form
+    │   │   ├── footer.tsx   # Footer with links and company info
+    │   │   └── index.ts     # Component exports
     │   ├── call/            # Components specific to the interview call interface
     │   │   ├── index.tsx           # Main call component
     │   │   ├── feedbackForm.tsx    # Feedback form with assessment redirect
@@ -198,6 +231,7 @@ CognitoAI/
     ├── lib/                 # Utility functions, constants, prompts
     │   ├── compose.tsx      # Helper for composing providers
     │   ├── constants.ts     # Application constants (e.g., prompts, defaults)
+    │   ├── contact.ts       # Contact information and company details
     │   ├── enum.tsx         # Enums used in the application
     │   ├── logger.ts        # Simple logging utility
     │   ├── utils.ts         # General utility functions (cn, date formatting, etc.)
@@ -208,6 +242,7 @@ CognitoAI/
     │   ├── analytics.service.ts # Handles communication/overall analysis
     │   ├── clients.service.ts   # User/Organization data operations
     │   ├── codeExecution.service.ts # Handles code execution via Judge0 
+    │   ├── contact.service.ts   # Contact messages and newsletter subscriptions
     │   ├── feedback.service.ts  # Handles user feedback submission
     │   ├── interviewers.service.ts # Interviewer data operations
     │   ├── interviews.service.ts   # Interview data operations
@@ -216,6 +251,7 @@ CognitoAI/
     │   └── assessments.service.ts     # Assessment data operations
     └── types/               # TypeScript type definitions
         ├── database.types.ts # Types generated from Supabase schema
+        ├── contact.ts        # Types for contact messages and newsletter subscriptions
         ├── interview.ts
         ├── interviewer.ts
         ├── organization.ts
