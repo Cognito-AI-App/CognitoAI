@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -243,10 +244,12 @@ export default function Screenshots() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-4 h-auto">
-              <Play className="mr-2 w-5 h-5" />
-              Start Free Trial
-            </Button>
+            <Link href="/sign-up">
+              <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-4 h-auto">
+                <Play className="mr-2 w-5 h-5" />
+                Start Free Trial
+              </Button>
+            </Link>
             <Button 
               variant="outline" 
               size="lg" 

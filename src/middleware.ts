@@ -14,6 +14,8 @@ const isPublicRoute = createRouteMatcher([
   "/api/analyze-communication(.*)",
   "/api/execute-code(.*)",
   "/api/coding-assistant(.*)",
+  "/api/contact-message(.*)",
+  "/api/newsletter-subscription(.*)",
 ]);
 
 const isProtectedRoute = createRouteMatcher([

@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
+import { toast } from "sonner";
 import { 
   Mail, 
   Phone, 
@@ -12,6 +14,71 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CONTACT_INFO, COMPANY_INFO } from "@/lib/contact";
+
+function NewsletterSignup() {
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/newsletter-subscription", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        toast.success("Successfully subscribed to our newsletter!");
+        setEmail("");
+      } else {
+        toast.error(result.error || "Failed to subscribe. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error subscribing to newsletter:", error);
+      toast.error("Failed to subscribe. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="border-t border-gray-800 pt-8 mb-8">
+      <div className="max-w-md mx-auto text-center">
+        <h3 className="text-lg font-semibold mb-2">Stay Updated</h3>
+        <p className="text-gray-300 mb-4">
+          Get the latest updates on AI-powered hiring and new features.
+        </p>
+        <form onSubmit={handleSubmit} className="flex space-x-2">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            required
+            disabled={isSubmitting}
+            className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
+          />
+          <Button 
+            type="submit"
+            disabled={isSubmitting || !email.trim()}
+            className="bg-indigo-600 hover:bg-indigo-700 px-6 disabled:opacity-50"
+          >
+            {isSubmitting ? "..." : "Subscribe"}
+          </Button>
+        </form>
+      </div>
+    </div>
+  );
+}
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -152,24 +219,7 @@ export default function Footer() {
         </div>
 
         {/* Newsletter Signup */}
-        <div className="border-t border-gray-800 pt-8 mb-8">
-          <div className="max-w-md mx-auto text-center">
-            <h3 className="text-lg font-semibold mb-2">Stay Updated</h3>
-            <p className="text-gray-300 mb-4">
-              Get the latest updates on AI-powered hiring and new features.
-            </p>
-            <div className="flex space-x-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-              <Button className="bg-indigo-600 hover:bg-indigo-700 px-6">
-                Subscribe
-              </Button>
-            </div>
-          </div>
-        </div>
+        <NewsletterSignup />
 
         {/* Bottom Footer */}
         <div className="border-t border-gray-800 pt-8">

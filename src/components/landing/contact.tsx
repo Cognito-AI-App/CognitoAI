@@ -1,7 +1,12 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
+import { toast } from "sonner";
 import { 
   Mail, 
   Phone, 
@@ -13,8 +18,20 @@ import {
   Users
 } from "lucide-react";
 import { CONTACT_INFO, COMPANY_INFO } from "@/lib/contact";
+import { CreateContactMessageRequest } from "@/types/contact";
 
 export default function Contact() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState<CreateContactMessageRequest>({
+    first_name: "",
+    last_name: "",
+    email: "",
+    company: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
+
   const contactMethods = [
     {
       icon: Mail,
@@ -62,6 +79,51 @@ export default function Contact() {
       description: "Schedule a custom demo for your team"
     }
   ];
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/contact-message", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        toast.success("Message sent successfully! We'll get back to you within 24 hours.");
+        setFormData({
+          first_name: "",
+          last_name: "",
+          email: "",
+          company: "",
+          phone: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        toast.error(result.error || "Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting contact form:", error);
+      toast.error("Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section id="contact" className="py-20 bg-gray-50">
@@ -149,30 +211,38 @@ export default function Contact() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 mb-2">
                       First Name *
                     </label>
                     <Input
-                      id="firstName"
+                      id="first_name"
+                      name="first_name"
                       type="text"
                       required
+                      value={formData.first_name}
+                      onChange={handleInputChange}
                       className="w-full"
                       placeholder="John"
+                      disabled={isSubmitting}
                     />
                   </div>
                   <div>
-                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="last_name" className="block text-sm font-medium text-gray-700 mb-2">
                       Last Name *
                     </label>
                     <Input
-                      id="lastName"
+                      id="last_name"
+                      name="last_name"
                       type="text"
                       required
+                      value={formData.last_name}
+                      onChange={handleInputChange}
                       className="w-full"
                       placeholder="Doe"
+                      disabled={isSubmitting}
                     />
                   </div>
                 </div>
@@ -183,10 +253,14 @@ export default function Contact() {
                   </label>
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     required
+                    value={formData.email}
+                    onChange={handleInputChange}
                     className="w-full"
                     placeholder="john.doe@company.com"
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -196,9 +270,29 @@ export default function Contact() {
                   </label>
                   <Input
                     id="company"
+                    name="company"
                     type="text"
+                    value={formData.company}
+                    onChange={handleInputChange}
                     className="w-full"
                     placeholder="Your Company Name"
+                    disabled={isSubmitting}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                    Phone
+                  </label>
+                  <Input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="w-full"
+                    placeholder="+1 (555) 123-4567"
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -208,10 +302,14 @@ export default function Contact() {
                   </label>
                   <Input
                     id="subject"
+                    name="subject"
                     type="text"
                     required
+                    value={formData.subject}
+                    onChange={handleInputChange}
                     className="w-full"
                     placeholder="How can we help you?"
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -221,19 +319,24 @@ export default function Contact() {
                   </label>
                   <Textarea
                     id="message"
+                    name="message"
                     required
                     rows={4}
+                    value={formData.message}
+                    onChange={handleInputChange}
                     className="w-full"
                     placeholder="Tell us about your hiring needs and how CognitoAI can help..."
+                    disabled={isSubmitting}
                   />
                 </div>
 
                 <Button 
                   type="submit" 
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-lg py-3 h-auto"
+                  disabled={isSubmitting}
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-lg py-3 h-auto disabled:opacity-50"
                 >
                   <Send className="mr-2 w-5 h-5" />
-                  Send Message
+                  {isSubmitting ? "Sending..." : "Send Message"}
                 </Button>
 
                 <p className="text-xs text-gray-500 text-center">
@@ -255,13 +358,16 @@ export default function Contact() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-4 h-auto">
-              Start Free Trial
-            </Button>
+            <Link href="/sign-up">
+              <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-4 h-auto">
+                Start Free Trial
+              </Button>
+            </Link>
             <Button 
               variant="outline" 
               size="lg" 
               className="text-lg px-8 py-4 h-auto border-2"
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Schedule Demo
             </Button>
