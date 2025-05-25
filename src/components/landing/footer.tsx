@@ -93,14 +93,14 @@ export default function Footer() {
     company: [
       { name: "About Us", href: "#" },
       { name: "Contact", href: "#contact" },
-      { name: "Privacy Policy", href: "#" },
-      { name: "Terms of Service", href: "#" }
+      // { name: "Privacy Policy", href: "#" },
+      // { name: "Terms of Service", href: "#" }
     ],
     resources: [
-      { name: "Documentation", href: "#" },
-      { name: "API Reference", href: "#" },
+      // { name: "Documentation", href: "#" },
+      // { name: "API Reference", href: "#" },
       { name: "Support", href: "#contact" },
-      { name: "Blog", href: "#" }
+      // { name: "Blog", href: "#" }
     ]
   };
 

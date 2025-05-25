@@ -53,9 +53,9 @@ export default function Hero() {
           </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 relative z-10">
             {isSignedIn ? (
-              <Link href="/dashboard">
+              <Link href="/dashboard" className="relative z-10">
                 <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-4 h-auto">
                   Go to Dashboard
                   <ArrowRight className="ml-2 w-5 h-5" />
@@ -63,7 +63,7 @@ export default function Hero() {
               </Link>
             ) : (
               <>
-                <Link href="/sign-up">
+                <Link href="/sign-up" className="relative z-10">
                   <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-4 h-auto">
                     Start Free Trial
                     <ArrowRight className="ml-2 w-5 h-5" />
@@ -72,7 +72,7 @@ export default function Hero() {
                 <Button 
                   variant="outline" 
                   size="lg" 
-                  className="text-lg px-8 py-4 h-auto border-2 hover:bg-gray-50"
+                  className="text-lg px-8 py-4 h-auto border-2 hover:bg-gray-50 relative z-10"
                   onClick={() => document.getElementById('screenshots')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <Play className="mr-2 w-5 h-5" />

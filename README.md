@@ -179,12 +179,14 @@ CognitoAI/
     │   └── api/             # API Routes (Backend logic)
     │       ├── analyze-communication/
     │       ├── coding-assistant/     # OpenAI code generation endpoint for AI assistant
+    │       ├── contact-message/      # Contact form submission endpoint
     │       ├── create-interview/
     │       ├── create-interviewer/
     │       ├── execute-code/         # Judge0 code execution endpoint for assessments
     │       ├── generate-insights/
     │       ├── generate-interview-questions/
     │       ├── get-call/
+    │       ├── newsletter-subscription/ # Newsletter subscription endpoint
     │       ├── register-call/
     │       └── response-webhook/ # (Potentially for Retell events)
     ├── components/          # Reusable UI components
@@ -240,6 +242,7 @@ CognitoAI/
     │   ├── analytics.service.ts # Handles communication/overall analysis
     │   ├── clients.service.ts   # User/Organization data operations
     │   ├── codeExecution.service.ts # Handles code execution via Judge0 
+    │   ├── contact.service.ts   # Contact messages and newsletter subscriptions
     │   ├── feedback.service.ts  # Handles user feedback submission
     │   ├── interviewers.service.ts # Interviewer data operations
     │   ├── interviews.service.ts   # Interview data operations
@@ -248,6 +251,7 @@ CognitoAI/
     │   └── assessments.service.ts     # Assessment data operations
     └── types/               # TypeScript type definitions
         ├── database.types.ts # Types generated from Supabase schema
+        ├── contact.ts        # Types for contact messages and newsletter subscriptions
         ├── interview.ts
         ├── interviewer.ts
         ├── organization.ts
