@@ -1,19 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async redirects() {
-    return [
-      {
-        source: "/",
-        destination: "/dashboard",
-        permanent: true,
-      },
-    ];
+    return [];
   },
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "img.clerk.com",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
       },
     ],
   },

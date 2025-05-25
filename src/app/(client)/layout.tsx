@@ -53,7 +53,7 @@ export default function RootLayout({
       >
         <ClerkProvider
           signInFallbackRedirectUrl={"/dashboard"}
-          afterSignOutUrl={"/sign-in"}
+          afterSignOutUrl={"/"}
         >
           <Providers>
             {!pathname.includes("/sign-in") &&
