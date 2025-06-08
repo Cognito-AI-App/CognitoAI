@@ -13,15 +13,15 @@ export const CodingQuestionService = {
 
       if (error) {
         console.error("Error fetching coding questions:", error);
-        
-return [];
+
+        return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAllQuestions:", error);
-      
-return [];
+
+      return [];
     }
   },
 
@@ -35,15 +35,15 @@ return [];
 
       if (error) {
         console.error("Error fetching coding question:", error);
-        
-return null;
+
+        return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in getQuestion:", error);
-      
-return null;
+
+      return null;
     }
   },
 
@@ -65,15 +65,15 @@ return null;
 
       if (error) {
         console.error("Error creating coding question:", error);
-        
-return null;
+
+        return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in createQuestion:", error);
-      
-return null;
+
+      return null;
     }
   },
 
@@ -91,15 +91,15 @@ return null;
 
       if (error) {
         console.error("Error updating coding question:", error);
-        
-return null;
+
+        return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in updateQuestion:", error);
-      
-return null;
+
+      return null;
     }
   },
 
@@ -112,19 +112,21 @@ return null;
 
       if (error) {
         console.error("Error deleting coding question:", error);
-        
-return false;
+
+        return false;
       }
 
       return true;
     } catch (error) {
       console.error("Error in deleteQuestion:", error);
-      
-return false;
+
+      return false;
     }
   },
 
-  getQuestionsForOrganization: async (organizationId: string): Promise<CodingQuestion[]> => {
+  getQuestionsForOrganization: async (
+    organizationId: string
+  ): Promise<CodingQuestion[]> => {
     try {
       const { data, error } = await supabase
         .from("coding_question")
@@ -134,18 +136,18 @@ return false;
 
       if (error) {
         console.error("Error fetching organization questions:", error);
-        
-return [];
+
+        return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getQuestionsForOrganization:", error);
-      
-return [];
+
+      return [];
     }
   },
-  
+
   getQuestionsForUser: async (userId: string): Promise<CodingQuestion[]> => {
     try {
       const { data, error } = await supabase
@@ -156,43 +158,48 @@ return [];
 
       if (error) {
         console.error("Error fetching user questions:", error);
-        
-return [];
+
+        return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getQuestionsForUser:", error);
-      
-return [];
+
+      return [];
     }
   },
-  
-  getQuestionsForUserOrOrganization: async (userId: string, organizationId: string | null): Promise<CodingQuestion[]> => {
+
+  getQuestionsForUserOrOrganization: async (
+    userId: string,
+    organizationId: string | null
+  ): Promise<CodingQuestion[]> => {
     try {
-      let query = supabase
-        .from("coding_question")
-        .select("*");
-      
+      let query = supabase.from("coding_question").select("*");
+
       if (organizationId) {
-        query = query.or(`organization_id.eq.${organizationId},user_id.eq.${userId}`);
+        query = query.or(
+          `organization_id.eq.${organizationId},user_id.eq.${userId}`
+        );
       } else {
         query = query.eq("user_id", userId);
       }
-      
-      const { data, error } = await query.order("created_at", { ascending: false });
+
+      const { data, error } = await query.order("created_at", {
+        ascending: false,
+      });
 
       if (error) {
         console.error("Error fetching questions:", error);
-        
-return [];
+
+        return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getQuestionsForUserOrOrganization:", error);
-      
-return [];
+
+      return [];
     }
-  }
-}; 
+  },
+};

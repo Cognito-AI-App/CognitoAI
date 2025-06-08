@@ -13,10 +13,7 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!body.email) {
-      return NextResponse.json(
-        { error: "Email is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
     // Validate email format
@@ -45,16 +42,16 @@ export async function POST(request: NextRequest) {
         // Reactivate subscription
         const { error } = await supabase
           .from("newsletter_subscription")
-          .update({ 
-            is_active: true, 
-            unsubscribed_at: null 
+          .update({
+            is_active: true,
+            unsubscribed_at: null,
           })
           .eq("email", body.email);
 
         if (error) {
           console.error("Error reactivating subscription:", error);
-          
-return NextResponse.json(
+
+          return NextResponse.json(
             { error: "Failed to subscribe" },
             { status: 500 }
           );
@@ -81,26 +78,26 @@ return NextResponse.json(
 
     if (error) {
       console.error("Error inserting newsletter subscription:", error);
-      
-return NextResponse.json(
+
+      return NextResponse.json(
         { error: "Failed to subscribe" },
         { status: 500 }
       );
     }
 
     return NextResponse.json(
-      { 
+      {
         message: "Successfully subscribed to newsletter",
-        id: data.id 
+        id: data.id,
       },
       { status: 201 }
     );
   } catch (error) {
     console.error("Error in newsletter subscription API:", error);
-    
-return NextResponse.json(
+
+    return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
     );
   }
-} 
+}

@@ -1,5 +1,9 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Assessment, AssessmentFormData, AssessmentResponse } from "@/types/assessment";
+import {
+  Assessment,
+  AssessmentFormData,
+  AssessmentResponse,
+} from "@/types/assessment";
 
 const supabase = createClientComponentClient();
 
@@ -13,15 +17,15 @@ export const AssessmentService = {
 
       if (error) {
         console.error("Error fetching assessments:", error);
-        
-return [];
+
+        return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAllAssessments:", error);
-      
-return [];
+
+      return [];
     }
   },
 
@@ -35,15 +39,15 @@ return [];
 
       if (error) {
         console.error("Error fetching assessment:", error);
-        
-return null;
+
+        return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in getAssessment:", error);
-      
-return null;
+
+      return null;
     }
   },
 
@@ -65,15 +69,15 @@ return null;
 
       if (error) {
         console.error("Error creating assessment:", error);
-        
-return null;
+
+        return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in createAssessment:", error);
-      
-return null;
+
+      return null;
     }
   },
 
@@ -91,15 +95,15 @@ return null;
 
       if (error) {
         console.error("Error updating assessment:", error);
-        
-return null;
+
+        return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in updateAssessment:", error);
-      
-return null;
+
+      return null;
     }
   },
 
@@ -109,15 +113,15 @@ return null;
 
       if (error) {
         console.error("Error deleting assessment:", error);
-        
-return false;
+
+        return false;
       }
 
       return true;
     } catch (error) {
       console.error("Error in deleteAssessment:", error);
-      
-return false;
+
+      return false;
     }
   },
 
@@ -133,18 +137,18 @@ return false;
 
       if (error) {
         console.error("Error fetching organization assessments:", error);
-        
-return [];
+
+        return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentsForOrganization:", error);
-      
-return [];
+
+      return [];
     }
   },
-  
+
   getAssessmentsForUser: async (userId: string): Promise<Assessment[]> => {
     try {
       const { data, error } = await supabase
@@ -155,43 +159,48 @@ return [];
 
       if (error) {
         console.error("Error fetching user assessments:", error);
-        
-return [];
+
+        return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentsForUser:", error);
-      
-return [];
+
+      return [];
     }
   },
-  
-  getAssessmentsForUserOrOrganization: async (userId: string, organizationId: string | null): Promise<Assessment[]> => {
+
+  getAssessmentsForUserOrOrganization: async (
+    userId: string,
+    organizationId: string | null
+  ): Promise<Assessment[]> => {
     try {
-      let query = supabase
-        .from("assessment")
-        .select("*");
-      
+      let query = supabase.from("assessment").select("*");
+
       if (organizationId) {
-        query = query.or(`organization_id.eq.${organizationId},user_id.eq.${userId}`);
+        query = query.or(
+          `organization_id.eq.${organizationId},user_id.eq.${userId}`
+        );
       } else {
         query = query.eq("user_id", userId);
       }
-      
-      const { data, error } = await query.order("created_at", { ascending: false });
+
+      const { data, error } = await query.order("created_at", {
+        ascending: false,
+      });
 
       if (error) {
         console.error("Error fetching assessments:", error);
-        
-return [];
+
+        return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentsForUserOrOrganization:", error);
-      
-return [];
+
+      return [];
     }
   },
 
@@ -208,15 +217,15 @@ return [];
 
       if (error) {
         console.error("Error creating assessment response:", error);
-        
-return null;
+
+        return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in createAssessmentResponse:", error);
-      
-return null;
+
+      return null;
     }
   },
 
@@ -234,15 +243,15 @@ return null;
 
       if (error) {
         console.error("Error updating assessment response:", error);
-        
-return null;
+
+        return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in updateAssessmentResponse:", error);
-      
-return null;
+
+      return null;
     }
   },
 
@@ -258,15 +267,15 @@ return null;
 
       if (error) {
         console.error("Error fetching assessment responses:", error);
-        
-return [];
+
+        return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentResponsesForInterview:", error);
-      
-return [];
+
+      return [];
     }
   },
 
@@ -284,15 +293,15 @@ return [];
 
       if (error) {
         console.error("Error fetching assessment responses for email:", error);
-        
-return [];
+
+        return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentResponsesForEmail:", error);
-      
-return [];
+
+      return [];
     }
   },
-}; 
+};

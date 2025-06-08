@@ -14,7 +14,7 @@ export default function Hero() {
     <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 pt-16">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-grid-pattern opacity-5" />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center">
           {/* Badge */}
@@ -27,7 +27,8 @@ export default function Hero() {
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
             Transform Your
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-              {" "}Hiring Process
+              {" "}
+              Hiring Process
             </span>
           </h1>
 
@@ -44,7 +45,9 @@ export default function Hero() {
             </div>
             <div className="flex items-center px-4 py-2 bg-white rounded-full shadow-sm border border-gray-200">
               <Code className="w-5 h-5 text-purple-600 mr-2" />
-              <span className="text-gray-700 font-medium">Coding Assessments</span>
+              <span className="text-gray-700 font-medium">
+                Coding Assessments
+              </span>
             </div>
             <div className="flex items-center px-4 py-2 bg-white rounded-full shadow-sm border border-gray-200">
               <Brain className="w-5 h-5 text-green-600 mr-2" />
@@ -56,7 +59,10 @@ export default function Hero() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 relative z-10">
             {isSignedIn ? (
               <Link href="/dashboard" className="relative z-10">
-                <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-4 h-auto">
+                <Button
+                  size="lg"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-4 h-auto"
+                >
                   Go to Dashboard
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
@@ -64,16 +70,23 @@ export default function Hero() {
             ) : (
               <>
                 <Link href="/sign-up" className="relative z-10">
-                  <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-4 h-auto">
+                  <Button
+                    size="lg"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-4 h-auto"
+                  >
                     Start Free Trial
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
                 </Link>
-                <Button 
-                  variant="outline" 
-                  size="lg" 
+                <Button
+                  variant="outline"
+                  size="lg"
                   className="text-lg px-8 py-4 h-auto border-2 hover:bg-gray-50 relative z-10"
-                  onClick={() => document.getElementById('screenshots')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() =>
+                    document
+                      .getElementById("screenshots")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  }
                 >
                   <Play className="mr-2 w-5 h-5" />
                   See Demo
@@ -116,4 +129,4 @@ export default function Hero() {
       </div>
     </section>
   );
-} 
+}

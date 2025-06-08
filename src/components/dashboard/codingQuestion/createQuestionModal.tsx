@@ -3,7 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import { CodingQuestionService } from "@/services/codingQuestions.service";
-import { CodingQuestionFormData, Difficulty, TestCase } from "@/types/codingQuestion";
+import {
+  CodingQuestionFormData,
+  Difficulty,
+  TestCase,
+} from "@/types/codingQuestion";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -35,11 +39,11 @@ interface Props {
   editingQuestion?: number | null;
 }
 
-const CreateQuestionModal: React.FC<Props> = ({
+function CreateQuestionModal({
   isOpen,
   onClose,
   editingQuestion = null,
-}) => {
+}: Props) {
   const { userId } = useAuth();
   const { organization } = useOrganization();
   const { fetchCodingQuestions } = useCodingQuestions();
@@ -63,14 +67,16 @@ const CreateQuestionModal: React.FC<Props> = ({
     is_active: true,
   };
 
-  const [formData, setFormData] = useState<CodingQuestionFormData>(initialFormData);
+  const [formData, setFormData] =
+    useState<CodingQuestionFormData>(initialFormData);
 
   useEffect(() => {
     const loadQuestion = async () => {
       if (editingQuestion) {
         setIsEditing(true);
         setLoading(true);
-        const question = await CodingQuestionService.getQuestion(editingQuestion);
+        const question =
+          await CodingQuestionService.getQuestion(editingQuestion);
         if (question) {
           setFormData({
             title: question.title,
@@ -93,7 +99,7 @@ const CreateQuestionModal: React.FC<Props> = ({
     if (isOpen) {
       loadQuestion();
     }
-  }, [isOpen, editingQuestion]);
+  }, [isOpen, editingQuestion, initialFormData]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -145,8 +151,8 @@ const CreateQuestionModal: React.FC<Props> = ({
   const removeTestCase = (index: number) => {
     if (formData.test_cases.length <= 1) {
       toast.error("You need at least one test case");
-      
-return;
+
+      return;
     }
     const updatedTestCases = [...formData.test_cases];
     updatedTestCases.splice(index, 1);
@@ -159,40 +165,42 @@ return;
   const handleSubmit = async () => {
     if (!userId) {
       toast.error("Authentication error. Please try again.");
-      
-return;
+
+      return;
     }
 
     // Validation
     if (!formData.title.trim()) {
       toast.error("Title is required");
-      
-return;
+
+      return;
     }
     if (!formData.description.trim()) {
       toast.error("Description is required");
-      
-return;
+
+      return;
     }
     if (!formData.input_format.trim()) {
       toast.error("Input format is required");
-      
-return;
+
+      return;
     }
     if (!formData.output_format.trim()) {
       toast.error("Output format is required");
-      
-return;
+
+      return;
     }
     if (!formData.example_explanation.trim()) {
       toast.error("Example explanation is required");
-      
-return;
+
+      return;
     }
-    if (formData.test_cases.some(tc => !tc.input.trim() || !tc.output.trim())) {
+    if (
+      formData.test_cases.some((tc) => !tc.input.trim() || !tc.output.trim())
+    ) {
       toast.error("All test cases must have both input and output");
-      
-return;
+
+      return;
     }
 
     setLoading(true);
@@ -218,7 +226,9 @@ return;
     }
   };
 
-  if (!isOpen) {return null;}
+  if (!isOpen) {
+    return null;
+  }
 
   const formattedDescription = `
 **Question Title:** ${formData.title || "Question title goes here..."}
@@ -361,7 +371,7 @@ ${formData.example_explanation || "Example explanation..."}
 
                 {formData.test_cases.map((testCase, index) => (
                   <div
-                    key={index}
+                    key={`testcase-${index}-${testCase.input.slice(0, 10)}`}
                     className="p-3 border rounded-md mb-3 bg-slate-50"
                   >
                     <div className="flex justify-between items-center mb-2">
@@ -398,7 +408,11 @@ ${formData.example_explanation || "Example explanation..."}
                           placeholder="Expected output for this test case"
                           rows={2}
                           onChange={(e) =>
-                            handleTestCaseChange(index, "output", e.target.value)
+                            handleTestCaseChange(
+                              index,
+                              "output",
+                              e.target.value
+                            )
                           }
                         />
                       </div>
@@ -435,12 +449,16 @@ ${formData.example_explanation || "Example explanation..."}
             Cancel
           </Button>
           <Button disabled={loading} onClick={handleSubmit}>
-            {loading ? "Saving..." : isEditing ? "Update Question" : "Create Question"}
+            {loading
+              ? "Saving..."
+              : isEditing
+                ? "Update Question"
+                : "Create Question"}
           </Button>
         </CardFooter>
       </Card>
     </div>
   );
-};
+}
 
-export default CreateQuestionModal; 
+export default CreateQuestionModal;

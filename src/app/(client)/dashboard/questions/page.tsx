@@ -2,7 +2,12 @@
 
 import React, { useState } from "react";
 import { useCodingQuestions } from "@/contexts/codingQuestions.context";
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PlusIcon, CodeIcon } from "lucide-react";
@@ -20,7 +25,9 @@ function CodingQuestions() {
   const { codingQuestions, loading } = useCodingQuestions();
   const router = useRouter();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [editingQuestionId, setEditingQuestionId] = useState<number | null>(null);
+  const [editingQuestionId, setEditingQuestionId] = useState<number | null>(
+    null
+  );
 
   const handleCreateQuestion = () => {
     setEditingQuestionId(null);
@@ -60,7 +67,7 @@ function CodingQuestions() {
               Create and manage coding questions for assessments
             </h3>
           </div>
-          <Button 
+          <Button
             className="bg-indigo-600 hover:bg-indigo-700"
             onClick={handleCreateQuestion}
           >
@@ -75,11 +82,13 @@ function CodingQuestions() {
             {codingQuestions.length === 0 ? (
               <div className="col-span-full flex flex-col items-center justify-center p-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
                 <CodeIcon className="h-12 w-12 text-gray-400 mb-3" />
-                <h3 className="text-lg font-medium text-gray-600 mb-1">No questions yet</h3>
+                <h3 className="text-lg font-medium text-gray-600 mb-1">
+                  No questions yet
+                </h3>
                 <p className="text-sm text-gray-500 mb-4 text-center">
                   Create your first coding question to get started
                 </p>
-                <Button 
+                <Button
                   className="bg-indigo-600 hover:bg-indigo-700"
                   onClick={handleCreateQuestion}
                 >
@@ -88,24 +97,29 @@ function CodingQuestions() {
               </div>
             ) : (
               codingQuestions.map((question) => (
-                <Card 
-                  key={question.id} 
+                <Card
+                  key={question.id}
                   className="cursor-pointer hover:shadow-md transition-shadow"
                   onClick={() => handleEditQuestion(question.id)}
                 >
                   <CardContent className="p-4">
                     <div className="flex justify-between items-start mb-2">
-                      <CardTitle className="text-lg">{question.title}</CardTitle>
+                      <CardTitle className="text-lg">
+                        {question.title}
+                      </CardTitle>
                       <Badge className={difficultyColors[question.difficulty]}>
                         {question.difficulty}
                       </Badge>
                     </div>
                     <CardDescription className="line-clamp-2 mb-4">
-                      {question.description.replace(/<[^>]*>/g, '')}
+                      {question.description.replace(/<[^>]*>/g, "")}
                     </CardDescription>
                     <div className="flex justify-between text-xs text-gray-500">
                       <span>{question.test_cases.length} test cases</span>
-                      <span>Created: {new Date(question.created_at).toLocaleDateString()}</span>
+                      <span>
+                        Created:{" "}
+                        {new Date(question.created_at).toLocaleDateString()}
+                      </span>
                     </div>
                   </CardContent>
                 </Card>
@@ -115,8 +129,8 @@ function CodingQuestions() {
         )}
       </div>
 
-      <CreateQuestionModal 
-        isOpen={isCreateModalOpen} 
+      <CreateQuestionModal
+        isOpen={isCreateModalOpen}
         editingQuestion={editingQuestionId}
         onClose={() => setIsCreateModalOpen(false)}
       />
@@ -124,4 +138,4 @@ function CodingQuestions() {
   );
 }
 
-export default CodingQuestions; 
+export default CodingQuestions;

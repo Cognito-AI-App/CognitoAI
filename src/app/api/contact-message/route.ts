@@ -47,26 +47,26 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error("Error inserting contact message:", error);
-      
-return NextResponse.json(
+
+      return NextResponse.json(
         { error: "Failed to submit message" },
         { status: 500 }
       );
     }
 
     return NextResponse.json(
-      { 
+      {
         message: "Message submitted successfully",
-        id: data.id 
+        id: data.id,
       },
       { status: 201 }
     );
   } catch (error) {
     console.error("Error in contact message API:", error);
-    
-return NextResponse.json(
+
+    return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
     );
   }
-} 
+}

@@ -68,7 +68,9 @@ function InterviewHome({ params, searchParams }: Props) {
   const [iconColor, seticonColor] = useState<string>("#4F46E5");
   const { organization } = useOrganization();
   const [filterStatus, setFilterStatus] = useState<string>("ALL");
-  const [assessmentResponses, setAssessmentResponses] = useState<AssessmentResponse[]>([]);
+  const [assessmentResponses, setAssessmentResponses] = useState<
+    AssessmentResponse[]
+  >([]);
 
   const seeInterviewPreviewPage = () => {
     const protocol = base_url?.includes("localhost") ? "http" : "https";
@@ -127,7 +129,7 @@ function InterviewHome({ params, searchParams }: Props) {
     const fetchResponses = async () => {
       try {
         const response = await ResponseService.getAllResponses(
-          params.interviewId,
+          params.interviewId
         );
         setResponses(response);
         setLoading(true);
@@ -146,7 +148,10 @@ function InterviewHome({ params, searchParams }: Props) {
     const fetchAssessmentResponses = async () => {
       if (interview?.id && interview.has_assessment) {
         try {
-          const responses = await AssessmentService.getAssessmentResponsesForInterview(interview.id);
+          const responses =
+            await AssessmentService.getAssessmentResponsesForInterview(
+              interview.id
+            );
           if (responses) {
             setAssessmentResponses(responses);
           }
@@ -164,7 +169,7 @@ function InterviewHome({ params, searchParams }: Props) {
   const handleDeleteResponse = (deletedCallId: string) => {
     if (responses) {
       setResponses(
-        responses.filter((response) => response.call_id !== deletedCallId),
+        responses.filter((response) => response.call_id !== deletedCallId)
       );
       if (searchParams.call === deletedCallId) {
         router.push(`/interviews/${params.interviewId}`);
@@ -177,7 +182,7 @@ function InterviewHome({ params, searchParams }: Props) {
       await ResponseService.saveResponse({ is_viewed: true }, response.call_id);
       if (responses) {
         const updatedResponses = responses.map((r) =>
-          r.call_id === response.call_id ? { ...r, is_viewed: true } : r,
+          r.call_id === response.call_id ? { ...r, is_viewed: true } : r
         );
         setResponses(updatedResponses);
       }
@@ -194,7 +199,7 @@ function InterviewHome({ params, searchParams }: Props) {
 
       await InterviewService.updateInterview(
         { is_active: updatedIsActive },
-        params.interviewId,
+        params.interviewId
       );
 
       toast.success("Interview status updated", {
@@ -217,7 +222,7 @@ function InterviewHome({ params, searchParams }: Props) {
     try {
       await InterviewService.updateInterview(
         { theme_color: newColor },
-        params.interviewId,
+        params.interviewId
       );
 
       toast.success("Theme color updated", {
@@ -238,7 +243,7 @@ function InterviewHome({ params, searchParams }: Props) {
       return prevResponses?.map((response) =>
         response.call_id === callId
           ? { ...response, candidate_status: newStatus }
-          : response,
+          : response
       );
     });
   };
@@ -272,7 +277,7 @@ function InterviewHome({ params, searchParams }: Props) {
     }
 
     return responses?.filter(
-      (response) => response?.candidate_status == filterStatus,
+      (response) => response?.candidate_status == filterStatus
     );
   };
 
@@ -377,7 +382,7 @@ function InterviewHome({ params, searchParams }: Props) {
                     className="bg-transparent shadow-none text-xs text-indigo-600 px-0 h-7 hover:scale-110 relative"
                     onClick={(event) => {
                       router.push(
-                        `/interviews/${params.interviewId}?edit=true`,
+                        `/interviews/${params.interviewId}?edit=true`
                       );
                     }}
                   >
@@ -483,7 +488,7 @@ function InterviewHome({ params, searchParams }: Props) {
                       key={response?.id}
                       onClick={() => {
                         router.push(
-                          `/interviews/${params.interviewId}?call=${response.call_id}`,
+                          `/interviews/${params.interviewId}?call=${response.call_id}`
                         );
                         handleResponseClick(response);
                       }}
@@ -507,7 +512,7 @@ function InterviewHome({ params, searchParams }: Props) {
                             </p>
                             <p className="">
                               {formatTimestampToDateHHMM(
-                                String(response?.created_at),
+                                String(response?.created_at)
                               )}
                             </p>
                           </div>
@@ -533,15 +538,27 @@ function InterviewHome({ params, searchParams }: Props) {
                                         <div className="w-6 h-6 rounded-full bg-white border-2 border-indigo-500 flex items-center justify-center">
                                           <span className="text-indigo-500 text-xs font-semibold">
                                             {(() => {
-                                              const behavioralScore = response?.analytics?.overallScore || 0;
-                                              const assessmentResponse = assessmentResponses.find(ar => ar.email === response.email);
-                                              const codingScore = assessmentResponse?.score || null;
+                                              const behavioralScore =
+                                                response?.analytics
+                                                  ?.overallScore || 0;
+                                              const assessmentResponse =
+                                                assessmentResponses.find(
+                                                  (ar) =>
+                                                    ar.email === response.email
+                                                );
+                                              const codingScore =
+                                                assessmentResponse?.score ||
+                                                null;
 
                                               if (codingScore !== null) {
-                                                return Math.round((behavioralScore + codingScore) / 2);
+                                                return Math.round(
+                                                  (behavioralScore +
+                                                    codingScore) /
+                                                    2
+                                                );
                                               }
-                                              
-return behavioralScore;
+
+                                              return behavioralScore;
                                             })()}
                                           </span>
                                         </div>

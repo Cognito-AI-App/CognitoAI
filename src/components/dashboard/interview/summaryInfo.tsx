@@ -3,7 +3,7 @@
 import { Interview } from "@/types/interview";
 import { Interviewer } from "@/types/interviewer";
 import { Response } from "@/types/response";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { UserCircleIcon, SmileIcon, Info } from "lucide-react";
 import { useInterviewers } from "@/contexts/interviewers.context";
 import { PieChart } from "@mui/x-charts/PieChart";
@@ -99,36 +99,39 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
     }
   }, [interview]);
 
-  const prepareTableData = (responses: Response[]): TableData[] => {
-    return responses.map((response) => {
-      // Find assessment response for this candidate if it exists
-      const assessmentResponse = assessmentResponses.find(
-        (ar) => ar.email === response.email
-      );
+  const prepareTableData = useCallback(
+    (responses: Response[]): TableData[] => {
+      return responses.map((response) => {
+        // Find assessment response for this candidate if it exists
+        const assessmentResponse = assessmentResponses.find(
+          (ar) => ar.email === response.email
+        );
 
-      const behavioralScore = response.analytics?.overallScore || 0;
-      const codingScore = assessmentResponse?.score || null;
+        const behavioralScore = response.analytics?.overallScore || 0;
+        const codingScore = assessmentResponse?.score || null;
 
-      // Calculate combined score (average of behavioral and coding if both exist)
-      let combinedScore = behavioralScore;
-      if (codingScore !== null) {
-        combinedScore = Math.round((behavioralScore + codingScore) / 2);
-      }
+        // Calculate combined score (average of behavioral and coding if both exist)
+        let combinedScore = behavioralScore;
+        if (codingScore !== null) {
+          combinedScore = Math.round((behavioralScore + codingScore) / 2);
+        }
 
-      return {
-        call_id: response.call_id,
-        name: response.name || "Anonymous",
-        combinedScore: combinedScore,
-        overallScore: behavioralScore,
-        codingScore: codingScore,
-        communicationScore: response.analytics?.communication?.score || 0,
-        callSummary:
-          response.analytics?.softSkillSummary ||
-          response.details?.call_analysis?.call_summary ||
-          "No summary available",
-      };
-    });
-  };
+        return {
+          call_id: response.call_id,
+          name: response.name || "Anonymous",
+          combinedScore: combinedScore,
+          overallScore: behavioralScore,
+          codingScore: codingScore,
+          communicationScore: response.analytics?.communication?.score || 0,
+          callSummary:
+            response.analytics?.softSkillSummary ||
+            response.details?.call_analysis?.call_summary ||
+            "No summary available",
+        };
+      });
+    },
+    [assessmentResponses]
+  );
 
   useEffect(() => {
     if (!interviewers || !interview) {
@@ -214,7 +217,7 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
 
     const preparedData = prepareTableData(responses);
     setTableData(preparedData);
-  }, [responses, assessmentResponses]);
+  }, [responses, assessmentResponses, prepareTableData]);
 
   return (
     <div className="h-screen z-[10] mx-2">

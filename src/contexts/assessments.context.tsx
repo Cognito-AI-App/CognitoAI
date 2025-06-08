@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 
 import { Assessment } from "@/types/assessment";
@@ -33,7 +39,7 @@ export function AssessmentsProvider({
   const { userId } = useAuth();
   const { organization } = useOrganization();
 
-  const fetchAssessments = async () => {
+  const fetchAssessments = useCallback(async () => {
     setLoading(true);
     try {
       if (userId) {
@@ -52,7 +58,7 @@ export function AssessmentsProvider({
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId, organization?.id]);
 
   useEffect(() => {
     if (userId) {
@@ -61,7 +67,7 @@ export function AssessmentsProvider({
       setLoading(false);
       setAssessments([]);
     }
-  }, [userId, organization?.id]);
+  }, [userId, organization?.id, fetchAssessments]);
 
   return (
     <AssessmentsContext.Provider

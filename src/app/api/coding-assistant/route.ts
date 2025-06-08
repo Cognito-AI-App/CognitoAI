@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-import { codingAssistantPrompt, generateSystemMessage } from "@/lib/prompts/codingAssistant";
+import {
+  codingAssistantPrompt,
+  generateSystemMessage,
+} from "@/lib/prompts/codingAssistant";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -47,10 +50,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ content: aiResponse });
   } catch (error: any) {
     console.error("Error in coding assistant API:", error);
-    
-return NextResponse.json(
+
+    return NextResponse.json(
       { error: error.message || "Failed to generate code" },
       { status: 500 }
     );
   }
-} 
+}

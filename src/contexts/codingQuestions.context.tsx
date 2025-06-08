@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 
 import { CodingQuestion } from "@/types/codingQuestion";
@@ -33,7 +39,7 @@ export function CodingQuestionsProvider({
   const { userId } = useAuth();
   const { organization } = useOrganization();
 
-  const fetchCodingQuestions = async () => {
+  const fetchCodingQuestions = useCallback(async () => {
     setLoading(true);
     try {
       if (userId) {
@@ -52,7 +58,7 @@ export function CodingQuestionsProvider({
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId, organization?.id]);
 
   useEffect(() => {
     if (userId) {
@@ -61,7 +67,7 @@ export function CodingQuestionsProvider({
       setLoading(false);
       setCodingQuestions([]);
     }
-  }, [userId, organization?.id]);
+  }, [userId, organization?.id, fetchCodingQuestions]);
 
   return (
     <CodingQuestionsContext.Provider

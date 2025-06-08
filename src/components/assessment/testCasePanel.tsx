@@ -7,7 +7,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CodingQuestion } from "@/types/codingQuestion";
 import { AssessmentQuestionResult } from "@/types/assessment";
 import { Badge } from "@/components/ui/badge";
-import { Play, CheckCircle, XCircle, AlertTriangle, Clock, Cpu } from "lucide-react";
+import {
+  Play,
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
+  Clock,
+  Cpu,
+} from "lucide-react";
 
 interface TestCasePanelProps {
   question: CodingQuestion;
@@ -16,14 +23,14 @@ interface TestCasePanelProps {
   isSubmitting: boolean;
 }
 
-const TestCasePanel: React.FC<TestCasePanelProps> = ({
+function TestCasePanel({
   question,
   result,
   onRunTest,
   isSubmitting,
-}) => {
+}: TestCasePanelProps) {
   // Filter out hidden test cases for display (but still show as "Hidden Test X")
-  const visibleTestCases = question.test_cases.filter(tc => !tc.is_hidden);
+  const visibleTestCases = question.test_cases.filter((tc) => !tc.is_hidden);
   const hiddenTestCount = question.test_cases.length - visibleTestCases.length;
 
   return (
@@ -43,11 +50,7 @@ const TestCasePanel: React.FC<TestCasePanelProps> = ({
               </Badge>
             </>
           )}
-          <Button 
-            disabled={isSubmitting} 
-            size="sm"
-            onClick={() => onRunTest()}
-          >
+          <Button disabled={isSubmitting} size="sm" onClick={() => onRunTest()}>
             <Play className="h-4 w-4 mr-1" /> Run All Tests
           </Button>
         </div>
@@ -59,34 +62,50 @@ const TestCasePanel: React.FC<TestCasePanelProps> = ({
           <CardContent className="p-4">
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <h4 className="text-sm font-medium mb-1 text-gray-500">Status</h4>
+                <h4 className="text-sm font-medium mb-1 text-gray-500">
+                  Status
+                </h4>
                 <div className="flex items-center">
                   {result.status === "Accepted" ? (
                     <>
                       <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                      <span className="font-medium text-green-600">Accepted</span>
+                      <span className="font-medium text-green-600">
+                        Accepted
+                      </span>
                     </>
-                  ) : result.status === "Runtime Error" || result.status === "Time Limit Exceeded" ? (
+                  ) : result.status === "Runtime Error" ||
+                    result.status === "Time Limit Exceeded" ? (
                     <>
                       <AlertTriangle className="h-5 w-5 text-amber-500 mr-2" />
-                      <span className="font-medium text-amber-600">{result.status}</span>
+                      <span className="font-medium text-amber-600">
+                        {result.status}
+                      </span>
                     </>
                   ) : (
                     <>
                       <XCircle className="h-5 w-5 text-red-500 mr-2" />
-                      <span className="font-medium text-red-600">{result.status}</span>
+                      <span className="font-medium text-red-600">
+                        {result.status}
+                      </span>
                     </>
                   )}
                 </div>
               </div>
               <div>
-                <h4 className="text-sm font-medium mb-1 text-gray-500">Test Cases</h4>
+                <h4 className="text-sm font-medium mb-1 text-gray-500">
+                  Test Cases
+                </h4>
                 <div className="flex items-center">
-                  <span className="font-medium">{result.passed_test_cases} / {result.total_test_cases} passed</span>
+                  <span className="font-medium">
+                    {result.passed_test_cases} / {result.total_test_cases}{" "}
+                    passed
+                  </span>
                 </div>
               </div>
               <div>
-                <h4 className="text-sm font-medium mb-1 text-gray-500">Score</h4>
+                <h4 className="text-sm font-medium mb-1 text-gray-500">
+                  Score
+                </h4>
                 <div className="flex items-center">
                   <span className="font-medium">{result.score}%</span>
                 </div>
@@ -109,22 +128,27 @@ const TestCasePanel: React.FC<TestCasePanelProps> = ({
               <TabsTrigger value="compile-output">Compile Output</TabsTrigger>
             )}
           </TabsList>
-          
+
           <TabsContent value="test-results" className="mt-4 space-y-3">
             {visibleTestCases.map((testCase, index) => (
-              <Card key={index} className="overflow-hidden">
+              <Card
+                key={`testcase-${index}-${testCase.input.slice(0, 10)}`}
+                className="overflow-hidden"
+              >
                 <div className="flex items-center justify-between p-3 bg-slate-50 border-b">
                   <div className="flex items-center">
                     <span className="font-medium">Test Case {index + 1}</span>
-                    {result && result.passed_test_cases > 0 && index < result.passed_test_cases ? (
+                    {result &&
+                    result.passed_test_cases > 0 &&
+                    index < result.passed_test_cases ? (
                       <CheckCircle className="h-4 w-4 text-green-500 ml-2" />
                     ) : result && result.status ? (
                       <XCircle className="h-4 w-4 text-red-500 ml-2" />
                     ) : null}
                   </div>
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
+                  <Button
+                    size="sm"
+                    variant="outline"
                     disabled={isSubmitting}
                     onClick={() => onRunTest(index)}
                   >
@@ -134,13 +158,17 @@ const TestCasePanel: React.FC<TestCasePanelProps> = ({
                 <CardContent className="p-0">
                   <div className="grid grid-cols-2 divide-x">
                     <div className="p-3">
-                      <h4 className="text-xs font-medium mb-1 text-gray-500">Input</h4>
+                      <h4 className="text-xs font-medium mb-1 text-gray-500">
+                        Input
+                      </h4>
                       <pre className="text-sm bg-slate-100 p-2 rounded whitespace-pre-wrap overflow-auto max-h-32">
                         {testCase.input}
                       </pre>
                     </div>
                     <div className="p-3">
-                      <h4 className="text-xs font-medium mb-1 text-gray-500">Expected Output</h4>
+                      <h4 className="text-xs font-medium mb-1 text-gray-500">
+                        Expected Output
+                      </h4>
                       <pre className="text-sm bg-slate-100 p-2 rounded whitespace-pre-wrap overflow-auto max-h-32">
                         {testCase.output}
                       </pre>
@@ -149,24 +177,33 @@ const TestCasePanel: React.FC<TestCasePanelProps> = ({
                 </CardContent>
               </Card>
             ))}
-            
+
             {/* Hidden test cases */}
             {hiddenTestCount > 0 && (
               <Card>
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <span className="text-sm">
-                      {hiddenTestCount} hidden test case{hiddenTestCount > 1 ? 's' : ''}
+                      {hiddenTestCount} hidden test case
+                      {hiddenTestCount > 1 ? "s" : ""}
                     </span>
-                    <Badge variant={result?.passed_test_cases === result?.total_test_cases ? "secondary" : "destructive"}>
-                      {result?.passed_test_cases === result?.total_test_cases ? "All Passed" : "Not All Passed"}
+                    <Badge
+                      variant={
+                        result?.passed_test_cases === result?.total_test_cases
+                          ? "secondary"
+                          : "destructive"
+                      }
+                    >
+                      {result?.passed_test_cases === result?.total_test_cases
+                        ? "All Passed"
+                        : "Not All Passed"}
                     </Badge>
                   </div>
                 </CardContent>
               </Card>
             )}
           </TabsContent>
-          
+
           <TabsContent value="standard-output" className="mt-4">
             <Card>
               <CardContent className="p-4">
@@ -175,12 +212,14 @@ const TestCasePanel: React.FC<TestCasePanelProps> = ({
                     {result.stdout}
                   </pre>
                 ) : (
-                  <p className="text-gray-500">No output available. Run your code first.</p>
+                  <p className="text-gray-500">
+                    No output available. Run your code first.
+                  </p>
                 )}
               </CardContent>
             </Card>
           </TabsContent>
-          
+
           <TabsContent value="standard-error" className="mt-4">
             <Card>
               <CardContent className="p-4">
@@ -194,7 +233,7 @@ const TestCasePanel: React.FC<TestCasePanelProps> = ({
               </CardContent>
             </Card>
           </TabsContent>
-          
+
           <TabsContent value="compile-output" className="mt-4">
             <Card>
               <CardContent className="p-4">
@@ -212,6 +251,6 @@ const TestCasePanel: React.FC<TestCasePanelProps> = ({
       </div>
     </div>
   );
-};
+}
 
-export default TestCasePanel; 
+export default TestCasePanel;

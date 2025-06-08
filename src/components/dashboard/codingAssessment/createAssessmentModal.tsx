@@ -56,17 +56,19 @@ const difficultyColors = {
   hard: "bg-red-100 text-red-800",
 };
 
-const CreateAssessmentModal: React.FC<Props> = ({
+function CreateAssessmentModal({
   isOpen,
   onClose,
   editingAssessment = null,
-}) => {
+}: Props) {
   const { userId } = useAuth();
   const { organization } = useOrganization();
   const { fetchAssessments } = useAssessments();
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [availableQuestions, setAvailableQuestions] = useState<CodingQuestion[]>([]);
+  const [availableQuestions, setAvailableQuestions] = useState<
+    CodingQuestion[]
+  >([]);
   const [open, setOpen] = useState(false);
 
   const initialFormData: AssessmentFormData = {
@@ -84,10 +86,11 @@ const CreateAssessmentModal: React.FC<Props> = ({
   useEffect(() => {
     const loadQuestions = async () => {
       if (userId) {
-        const questions = await CodingQuestionService.getQuestionsForUserOrOrganization(
-          userId,
-          organization?.id || null
-        );
+        const questions =
+          await CodingQuestionService.getQuestionsForUserOrOrganization(
+            userId,
+            organization?.id || null
+          );
         setAvailableQuestions(questions);
       }
     };
@@ -102,7 +105,8 @@ const CreateAssessmentModal: React.FC<Props> = ({
       if (editingAssessment) {
         setIsEditing(true);
         setLoading(true);
-        const assessment = await AssessmentService.getAssessment(editingAssessment);
+        const assessment =
+          await AssessmentService.getAssessment(editingAssessment);
         if (assessment) {
           setFormData({
             name: assessment.name,
@@ -124,7 +128,7 @@ const CreateAssessmentModal: React.FC<Props> = ({
     if (isOpen) {
       loadAssessment();
     }
-  }, [isOpen, editingAssessment]);
+  }, [isOpen, editingAssessment, initialFormData]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -165,25 +169,25 @@ const CreateAssessmentModal: React.FC<Props> = ({
   const handleSubmit = async () => {
     if (!userId) {
       toast.error("Authentication error. Please try again.");
-      
-return;
+
+      return;
     }
 
     // Validation
     if (!formData.name.trim()) {
       toast.error("Name is required");
-      
-return;
+
+      return;
     }
     if (!formData.description || !formData.description.trim()) {
       toast.error("Description is required");
-      
-return;
+
+      return;
     }
     if (formData.questions.length === 0) {
       toast.error("You must select at least one question");
-      
-return;
+
+      return;
     }
 
     setLoading(true);
@@ -209,13 +213,17 @@ return;
     }
   };
 
-  if (!isOpen) {return null;}
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
       <Card className="w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
         <CardHeader>
-          <CardTitle>{isEditing ? "Edit" : "Create"} Coding Assessment</CardTitle>
+          <CardTitle>
+            {isEditing ? "Edit" : "Create"} Coding Assessment
+          </CardTitle>
           <CardDescription>
             {isEditing
               ? "Update your coding assessment"
@@ -281,7 +289,9 @@ return;
             </div>
 
             <div>
-              <Label className="mb-2 block">Selected Questions: {formData.questions.length}</Label>
+              <Label className="mb-2 block">
+                Selected Questions: {formData.questions.length}
+              </Label>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <Button
@@ -316,8 +326,12 @@ return;
                                   : "opacity-0"
                               )}
                             />
-                            <span className="flex-1 truncate">{question.title}</span>
-                            <Badge className={difficultyColors[question.difficulty]}>
+                            <span className="flex-1 truncate">
+                              {question.title}
+                            </span>
+                            <Badge
+                              className={difficultyColors[question.difficulty]}
+                            >
                               {question.difficulty}
                             </Badge>
                           </CommandItem>
@@ -334,16 +348,22 @@ return;
                 <Label className="mb-2 block">Selected Questions:</Label>
                 <div className="space-y-2">
                   {formData.questions.map((id) => {
-                    const question = availableQuestions.find((q) => q.id === id);
-                    
-return (
+                    const question = availableQuestions.find(
+                      (q) => q.id === id
+                    );
+
+                    return (
                       <div
                         key={id}
                         className="flex justify-between items-center p-2 border rounded-md"
                       >
                         <span>{question?.title || `Question #${id}`}</span>
                         <div className="flex gap-2">
-                          <Badge className={difficultyColors[question?.difficulty || "medium"]}>
+                          <Badge
+                            className={
+                              difficultyColors[question?.difficulty || "medium"]
+                            }
+                          >
                             {question?.difficulty || "unknown"}
                           </Badge>
                           <Button
@@ -368,12 +388,16 @@ return (
             Cancel
           </Button>
           <Button disabled={loading} onClick={handleSubmit}>
-            {loading ? "Saving..." : isEditing ? "Update Assessment" : "Create Assessment"}
+            {loading
+              ? "Saving..."
+              : isEditing
+                ? "Update Assessment"
+                : "Create Assessment"}
           </Button>
         </CardFooter>
       </Card>
     </div>
   );
-};
+}
 
-export default CreateAssessmentModal; 
+export default CreateAssessmentModal;
