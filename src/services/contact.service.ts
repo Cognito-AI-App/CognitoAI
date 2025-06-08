@@ -1,9 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
-import { 
-  ContactMessage, 
+import {
+  ContactMessage,
   CreateContactMessageRequest,
   NewsletterSubscription,
-  CreateNewsletterSubscriptionRequest 
+  CreateNewsletterSubscriptionRequest,
 } from "@/types/contact";
 
 const supabase = createClient(
@@ -12,7 +12,9 @@ const supabase = createClient(
 );
 
 export class ContactService {
-  static async createContactMessage(data: CreateContactMessageRequest): Promise<ContactMessage> {
+  static async createContactMessage(
+    data: CreateContactMessageRequest
+  ): Promise<ContactMessage> {
     const { data: result, error } = await supabase
       .from("contact_message")
       .insert([
@@ -62,7 +64,9 @@ export class ContactService {
 }
 
 export class NewsletterService {
-  static async subscribe(data: CreateNewsletterSubscriptionRequest): Promise<NewsletterSubscription> {
+  static async subscribe(
+    data: CreateNewsletterSubscriptionRequest
+  ): Promise<NewsletterSubscription> {
     // Check if email already exists
     const { data: existing } = await supabase
       .from("newsletter_subscription")
@@ -77,16 +81,18 @@ export class NewsletterService {
         // Reactivate subscription
         const { data: result, error } = await supabase
           .from("newsletter_subscription")
-          .update({ 
-            is_active: true, 
-            unsubscribed_at: null 
+          .update({
+            is_active: true,
+            unsubscribed_at: null,
           })
           .eq("email", data.email)
           .select()
           .single();
 
         if (error) {
-          throw new Error(`Failed to reactivate subscription: ${error.message}`);
+          throw new Error(
+            `Failed to reactivate subscription: ${error.message}`
+          );
         }
 
         return result;
@@ -115,9 +121,9 @@ export class NewsletterService {
   static async unsubscribe(email: string): Promise<void> {
     const { error } = await supabase
       .from("newsletter_subscription")
-      .update({ 
-        is_active: false, 
-        unsubscribed_at: new Date().toISOString() 
+      .update({
+        is_active: false,
+        unsubscribed_at: new Date().toISOString(),
       })
       .eq("email", email);
 
@@ -152,4 +158,4 @@ export class NewsletterService {
 
     return data || [];
   }
-} 
+}

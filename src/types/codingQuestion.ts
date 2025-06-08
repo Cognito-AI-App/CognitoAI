@@ -1,4 +1,4 @@
-export type Difficulty = 'easy' | 'medium' | 'hard';
+export type Difficulty = "easy" | "medium" | "hard";
 
 export type TestCase = {
   input: string;
@@ -23,5 +23,5 @@ export type CodingQuestion = {
 
 export type CodingQuestionFormData = Omit<
   CodingQuestion,
-  'id' | 'created_at' | 'organization_id' | 'user_id'
->; 
+  "id" | "created_at" | "organization_id" | "user_id"
+>;

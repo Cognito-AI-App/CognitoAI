@@ -31,13 +31,17 @@ export const generateSystemMessage = (currentCode: string) => {
   return `
 You are an expert coding assistant helping with programming problems.
 
-${currentCode ? `Here is the user's current code for context:
+${
+  currentCode
+    ? `Here is the user's current code for context:
 
 \`\`\`
 ${currentCode}
 \`\`\`
 
-` : ''}
+`
+    : ""
+}
 Remember to provide ONLY code with no explanations or comments. Do not solve the entire problem unless specifically asked.
 `;
-}; 
+};

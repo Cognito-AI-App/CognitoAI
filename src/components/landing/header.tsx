@@ -61,7 +61,10 @@ export default function Header() {
             ) : (
               <>
                 <Link href="/sign-in">
-                  <Button variant="ghost" className="text-gray-600 hover:text-indigo-600">
+                  <Button
+                    variant="ghost"
+                    className="text-gray-600 hover:text-indigo-600"
+                  >
                     Sign In
                   </Button>
                 </Link>
@@ -81,7 +84,11 @@ export default function Header() {
               size="icon"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </Button>
           </div>
         </div>
@@ -128,4 +135,4 @@ export default function Header() {
       </div>
     </header>
   );
-} 
+}

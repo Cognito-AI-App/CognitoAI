@@ -39,14 +39,14 @@ export async function POST(req: Request, res: Response) {
 
     return NextResponse.json(
       { response: "Interview created successfully" },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (err) {
     logger.error("Error creating interview", err as object);
 
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

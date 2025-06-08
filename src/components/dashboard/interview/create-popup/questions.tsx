@@ -22,7 +22,7 @@ function QuestionsPopup({ interviewData, setProceed, setOpen }: Props) {
   const [isClicked, setIsClicked] = useState(false);
 
   const [questions, setQuestions] = useState<Question[]>(
-    interviewData.questions,
+    interviewData.questions
   );
   const [description, setDescription] = useState<string>(
     interviewData.description ? interviewData.description.trim() : ""
@@ -35,8 +35,8 @@ function QuestionsPopup({ interviewData, setProceed, setOpen }: Props) {
   const handleInputChange = (id: string, newQuestion: Question) => {
     setQuestions(
       questions.map((question) =>
-        question.id === id ? { ...question, ...newQuestion } : question,
-      ),
+        question.id === id ? { ...question, ...newQuestion } : question
+      )
     );
   };
 
@@ -47,7 +47,7 @@ function QuestionsPopup({ interviewData, setProceed, setOpen }: Props) {
           ...question,
           question: "",
           follow_up_count: 1,
-        })),
+        }))
       );
 
       return;
@@ -175,9 +175,11 @@ function QuestionsPopup({ interviewData, setProceed, setOpen }: Props) {
             questions.length < interviewData.question_count ||
             description.trim() === "" ||
             questions.some((question) => {
-              return !question.question || 
-                     typeof question.question !== 'string' || 
-                     question.question.trim() === "";
+              return (
+                !question.question ||
+                typeof question.question !== "string" ||
+                question.question.trim() === ""
+              );
             })
           }
           className="bg-indigo-600 hover:bg-indigo-800 mr-5 mt-2"

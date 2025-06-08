@@ -3,9 +3,9 @@
  */
 
 export interface LanguageOption {
-  id: number;       // Judge0 language ID
-  name: string;     // Display name
-  value: string;    // Monaco editor language identifier
+  id: number; // Judge0 language ID
+  name: string; // Display name
+  value: string; // Monaco editor language identifier
 }
 
 export const languageOptions: LanguageOption[] = [
@@ -28,14 +28,14 @@ export const languageOptions: LanguageOption[] = [
  * Get a language option by its value (Monaco identifier)
  */
 export function getLanguageByValue(value: string): LanguageOption | undefined {
-  return languageOptions.find(lang => lang.value === value);
+  return languageOptions.find((lang) => lang.value === value);
 }
 
 /**
  * Get a language option by its ID (Judge0 ID)
  */
 export function getLanguageById(id: number): LanguageOption | undefined {
-  return languageOptions.find(lang => lang.id === id);
+  return languageOptions.find((lang) => lang.id === id);
 }
 
 /**
@@ -43,4 +43,4 @@ export function getLanguageById(id: number): LanguageOption | undefined {
  */
 export function getDefaultLanguage(): LanguageOption {
   return languageOptions[0];
-} 
+}

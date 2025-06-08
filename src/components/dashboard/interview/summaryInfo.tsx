@@ -61,7 +61,9 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
     incomplete: 0,
     partial: 0,
   });
-  const [assessmentResponses, setAssessmentResponses] = useState<AssessmentResponse[]>([]);
+  const [assessmentResponses, setAssessmentResponses] = useState<
+    AssessmentResponse[]
+  >([]);
 
   const totalResponses = responses.length;
 
@@ -79,7 +81,10 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
     const fetchAssessmentData = async () => {
       if (interview?.id) {
         try {
-          const responses = await AssessmentService.getAssessmentResponsesForInterview(interview.id);
+          const responses =
+            await AssessmentService.getAssessmentResponsesForInterview(
+              interview.id
+            );
           if (responses) {
             setAssessmentResponses(responses);
           }
@@ -100,16 +105,16 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
       const assessmentResponse = assessmentResponses.find(
         (ar) => ar.email === response.email
       );
-      
+
       const behavioralScore = response.analytics?.overallScore || 0;
       const codingScore = assessmentResponse?.score || null;
-      
+
       // Calculate combined score (average of behavioral and coding if both exist)
       let combinedScore = behavioralScore;
       if (codingScore !== null) {
         combinedScore = Math.round((behavioralScore + codingScore) / 2);
       }
-      
+
       return {
         call_id: response.call_id,
         name: response.name || "Anonymous",
@@ -130,7 +135,7 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
       return;
     }
     const interviewer = interviewers.find(
-      (interviewer) => interviewer.id === interview.interviewer_id,
+      (interviewer) => interviewer.id === interview.interviewer_id
     );
     setInterviewer(interviewer);
   }, [interviewers, interview]);
@@ -194,7 +199,7 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
       totalDuration += response.duration;
       if (
         Object.values(CandidateStatus).includes(
-          response.candidate_status as CandidateStatus,
+          response.candidate_status as CandidateStatus
         )
       ) {
         statusCounter[response.candidate_status as CandidateStatus]++;
@@ -253,7 +258,7 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
                 </div>
                 <p className="w-fit text-2xl font-semibold text-indigo-600  p-1 px-2 bg-indigo-100 rounded-md">
                   {Math.round(
-                    (completedInterviews / responses.length) * 10000,
+                    (completedInterviews / responses.length) * 10000
                   ) / 100}
                   %
                 </p>

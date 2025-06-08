@@ -85,7 +85,7 @@ function AssessmentInterface({ params }: Props) {
   const [isActive, setIsActive] = useState(true);
   const { getInterviewById } = useInterviews();
   const [interviewNotFound, setInterviewNotFound] = useState(false);
-  
+
   useEffect(() => {
     if (interview) {
       setIsActive(interview?.is_active === true);
@@ -147,7 +147,8 @@ function AssessmentInterface({ params }: Props) {
             {interview?.name} - Assessment
           </p>
           <p className="text-center text-gray-600 my-5">
-            Please use a PC to complete this assessment. Assessments are not supported on mobile devices.
+            Please use a PC to complete this assessment. Assessments are not
+            supported on mobile devices.
           </p>
         </div>
         <div className="text-center text-md font-semibold mr-2 my-5">
@@ -166,4 +167,4 @@ function AssessmentInterface({ params }: Props) {
   );
 }
 
-export default AssessmentInterface; 
+export default AssessmentInterface;

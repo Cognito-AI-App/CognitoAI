@@ -1,7 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAuth, useOrganization } from "@clerk/nextjs";
+
 import { CodingQuestion } from "@/types/codingQuestion";
 import { CodingQuestionService } from "@/services/codingQuestions.service";
 
@@ -17,13 +18,16 @@ const defaultContext: CodingQuestionsContextType = {
   fetchCodingQuestions: async () => {},
 };
 
-const CodingQuestionsContext = createContext<CodingQuestionsContextType>(defaultContext);
+const CodingQuestionsContext =
+  createContext<CodingQuestionsContextType>(defaultContext);
 
 export const useCodingQuestions = () => useContext(CodingQuestionsContext);
 
-export const CodingQuestionsProvider: React.FC<{ children: React.ReactNode }> = ({
+export function CodingQuestionsProvider({
   children,
-}) => {
+}: {
+  children: React.ReactNode;
+}) {
   const [codingQuestions, setCodingQuestions] = useState<CodingQuestion[]>([]);
   const [loading, setLoading] = useState(true);
   const { userId } = useAuth();
@@ -33,10 +37,11 @@ export const CodingQuestionsProvider: React.FC<{ children: React.ReactNode }> = 
     setLoading(true);
     try {
       if (userId) {
-        const questions = await CodingQuestionService.getQuestionsForUserOrOrganization(
-          userId,
-          organization?.id || null
-        );
+        const questions =
+          await CodingQuestionService.getQuestionsForUserOrOrganization(
+            userId,
+            organization?.id || null
+          );
         setCodingQuestions(questions);
       } else {
         setCodingQuestions([]);
@@ -69,4 +74,4 @@ export const CodingQuestionsProvider: React.FC<{ children: React.ReactNode }> = 
       {children}
     </CodingQuestionsContext.Provider>
   );
-}; 
+}

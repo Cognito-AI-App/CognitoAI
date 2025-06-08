@@ -35,4 +35,4 @@ export interface NewsletterSubscription {
 export interface CreateNewsletterSubscriptionRequest {
   email: string;
   source?: string;
-} 
+}

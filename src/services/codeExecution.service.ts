@@ -23,28 +23,28 @@ export const executeCode = async (
   passed_test_cases: number;
   total_test_cases: number;
 }> => {
-  const response = await fetch('/api/execute-code', {
-    method: 'POST',
+  const response = await fetch("/api/execute-code", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       sourceCode,
       languageId,
-      testCases
+      testCases,
     }),
   });
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.error || 'Failed to execute code');
+    throw new Error(errorData.error || "Failed to execute code");
   }
-  
+
   return await response.json();
 };
 
 const CodeExecutionService = {
-  executeCode
+  executeCode,
 };
 
-export default CodeExecutionService; 
+export default CodeExecutionService;

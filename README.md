@@ -45,47 +45,48 @@ CognitoAI is a platform designed to automate the user interview process using ad
 
 ## Core Features
 
-*   **AI Interviewers:** Utilizes conversational AI (Retell AI, OpenAI) to conduct interviews.
-*   **Customizable Interviews:** Define interview objectives, descriptions, questions, and branding (logo, theme).
-*   **Coding Assessments:** Create and manage coding assessments with difficulty levels and test cases that can be linked to interviews.
-*   **Automated Question Generation:** Generate relevant interview questions based on objectives and context (e.g., from PDFs).
-*   **Transcript Analysis:** Automatically transcribes interviews and provides analysis.
-*   **Communication Analysis:** Scores and provides feedback on interviewee communication skills.
-*   **Insight Generation:** Derives key insights and summaries from multiple interview responses.
-*   **Dashboard:** Centralized view for managing interviews, interviewers, and reviewing responses.
-*   **Response Management:** View individual responses, recordings, transcripts, and analytics.
-*   **User & Organization Management:** Supports multi-user organizations via Clerk authentication.
-*   **PDF Parsing:** Extracts text content from uploaded PDF documents (e.g., resumes, job descriptions).
-*   **Professional Landing Page:** Beautiful, responsive landing page with features showcase, screenshots gallery, and contact information.
+- **AI Interviewers:** Utilizes conversational AI (Retell AI, OpenAI) to conduct interviews.
+- **Customizable Interviews:** Define interview objectives, descriptions, questions, and branding (logo, theme).
+- **Coding Assessments:** Create and manage coding assessments with difficulty levels and test cases that can be linked to interviews.
+- **Automated Question Generation:** Generate relevant interview questions based on objectives and context (e.g., from PDFs).
+- **Transcript Analysis:** Automatically transcribes interviews and provides analysis.
+- **Communication Analysis:** Scores and provides feedback on interviewee communication skills.
+- **Insight Generation:** Derives key insights and summaries from multiple interview responses.
+- **Dashboard:** Centralized view for managing interviews, interviewers, and reviewing responses.
+- **Response Management:** View individual responses, recordings, transcripts, and analytics.
+- **User & Organization Management:** Supports multi-user organizations via Clerk authentication.
+- **PDF Parsing:** Extracts text content from uploaded PDF documents (e.g., resumes, job descriptions).
+- **Professional Landing Page:** Beautiful, responsive landing page with features showcase, screenshots gallery, and contact information.
 
 ### Coding Assessments
 
 The platform includes a full-featured coding assessment system that can be added to interviews:
 
-* **Creation & Management:** Create coding questions with multiple test cases and difficulty levels. Group questions into assessments.
-* **Interview Integration:** Link assessments to interviews, allowing candidates to proceed to coding tests after the behavioral interview.
-* **Code Execution:** Execute code in multiple languages using Judge0 API, with real-time test results.
-* **AI Coding Assistant:** Integrated AI assistant that helps candidates generate code solutions for assessment questions:
-  * Maintains separate conversation history for each question
-  * Generates clean, working code based on the question requirements
-  * Offers one-click code application to the editor
-  * Uses OpenAI to provide intelligent coding suggestions
-  * Optimized prompts ensure code-only responses without explanations or comments
-* **Features:**
-  * Monaco code editor with syntax highlighting for 13+ programming languages
-  * Customizable starter code templates for each language
-  * Support for visible example tests and hidden edge case tests
-  * Automated scoring based on passed test cases
-  * Time limits and tab switch tracking to ensure assessment integrity
-  * Immediate feedback on compilation errors and test outcomes
-* **Comprehensive Scoring System:**
-  * Individual scoring for each coding question based on test case success
-  * Overall coding assessment score calculation (percentage of passed tests)
-  * Combined candidate evaluation that averages behavioral interview and coding scores
-  * Complete score breakdown visible in interviewer dashboard
-  * Color-coded performance indicators for easy evaluation
+- **Creation & Management:** Create coding questions with multiple test cases and difficulty levels. Group questions into assessments.
+- **Interview Integration:** Link assessments to interviews, allowing candidates to proceed to coding tests after the behavioral interview.
+- **Code Execution:** Execute code in multiple languages using Judge0 API, with real-time test results.
+- **AI Coding Assistant:** Integrated AI assistant that helps candidates generate code solutions for assessment questions:
+  - Maintains separate conversation history for each question
+  - Generates clean, working code based on the question requirements
+  - Offers one-click code application to the editor
+  - Uses OpenAI to provide intelligent coding suggestions
+  - Optimized prompts ensure code-only responses without explanations or comments
+- **Features:**
+  - Monaco code editor with syntax highlighting for 13+ programming languages
+  - Customizable starter code templates for each language
+  - Support for visible example tests and hidden edge case tests
+  - Automated scoring based on passed test cases
+  - Time limits and tab switch tracking to ensure assessment integrity
+  - Immediate feedback on compilation errors and test outcomes
+- **Comprehensive Scoring System:**
+  - Individual scoring for each coding question based on test case success
+  - Overall coding assessment score calculation (percentage of passed tests)
+  - Combined candidate evaluation that averages behavioral interview and coding scores
+  - Complete score breakdown visible in interviewer dashboard
+  - Color-coded performance indicators for easy evaluation
 
 Upon completing the behavioral interview, candidates can proceed to the coding assessment where they:
+
 1. Select their preferred programming language
 2. Write code solutions for the given problems
 3. Run tests to verify their solutions
@@ -97,38 +98,39 @@ Assessment results are saved with the interview, allowing interviewers to review
 
 The platform features a professional, responsive landing page that serves as the entry point for new users:
 
-* **Modern Design:** Clean, professional design with smooth animations and responsive layout
-* **Features Showcase:** Comprehensive overview of platform capabilities with interactive elements
-* **Screenshots Gallery:** Interactive gallery showcasing the application interface with category filtering
-* **Process Explanation:** Step-by-step guide on how CognitoAI works from setup to insights
-* **Contact Integration:** Contact form and information with direct links to email, phone, and LinkedIn
-* **Authentication Integration:** Seamless integration with Clerk authentication, showing appropriate CTAs based on user state
-* **SEO Optimized:** Proper meta tags, structured data, and semantic HTML for search engine optimization
+- **Modern Design:** Clean, professional design with smooth animations and responsive layout
+- **Features Showcase:** Comprehensive overview of platform capabilities with interactive elements
+- **Screenshots Gallery:** Interactive gallery showcasing the application interface with category filtering
+- **Process Explanation:** Step-by-step guide on how CognitoAI works from setup to insights
+- **Contact Integration:** Contact form and information with direct links to email, phone, and LinkedIn
+- **Authentication Integration:** Seamless integration with Clerk authentication, showing appropriate CTAs based on user state
+- **SEO Optimized:** Proper meta tags, structured data, and semantic HTML for search engine optimization
 
 The landing page is built with:
-* **Responsive Design:** Mobile-first approach ensuring great experience across all devices
-* **Performance Optimized:** Fast loading with optimized images and efficient component structure
-* **Accessibility:** WCAG compliant with proper ARIA labels and keyboard navigation
-* **Component Architecture:** Modular components for easy maintenance and updates
+
+- **Responsive Design:** Mobile-first approach ensuring great experience across all devices
+- **Performance Optimized:** Fast loading with optimized images and efficient component structure
+- **Accessibility:** WCAG compliant with proper ARIA labels and keyboard navigation
+- **Component Architecture:** Modular components for easy maintenance and updates
 
 ## Technology Stack
 
-*   **Framework:** Next.js 14 (App Router)
-*   **Language:** TypeScript
-*   **Styling:** Tailwind CSS, PostCSS, Shadcn/ui, `clsx`, `tailwind-merge`
-*   **UI Components:** Shadcn/ui (built on Radix UI), NextUI (Progress, CircularProgress), Material UI (Charts - PieChart)
-*   **State Management:** React Context API, TanStack Query (React Query)
-*   **Forms:** React Hook Form, Zod (Validation)
-*   **Authentication:** Clerk
-*   **Database:** Supabase (PostgreSQL)
-*   **Conversational AI:** Retell AI SDK, OpenAI API (GPT-4o)
-*   **LLM Integration:** Langchain (PDF Loading, Prompt Templating)
-*   **Code Editor:** Monaco Editor (@monaco-editor/react)
-*   **Code Execution:** Judge0 API (via RapidAPI)
-*   **API:** Next.js API Routes
-*   **Containerization:** Docker, Docker Compose
-*   **Linting/Formatting:** ESLint, Prettier
-*   **CI/CD:** GitHub Actions
+- **Framework:** Next.js 14 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS, PostCSS, Shadcn/ui, `clsx`, `tailwind-merge`
+- **UI Components:** Shadcn/ui (built on Radix UI), NextUI (Progress, CircularProgress), Material UI (Charts - PieChart)
+- **State Management:** React Context API, TanStack Query (React Query)
+- **Forms:** React Hook Form, Zod (Validation)
+- **Authentication:** Clerk
+- **Database:** Supabase (PostgreSQL)
+- **Conversational AI:** Retell AI SDK, OpenAI API (GPT-4o)
+- **LLM Integration:** Langchain (PDF Loading, Prompt Templating)
+- **Code Editor:** Monaco Editor (@monaco-editor/react)
+- **Code Execution:** Judge0 API (via RapidAPI)
+- **API:** Next.js API Routes
+- **Containerization:** Docker, Docker Compose
+- **Linting/Formatting:** ESLint, Prettier
+- **CI/CD:** GitHub Actions
 
 ## Project Structure
 
@@ -241,7 +243,7 @@ CognitoAI/
     ├── services/            # Data fetching and business logic services
     │   ├── analytics.service.ts # Handles communication/overall analysis
     │   ├── clients.service.ts   # User/Organization data operations
-    │   ├── codeExecution.service.ts # Handles code execution via Judge0 
+    │   ├── codeExecution.service.ts # Handles code execution via Judge0
     │   ├── contact.service.ts   # Contact messages and newsletter subscriptions
     │   ├── feedback.service.ts  # Handles user feedback submission
     │   ├── interviewers.service.ts # Interviewer data operations
@@ -267,15 +269,15 @@ Follow these steps to set up and run the project locally.
 
 ### Prerequisites
 
-*   Node.js (v20 or later recommended - see `Dockerfile`)
-*   Yarn (v1.x)
-*   Docker & Docker Compose (Optional, but recommended for easier setup)
-*   Access keys for:
-    *   Clerk (Publishable Key, Secret Key)
-    *   Supabase (URL, Anon Key)
-    *   Retell AI (API Key)
-    *   OpenAI (API Key)
-    *   Judge0 API via RapidAPI (API Key)
+- Node.js (v20 or later recommended - see `Dockerfile`)
+- Yarn (v1.x)
+- Docker & Docker Compose (Optional, but recommended for easier setup)
+- Access keys for:
+  - Clerk (Publishable Key, Secret Key)
+  - Supabase (URL, Anon Key)
+  - Retell AI (API Key)
+  - OpenAI (API Key)
+  - Judge0 API via RapidAPI (API Key)
 
 ## Clerk Setup ([Clerk](https://clerk.com/))
 
@@ -338,6 +340,7 @@ To fully implement the coding assessment feature in your instance, follow these 
 ### 1. Database Setup
 
 Ensure your database has the assessment-related tables by running the schema in `supabase_schema.sql`. The key tables are:
+
 - `coding_question`: Stores individual coding problems
 - `assessment`: Stores collections of coding questions
 - `assessment_response`: Stores candidate responses
@@ -345,6 +348,7 @@ Ensure your database has the assessment-related tables by running the schema in 
 ### 2. Frontend Configuration
 
 1. **Install Dependencies**: The assessment feature requires Monaco editor and related packages:
+
    ```bash
    yarn add @monaco-editor/react monaco-editor
    ```
@@ -354,12 +358,14 @@ Ensure your database has the assessment-related tables by running the schema in 
 ### 3. Creating Questions & Assessments
 
 1. **Create Coding Questions**:
+
    - Navigate to the Coding Questions dashboard
    - Create questions with descriptions, test cases, and examples
    - Use Markdown for formatting explanations and examples
    - Define both visible and hidden test cases
 
 2. **Create Assessments**:
+
    - Navigate to the Assessments dashboard
    - Create an assessment and select questions to include
    - Set difficulty level and time duration
@@ -372,6 +378,7 @@ Ensure your database has the assessment-related tables by running the schema in 
 ### 4. Testing the Feature
 
 Before deploying to production, we recommend testing the full assessment workflow:
+
 1. Create a test interview with an attached assessment
 2. Complete the behavioral interview
 3. Proceed to the coding assessment
@@ -381,6 +388,7 @@ Before deploying to production, we recommend testing the full assessment workflo
 ### 5. Customization Options
 
 The assessment feature can be customized in several ways:
+
 - **Language Support**: Edit `languageOptions.ts` to add or remove programming languages
 - **Starter Templates**: Modify `codeTemplates.ts` to adjust starter code for each language
 - **UI Theming**: The Monaco editor supports both light and dark themes
@@ -465,44 +473,44 @@ docker-compose down
 
 ## Key Services and Libraries
 
-*   **Clerk:** Handles user authentication, sign-up, sign-in, and organization management. Middleware protects routes.
-*   **Supabase:** PostgreSQL database backend, providing data persistence for interviews, users, responses, etc. Used via `@supabase/supabase-js`.
-*   **Retell AI:** Powers the conversational AI agents for conducting interviews. Used via `retell-sdk` (backend) and `retell-client-js-sdk` (frontend).
-*   **OpenAI:** Used for generating interview questions, insights, and performing communication analysis via the GPT-4o model.
-*   **Langchain:** Used for orchestrating LLM interactions, specifically PDF loading (`PDFLoader`) in this project.
-*   **Shadcn/ui:** Provides beautifully designed, accessible UI components built on Radix UI primitives and styled with Tailwind CSS.
-*   **React Hook Form & Zod:** Used for robust form handling and validation.
-*   **TanStack Query:** Manages server state, caching, and data fetching, improving performance and UX.
-*   **Axios:** Used for making HTTP requests to internal API routes and external services.
-*   **Marked:** Used for rendering Markdown content (e.g., transcripts).
+- **Clerk:** Handles user authentication, sign-up, sign-in, and organization management. Middleware protects routes.
+- **Supabase:** PostgreSQL database backend, providing data persistence for interviews, users, responses, etc. Used via `@supabase/supabase-js`.
+- **Retell AI:** Powers the conversational AI agents for conducting interviews. Used via `retell-sdk` (backend) and `retell-client-js-sdk` (frontend).
+- **OpenAI:** Used for generating interview questions, insights, and performing communication analysis via the GPT-4o model.
+- **Langchain:** Used for orchestrating LLM interactions, specifically PDF loading (`PDFLoader`) in this project.
+- **Shadcn/ui:** Provides beautifully designed, accessible UI components built on Radix UI primitives and styled with Tailwind CSS.
+- **React Hook Form & Zod:** Used for robust form handling and validation.
+- **TanStack Query:** Manages server state, caching, and data fetching, improving performance and UX.
+- **Axios:** Used for making HTTP requests to internal API routes and external services.
+- **Marked:** Used for rendering Markdown content (e.g., transcripts).
 
 ## API Endpoints
 
 The backend logic is primarily handled via Next.js API Routes located in `src/app/api/`:
 
-*   `/api/analyze-communication`: Analyzes the communication skills from a transcript using OpenAI.
-*   `/api/create-interview`: Creates a new interview record in the database.
-*   `/api/create-interviewer`: Creates default interviewer profiles and associated Retell agents.
-*   `/api/execute-code`: Handles code execution via Judge0 for assessments.
-*   `/api/generate-insights`: Generates high-level insights from multiple call summaries for an interview.
-*   `/api/generate-interview-questions`: Generates interview questions using OpenAI based on provided context.
-*   `/api/get-call`: Retrieves call details from Retell and performs analysis if not already done.
-*   `/api/register-call`: Registers a web call with Retell AI to initiate an interview.
-*   `/api/response-webhook`: (Likely intended for receiving events from Retell, e.g., call ended, call analyzed - *needs verification/implementation*).
+- `/api/analyze-communication`: Analyzes the communication skills from a transcript using OpenAI.
+- `/api/create-interview`: Creates a new interview record in the database.
+- `/api/create-interviewer`: Creates default interviewer profiles and associated Retell agents.
+- `/api/execute-code`: Handles code execution via Judge0 for assessments.
+- `/api/generate-insights`: Generates high-level insights from multiple call summaries for an interview.
+- `/api/generate-interview-questions`: Generates interview questions using OpenAI based on provided context.
+- `/api/get-call`: Retrieves call details from Retell and performs analysis if not already done.
+- `/api/register-call`: Registers a web call with Retell AI to initiate an interview.
+- `/api/response-webhook`: (Likely intended for receiving events from Retell, e.g., call ended, call analyzed - _needs verification/implementation_).
 
 ## Database Schema
 
 The database schema is defined in `supabase_schema.sql`. Key tables include:
 
-*   `organization`: Stores information about client organizations, including plan details.
-*   `user`: Stores user information linked to Clerk users and organizations.
-*   `interviewer`: Defines AI interviewer profiles, including their Retell `agent_id` and personality settings.
-*   `interview`: Stores details about each interview setup (name, objective, questions, associated interviewer, etc.) and can optionally include an assessment.
-*   `coding_question`: Stores coding questions with descriptions, difficulty levels, and test cases.
-*   `assessment`: Defines coding assessments that can be linked to interviews, consisting of selected coding questions.
-*   `assessment_response`: Records candidate responses to coding assessments, including submitted code and test results.
-*   `response`: Records each interview response, including participant details, `call_id`, transcript (via `details`), analysis results (`analytics`), and status.
-*   `feedback`: Stores user feedback about the platform experience.
+- `organization`: Stores information about client organizations, including plan details.
+- `user`: Stores user information linked to Clerk users and organizations.
+- `interviewer`: Defines AI interviewer profiles, including their Retell `agent_id` and personality settings.
+- `interview`: Stores details about each interview setup (name, objective, questions, associated interviewer, etc.) and can optionally include an assessment.
+- `coding_question`: Stores coding questions with descriptions, difficulty levels, and test cases.
+- `assessment`: Defines coding assessments that can be linked to interviews, consisting of selected coding questions.
+- `assessment_response`: Records candidate responses to coding assessments, including submitted code and test results.
+- `response`: Records each interview response, including participant details, `call_id`, transcript (via `details`), analysis results (`analytics`), and status.
+- `feedback`: Stores user feedback about the platform experience.
 
 Refer to `supabase_schema.sql` for detailed column definitions, types, and relationships.
 
@@ -512,20 +520,20 @@ To ensure consistency and maintain code quality, please follow these guidelines:
 
 ### Branching Strategy
 
-*   **`main`:** Represents the production-ready code. Merges to `main` should only come from `dev` after thorough testing.
-*   **`dev`:** The primary development branch. All feature branches are merged into `dev`.
-*   **Feature Branches:** Create branches from `dev` for new features or bug fixes (e.g., `feat/add-interview-sharing`, `fix/dashboard-layout`). Name branches descriptively.
+- **`main`:** Represents the production-ready code. Merges to `main` should only come from `dev` after thorough testing.
+- **`dev`:** The primary development branch. All feature branches are merged into `dev`.
+- **Feature Branches:** Create branches from `dev` for new features or bug fixes (e.g., `feat/add-interview-sharing`, `fix/dashboard-layout`). Name branches descriptively.
 
 ### Linting and Formatting
 
-*   **ESLint & Prettier:** Configured to enforce code style and catch potential errors.
-*   **Run Checks:** Before committing, run:
-    ```bash
-    yarn lint # Check for ESLint errors/warnings
-    npx prettier --check . # Check for formatting issues
-    ```
-*   **Auto-Format:** To automatically fix formatting issues:
-    ```bash
-    npx prettier --write .
-    ```
-*   **CI:** The GitHub Actions workflow (`.github/workflows/ci.yml`) automatically checks Prettier formatting on pushes and pull requests to `main` and `dev`.
+- **ESLint & Prettier:** Configured to enforce code style and catch potential errors.
+- **Run Checks:** Before committing, run:
+  ```bash
+  yarn lint # Check for ESLint errors/warnings
+  npx prettier --check . # Check for formatting issues
+  ```
+- **Auto-Format:** To automatically fix formatting issues:
+  ```bash
+  npx prettier --write .
+  ```
+- **CI:** The GitHub Actions workflow (`.github/workflows/ci.yml`) automatically checks Prettier formatting on pushes and pull requests to `main` and `dev`.

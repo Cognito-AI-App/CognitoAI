@@ -1,4 +1,4 @@
-import { Difficulty } from './codingQuestion';
+import { Difficulty } from "./codingQuestion";
 
 export type Assessment = {
   id: number;
@@ -50,5 +50,5 @@ export type AssessmentQuestionResult = {
 
 export type AssessmentFormData = Omit<
   Assessment,
-  'id' | 'created_at' | 'organization_id' | 'user_id'
->; 
+  "id" | "created_at" | "organization_id" | "user_id"
+>;

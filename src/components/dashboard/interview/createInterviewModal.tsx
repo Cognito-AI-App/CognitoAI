@@ -29,7 +29,7 @@ function CreateInterviewModal({ open, setOpen }: Props) {
   const [loading, setLoading] = useState(false);
   const [proceed, setProceed] = useState(false);
   const [interviewData, setInterviewData] = useState<InterviewBase>(
-    CreateEmptyInterviewData(),
+    CreateEmptyInterviewData()
   );
 
   // Below for File Upload

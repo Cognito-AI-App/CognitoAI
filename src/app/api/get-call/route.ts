@@ -14,7 +14,7 @@ export async function POST(req: Request, res: Response) {
   const body = await req.json();
 
   const callDetails: Response = await ResponseService.getResponseByCallId(
-    body.id,
+    body.id
   );
   let callResponse = callDetails.details;
   if (callDetails.is_analysed) {
@@ -23,14 +23,14 @@ export async function POST(req: Request, res: Response) {
         callResponse,
         analytics: callDetails.analytics,
       },
-      { status: 200 },
+      { status: 200 }
     );
   }
   const callOutput = await retell.call.retrieve(body.id);
   const interviewId = callDetails?.interview_id;
   callResponse = callOutput;
   const duration = Math.round(
-    callResponse.end_timestamp / 1000 - callResponse.start_timestamp / 1000,
+    callResponse.end_timestamp / 1000 - callResponse.start_timestamp / 1000
   );
 
   const payload = {
@@ -49,7 +49,7 @@ export async function POST(req: Request, res: Response) {
       duration: duration,
       analytics: analytics,
     },
-    body.id,
+    body.id
   );
 
   logger.info("Call analysed successfully");
@@ -59,6 +59,6 @@ export async function POST(req: Request, res: Response) {
       callResponse,
       analytics,
     },
-    { status: 200 },
+    { status: 200 }
   );
 }

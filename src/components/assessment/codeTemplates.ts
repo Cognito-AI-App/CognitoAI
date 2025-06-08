@@ -157,7 +157,7 @@ $input = trim(fgets(STDIN));
 // Write your code here
 
 echo $result . "\\n";
-?>`
+?>`,
 };
 
 /**
@@ -165,4 +165,4 @@ echo $result . "\\n";
  */
 export function getStarterCode(language: string): string {
   return codeTemplates[language] || "// Write your solution here";
-} 
+}

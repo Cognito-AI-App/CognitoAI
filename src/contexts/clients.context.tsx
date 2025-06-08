@@ -30,7 +30,7 @@ export function ClientProvider({ children }: ClientProviderProps) {
       const response = await ClientService.getClientById(
         user?.id as string,
         user?.emailAddresses[0]?.emailAddress as string,
-        organization?.id as string,
+        organization?.id as string
       );
       setClient(response);
     } catch (error) {
@@ -44,7 +44,7 @@ export function ClientProvider({ children }: ClientProviderProps) {
       setClientLoading(true);
       const response = await ClientService.getOrganizationById(
         organization?.id as string,
-        organization?.name as string,
+        organization?.name as string
       );
     } catch (error) {
       console.error(error);

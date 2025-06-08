@@ -56,7 +56,7 @@ function InterviewCard({ name, interviewerId, id, url, readableSlug }: Props) {
               } catch (error) {
                 console.error(
                   `Failed to call api/get-call for response id ${response.call_id}:`,
-                  error,
+                  error
                 );
               }
             }
@@ -75,7 +75,7 @@ function InterviewCard({ name, interviewerId, id, url, readableSlug }: Props) {
   const copyToClipboard = () => {
     navigator.clipboard
       .writeText(
-        readableSlug ? `${base_url}/call/${readableSlug}` : (url as string),
+        readableSlug ? `${base_url}/call/${readableSlug}` : (url as string)
       )
       .then(
         () => {
@@ -85,7 +85,7 @@ function InterviewCard({ name, interviewerId, id, url, readableSlug }: Props) {
             {
               position: "bottom-right",
               duration: 3000,
-            },
+            }
           );
           setTimeout(() => {
             setCopied(false);
@@ -93,7 +93,7 @@ function InterviewCard({ name, interviewerId, id, url, readableSlug }: Props) {
         },
         (err) => {
           console.log("failed to copy", err.mesage);
-        },
+        }
       );
   };
 

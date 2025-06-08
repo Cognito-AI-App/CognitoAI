@@ -101,7 +101,7 @@ function DataTable({ data, interviewId }: DataTableProps) {
                       e.stopPropagation();
                       window.open(
                         `/interviews/${interviewId}?call=${row.original.call_id}`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   />
@@ -193,7 +193,9 @@ function DataTable({ data, interviewId }: DataTableProps) {
       },
       cell: ({ row }) => (
         <div className="min-h-[2.6em] flex items-center justify-center">
-          {row.getValue("codingScore") !== null ? row.getValue("codingScore") : "-"}
+          {row.getValue("codingScore") !== null
+            ? row.getValue("codingScore")
+            : "-"}
         </div>
       ),
       sortingFn: (rowA, rowB, columnId) => {
@@ -282,7 +284,7 @@ function DataTable({ data, interviewId }: DataTableProps) {
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext(),
+                        header.getContext()
                       )}
                 </TableHead>
               ))}

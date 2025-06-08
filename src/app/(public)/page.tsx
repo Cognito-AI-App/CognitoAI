@@ -5,7 +5,7 @@ import {
   HowItWorks,
   Screenshots,
   Contact,
-  Footer
+  Footer,
 } from "@/components/landing";
 
 export default function LandingPage() {
@@ -22,4 +22,4 @@ export default function LandingPage() {
       <Footer />
     </div>
   );
-} 
+}

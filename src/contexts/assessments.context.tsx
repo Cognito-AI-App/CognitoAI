@@ -1,7 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAuth, useOrganization } from "@clerk/nextjs";
+
 import { Assessment } from "@/types/assessment";
 import { AssessmentService } from "@/services/assessments.service";
 
@@ -17,13 +18,16 @@ const defaultContext: AssessmentsContextType = {
   fetchAssessments: async () => {},
 };
 
-const AssessmentsContext = createContext<AssessmentsContextType>(defaultContext);
+const AssessmentsContext =
+  createContext<AssessmentsContextType>(defaultContext);
 
 export const useAssessments = () => useContext(AssessmentsContext);
 
-export const AssessmentsProvider: React.FC<{ children: React.ReactNode }> = ({
+export function AssessmentsProvider({
   children,
-}) => {
+}: {
+  children: React.ReactNode;
+}) {
   const [assessments, setAssessments] = useState<Assessment[]>([]);
   const [loading, setLoading] = useState(true);
   const { userId } = useAuth();
@@ -33,10 +37,11 @@ export const AssessmentsProvider: React.FC<{ children: React.ReactNode }> = ({
     setLoading(true);
     try {
       if (userId) {
-        const fetchedAssessments = await AssessmentService.getAssessmentsForUserOrOrganization(
-          userId,
-          organization?.id || null
-        );
+        const fetchedAssessments =
+          await AssessmentService.getAssessmentsForUserOrOrganization(
+            userId,
+            organization?.id || null
+          );
         setAssessments(fetchedAssessments);
       } else {
         setAssessments([]);
@@ -69,4 +74,4 @@ export const AssessmentsProvider: React.FC<{ children: React.ReactNode }> = ({
       {children}
     </AssessmentsContext.Provider>
   );
-}; 
+}

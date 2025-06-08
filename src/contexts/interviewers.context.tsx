@@ -34,7 +34,7 @@ export function InterviewerProvider({ children }: InterviewerProviderProps) {
     try {
       setInterviewersLoading(true);
       const response = await InterviewerService.getAllInterviewers(
-        user?.id as string,
+        user?.id as string
       );
       setInterviewers(response);
     } catch (error) {

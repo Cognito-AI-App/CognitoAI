@@ -9,10 +9,12 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "CognitoAI - AI-Powered Automated User Interviews",
-  description: "Transform your hiring process with intelligent AI interviewers and comprehensive coding assessments. Conduct scalable, consistent, and insightful interviews that help you find the best talent.",
+  description:
+    "Transform your hiring process with intelligent AI interviewers and comprehensive coding assessments. Conduct scalable, consistent, and insightful interviews that help you find the best talent.",
   openGraph: {
     title: "CognitoAI - AI-Powered Automated User Interviews",
-    description: "Transform your hiring process with intelligent AI interviewers and comprehensive coding assessments. Conduct scalable, consistent, and insightful interviews that help you find the best talent.",
+    description:
+      "Transform your hiring process with intelligent AI interviewers and comprehensive coding assessments. Conduct scalable, consistent, and insightful interviews that help you find the best talent.",
     siteName: "CognitoAI",
     images: [
       {
@@ -60,4 +62,4 @@ export default function PublicLayout({
       </body>
     </html>
   );
-} 
+}

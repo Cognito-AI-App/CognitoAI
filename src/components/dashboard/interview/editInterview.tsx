@@ -46,25 +46,25 @@ function EditInterview({ interview }: EditInterviewProps) {
   const { assessments } = useAssessments();
 
   const [description, setDescription] = useState<string>(
-    interview?.description || "",
+    interview?.description || ""
   );
   const [objective, setObjective] = useState<string>(
-    interview?.objective || "",
+    interview?.objective || ""
   );
   const [numQuestions, setNumQuestions] = useState<number>(
-    interview?.question_count || 1,
+    interview?.question_count || 1
   );
   const [duration, setDuration] = useState<Number>(
-    Number(interview?.time_duration),
+    Number(interview?.time_duration)
   );
   const [questions, setQuestions] = useState<Question[]>(
-    interview?.questions || [],
+    interview?.questions || []
   );
   const [selectedInterviewer, setSelectedInterviewer] = useState(
-    interview?.interviewer_id,
+    interview?.interviewer_id
   );
   const [isAnonymous, setIsAnonymous] = useState<boolean>(
-    interview?.is_anonymous || false,
+    interview?.is_anonymous || false
   );
   const [hasAssessment, setHasAssessment] = useState<boolean>(
     interview?.has_assessment || false
@@ -82,8 +82,8 @@ function EditInterview({ interview }: EditInterviewProps) {
   const handleInputChange = (id: string, newQuestion: Question) => {
     setQuestions(
       questions.map((question) =>
-        question.id === id ? { ...question, ...newQuestion } : question,
-      ),
+        question.id === id ? { ...question, ...newQuestion } : question
+      )
     );
   };
 
@@ -94,7 +94,7 @@ function EditInterview({ interview }: EditInterviewProps) {
           ...question,
           question: "",
           follow_up_count: 1,
-        })),
+        }))
       );
 
       return;
@@ -134,7 +134,7 @@ function EditInterview({ interview }: EditInterviewProps) {
       }
       const response = await InterviewService.updateInterview(
         interviewData,
-        interview?.id,
+        interview?.id
       );
       setIsClicked(false);
       fetchInterviews();
@@ -318,10 +318,12 @@ function EditInterview({ interview }: EditInterviewProps) {
             be collected.
           </span>
         </label>
-        
+
         <div className="flex flex-row justify-between w-[75%] ml-2 mt-2">
           <div className="flex flex-row items-center">
-            <h3 className="text-sm font-medium mr-3">Include Coding Assessment:</h3>
+            <h3 className="text-sm font-medium mr-3">
+              Include Coding Assessment:
+            </h3>
             <Switch
               checked={hasAssessment}
               className={`ml-4 border-2 border-gray-300 ${
@@ -335,11 +337,15 @@ function EditInterview({ interview }: EditInterviewProps) {
         {hasAssessment && (
           <div className="w-[75%] ml-2 mt-3">
             <div className="flex flex-row items-start mb-3">
-              <h3 className="text-sm font-medium mr-3 mt-1">Select Assessment:</h3>
+              <h3 className="text-sm font-medium mr-3 mt-1">
+                Select Assessment:
+              </h3>
               <div className="flex-1">
                 <Select
                   value={selectedAssessment?.toString() || ""}
-                  onValueChange={(value) => setSelectedAssessment(Number(value))}
+                  onValueChange={(value) =>
+                    setSelectedAssessment(Number(value))
+                  }
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select an assessment" />
@@ -355,7 +361,8 @@ function EditInterview({ interview }: EditInterviewProps) {
                           key={assessment.id}
                           value={assessment.id.toString()}
                         >
-                          {assessment.name} ({assessment.question_count} questions, {assessment.difficulty} difficulty)
+                          {assessment.name} ({assessment.question_count}{" "}
+                          questions, {assessment.difficulty} difficulty)
                         </SelectItem>
                       ))
                     )}
@@ -365,7 +372,7 @@ function EditInterview({ interview }: EditInterviewProps) {
             </div>
           </div>
         )}
-        
+
         <div className="flex flex-row justify-between w-[75%] gap-3 ml-2">
           <div className="flex flex-row justify-center items-center mt-5 ">
             <h3 className="font-medium ">No. of Questions:</h3>

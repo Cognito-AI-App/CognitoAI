@@ -19,7 +19,7 @@ const updateOrganization = async (payload: any, id: string) => {
 const getClientById = async (
   id: string,
   email?: string | null,
-  organization_id?: string | null,
+  organization_id?: string | null
 ) => {
   try {
     const { data, error } = await supabase
@@ -66,7 +66,7 @@ const getClientById = async (
 
 const getOrganizationById = async (
   organization_id?: string,
-  organization_name?: string,
+  organization_name?: string
 ) => {
   try {
     const { data, error } = await supabase

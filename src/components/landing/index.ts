@@ -4,4 +4,4 @@ export { default as Features } from "./features";
 export { default as HowItWorks } from "./how-it-works";
 export { default as Screenshots } from "./screenshots";
 export { default as Contact } from "./contact";
-export { default as Footer } from "./footer"; 
+export { default as Footer } from "./footer";

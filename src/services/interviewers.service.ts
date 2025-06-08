@@ -11,7 +11,7 @@ const getAllInterviewers = async (clientId: string = "") => {
     if (clientError) {
       console.error(
         `Error fetching interviewers for clientId ${clientId}:`,
-        clientError,
+        clientError
       );
 
       return [];

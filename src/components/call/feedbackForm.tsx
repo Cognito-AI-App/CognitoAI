@@ -16,9 +16,13 @@ interface FeedbackFormProps {
   interview?: Interview;
 }
 
-export function FeedbackForm({ onSubmit, email, interview }: FeedbackFormProps) {
+export function FeedbackForm({
+  onSubmit,
+  email,
+  interview,
+}: FeedbackFormProps) {
   const [satisfaction, setSatisfaction] = useState<SatisfactionLevel>(
-    SatisfactionLevel.Moderate,
+    SatisfactionLevel.Moderate
   );
   const [feedback, setFeedback] = useState("");
 
@@ -37,11 +41,11 @@ export function FeedbackForm({ onSubmit, email, interview }: FeedbackFormProps) 
       <h3 className="text-lg font-semibold mb-4">
         Thank you for participating in this interview!
       </h3>
-      
+
       <p className="text-gray-600 mb-4">
         We would love to hear your feedback about the platform.
       </p>
-      
+
       <h3 className="text-lg font-semibold mb-4">
         Are you satisfied with the platform?
       </h3>

@@ -48,7 +48,7 @@ export default function RootLayout({
       <body
         className={cn(
           inter.className,
-          "antialiased overflow-hidden min-h-screen",
+          "antialiased overflow-hidden min-h-screen"
         )}
       >
         <ClerkProvider

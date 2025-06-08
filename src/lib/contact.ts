@@ -8,5 +8,6 @@ export const CONTACT_INFO = {
 export const COMPANY_INFO = {
   name: "CognitoAI",
   tagline: "AI-Powered Automated User Interviews",
-  description: "Transform your hiring process with intelligent AI interviewers and comprehensive coding assessments. Conduct scalable, consistent, and insightful interviews that help you find the best talent.",
-} as const; 
+  description:
+    "Transform your hiring process with intelligent AI interviewers and comprehensive coding assessments. Conduct scalable, consistent, and insightful interviews that help you find the best talent.",
+} as const;

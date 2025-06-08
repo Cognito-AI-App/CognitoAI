@@ -13,7 +13,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     !Retell.verify(
       JSON.stringify(req.body),
       apiKey,
-      req.headers.get("x-retell-signature") as string,
+      req.headers.get("x-retell-signature") as string
     )
   ) {
     console.error("Invalid signature");

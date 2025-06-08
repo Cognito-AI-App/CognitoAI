@@ -26,7 +26,7 @@ function SharePopup({ open, onClose, shareContent }: SharePopupProps) {
     if (interviewURL) {
       setUrl(interviewURL);
       setEmbedCode(
-        `<iframe src="${interviewURL}" width="${embedWidth}" height="${embedHeight}"></iframe>`,
+        `<iframe src="${interviewURL}" width="${embedWidth}" height="${embedHeight}"></iframe>`
       );
     }
   }, [shareContent, embedWidth, embedHeight]);
@@ -40,14 +40,14 @@ function SharePopup({ open, onClose, shareContent }: SharePopupProps) {
           {
             position: "bottom-right",
             duration: 3000,
-          },
+          }
         );
 
         setTimeout(() => setCopiedLink(false), 2000);
         setTimeout(() => onClose(), 1000);
       },
 
-      (err) => console.error("Failed to copy", err.message),
+      (err) => console.error("Failed to copy", err.message)
     );
   };
 
@@ -60,13 +60,13 @@ function SharePopup({ open, onClose, shareContent }: SharePopupProps) {
           {
             position: "bottom-right",
             duration: 3000,
-          },
+          }
         );
 
         setTimeout(() => setCopiedEmbed(false), 2000);
         setTimeout(() => onClose(), 1000);
       },
-      (err) => console.error("Failed to copy", err.message),
+      (err) => console.error("Failed to copy", err.message)
     );
   };
 

@@ -26,6 +26,6 @@ export async function POST(req: Request, res: Response) {
     {
       registerCallResponse,
     },
-    { status: 200 },
+    { status: 200 }
   );
 }

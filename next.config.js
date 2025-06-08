@@ -21,7 +21,7 @@ const nextConfig = {
       // https://github.com/vercel/next.js/issues/28774
       new webpack.NormalModuleReplacementPlugin(/^node:/, (resource) => {
         resource.request = resource.request.replace(/^node:/, "");
-      }),
+      })
     );
 
     return webpackConfig;

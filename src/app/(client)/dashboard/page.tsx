@@ -77,7 +77,7 @@ function Interviews() {
       try {
         const totalResponses =
           await ResponseService.getResponseCountByOrganizationId(
-            organization.id,
+            organization.id
           );
         const hasExceededLimit = totalResponses >= allowedResponsesCount;
         if (hasExceededLimit) {
@@ -85,7 +85,7 @@ function Interviews() {
           await InterviewService.deactivateInterviewsByOrgId(organization.id);
           await ClientService.updateOrganization(
             { plan: "free_trial_over" },
-            organization.id,
+            organization.id
           );
         }
       } catch (error) {
@@ -127,7 +127,10 @@ function Interviews() {
           ) : (
             <>
               {isUpgradeModalOpen && (
-                <Modal open={isUpgradeModalOpen} onClose={() => setIsUpgradeModalOpen(false)}>
+                <Modal
+                  open={isUpgradeModalOpen}
+                  onClose={() => setIsUpgradeModalOpen(false)}
+                >
                   <div className="flex flex-col space-y-4">
                     <div className="flex justify-center text-indigo-600">
                       <Gem />
@@ -170,7 +173,9 @@ function Interviews() {
                     </div>
                     <p className="text-l text-center">
                       Contact{" "}
-                      <span className="font-semibold">anurag.jha.in@gmail.com</span>{" "}
+                      <span className="font-semibold">
+                        anurag.jha.in@gmail.com
+                      </span>{" "}
                       to upgrade your plan.
                     </p>
                   </div>
@@ -178,7 +183,10 @@ function Interviews() {
               )}
 
               {isOrgModalOpen && (
-                <Modal open={isOrgModalOpen} onClose={() => setIsOrgModalOpen(false)}>
+                <Modal
+                  open={isOrgModalOpen}
+                  onClose={() => setIsOrgModalOpen(false)}
+                >
                   <div className="flex flex-col space-y-4">
                     <div className="flex justify-center text-indigo-600">
                       <Users size={32} />
@@ -187,17 +195,17 @@ function Interviews() {
                       No Organization Selected
                     </h3>
                     <p className="text-center">
-                      You are currently using CognitoAI without an organization. 
-                      While all features will work, creating an organization would allow you 
-                      to share interviews, questions, and assessments with your team.
+                      You are currently using CognitoAI without an organization.
+                      While all features will work, creating an organization
+                      would allow you to share interviews, questions, and
+                      assessments with your team.
                     </p>
                     <p className="text-sm text-center text-gray-500 mt-2">
-                      You can create or join an organization anytime from your user profile.
+                      You can create or join an organization anytime from your
+                      user profile.
                     </p>
                     <div className="flex justify-center mt-4">
-                      <Button 
-                        onClick={() => setIsOrgModalOpen(false)}
-                      >
+                      <Button onClick={() => setIsOrgModalOpen(false)}>
                         Got it
                       </Button>
                     </div>

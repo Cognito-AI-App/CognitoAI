@@ -72,7 +72,9 @@ function DetailsPopup({
       numQuestions,
     });
 
-    const generatedQuestionsResponse = response.data.response ? JSON.parse(response.data.response) : response.data;
+    const generatedQuestionsResponse = response.data.response
+      ? JSON.parse(response.data.response)
+      : response.data;
 
     let updatedQuestions: Question[] = [];
     if (
@@ -80,21 +82,28 @@ function DetailsPopup({
       generatedQuestionsResponse.questions.length > 0
     ) {
       updatedQuestions = generatedQuestionsResponse.questions
-        .filter((question: any) => question && question.question && typeof question.question === 'string')
+        .filter(
+          (question: any) =>
+            question &&
+            question.question &&
+            typeof question.question === "string"
+        )
         .map((questionObj: any) => ({
           id: uuidv4(),
           question: questionObj.question,
           follow_up_count: 1,
         }))
         .slice(0, Number(numQuestions));
-      
+
       // If no valid questions returned, create at least one empty question
       if (updatedQuestions.length === 0) {
-        updatedQuestions = [{ 
-          id: uuidv4(), 
-          question: "", 
-          follow_up_count: 1 
-        }];
+        updatedQuestions = [
+          {
+            id: uuidv4(),
+            question: "",
+            follow_up_count: 1,
+          },
+        ];
       }
     }
 
@@ -171,9 +180,7 @@ function DetailsPopup({
                 <div
                   key={Number(interviewer.id)}
                   className="flex flex-col justify-center items-center m-2 cursor-pointer w-32"
-                  onClick={() =>
-                    setSelectedInterviewer(BigInt(interviewer.id))
-                  }
+                  onClick={() => setSelectedInterviewer(BigInt(interviewer.id))}
                 >
                   <div className="relative">
                     <Image
@@ -285,7 +292,9 @@ function DetailsPopup({
 
           <div className="flex flex-row justify-between w-full mt-5">
             <div className="flex flex-row items-center">
-              <h3 className="text-sm font-medium mr-3">Include Coding Assessment:</h3>
+              <h3 className="text-sm font-medium mr-3">
+                Include Coding Assessment:
+              </h3>
               <Switch
                 checked={hasAssessment}
                 className="bg-indigo-600"
@@ -301,7 +310,9 @@ function DetailsPopup({
                 <div className="flex-1">
                   <Select
                     value={selectedAssessment?.toString() || ""}
-                    onValueChange={(value) => setSelectedAssessment(Number(value))}
+                    onValueChange={(value) =>
+                      setSelectedAssessment(Number(value))
+                    }
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select an assessment" />
@@ -317,7 +328,8 @@ function DetailsPopup({
                             key={assessment.id}
                             value={assessment.id.toString()}
                           >
-                            {assessment.name} ({assessment.question_count} questions, {assessment.difficulty} difficulty)
+                            {assessment.name} ({assessment.question_count}{" "}
+                            questions, {assessment.difficulty} difficulty)
                           </SelectItem>
                         ))
                       )}
@@ -327,7 +339,7 @@ function DetailsPopup({
               </div>
             </div>
           )}
-          
+
           <div className="mt-5 mb-4 w-full flex flex-row gap-3 justify-center items-center">
             <Button
               disabled={
@@ -377,7 +389,9 @@ function DetailsPopup({
           setOpenInterviewerDetails(false);
         }}
       >
-        <InterviewerDetailsModal interviewer={interviewerDetails || undefined} />
+        <InterviewerDetailsModal
+          interviewer={interviewerDetails || undefined}
+        />
       </Modal>
     </>
   );

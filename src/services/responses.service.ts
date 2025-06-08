@@ -50,7 +50,7 @@ const getAllResponses = async (interviewId: string) => {
 };
 
 const getResponseCountByOrganizationId = async (
-  organizationId: string,
+  organizationId: string
 ): Promise<number> => {
   try {
     const { count, error } = await supabase

@@ -1,7 +1,12 @@
 "use client";
 
 import React from "react";
-import { PlayCircleIcon, SpeechIcon, CodeIcon, ClipboardListIcon } from "lucide-react";
+import {
+  PlayCircleIcon,
+  SpeechIcon,
+  CodeIcon,
+  ClipboardListIcon,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 function SideMenu() {
@@ -37,9 +42,7 @@ function SideMenu() {
           </div>
           <div
             className={`flex flex-row p-3 rounded-md hover:bg-slate-200 cursor-pointer ${
-              pathname.endsWith("/questions")
-                ? "bg-indigo-200"
-                : "bg-slate-100"
+              pathname.endsWith("/questions") ? "bg-indigo-200" : "bg-slate-100"
             }`}
             onClick={() => router.push("/dashboard/questions")}
           >
