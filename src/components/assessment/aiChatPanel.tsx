@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { SendIcon, Trash2Icon, DownloadIcon } from "lucide-react";
+import { DownloadIcon, SendIcon, Trash2Icon } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+
+import { Button } from "@/components/ui/button";
 import { CodingQuestion } from "@/types/codingQuestion";
+import { Input } from "@/components/ui/input";
 
 interface Message {
   role: "user" | "assistant";
@@ -19,12 +20,12 @@ interface AIChatPanelProps {
   currentCode: string;
 }
 
-const AIChatPanel: React.FC<AIChatPanelProps> = ({
+function AIChatPanel({
   question,
   onApplyCode,
   questionIndex,
   currentCode,
-}) => {
+}: AIChatPanelProps) {
   const [input, setInput] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -46,7 +47,8 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
       const initialMessages: Message[] = [
         {
           role: "assistant",
-          content: "I'm your coding assistant. Ask me specific questions about code implementation and I'll generate code to help you. I'll only provide code without explanations.",
+          content:
+            "I'm your coding assistant. Ask me specific questions about code implementation and I'll generate code to help you. I'll only provide code without explanations.",
         },
       ];
       messagesMapRef.current.set(questionIndex, initialMessages);
@@ -67,7 +69,17 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
   }, [messages, questionIndex]);
 
   const handleSend = async () => {
+<<<<<<< Updated upstream
     if (!input.trim()) {return;}
+=======
+<<<<<<< HEAD
+    if (!input.trim()) {
+      return;
+    }
+=======
+    if (!input.trim()) {return;}
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
+>>>>>>> Stashed changes
 
     const userMessage: Message = {
       role: "user",
@@ -98,29 +110,35 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
       }
 
       const data = await response.json();
-      
+
       // Add AI response to messages
       const aiMessage: Message = {
         role: "assistant",
         content: data.content,
       };
-      
+
       setMessages([...updatedMessages, aiMessage]);
-      messagesMapRef.current.set(questionIndex, [...updatedMessages, aiMessage]);
+      messagesMapRef.current.set(questionIndex, [
+        ...updatedMessages,
+        aiMessage,
+      ]);
     } catch (error) {
       console.error("Error calling AI assistant:", error);
-      
+
       // Add error message
       const errorMessage: Message = {
         role: "assistant",
         content: "Sorry, I encountered an error. Please try again.",
       };
-      
+
       setMessages([...updatedMessages, errorMessage]);
-      messagesMapRef.current.set(questionIndex, [...updatedMessages, errorMessage]);
+      messagesMapRef.current.set(questionIndex, [
+        ...updatedMessages,
+        errorMessage,
+      ]);
     } finally {
       setIsLoading(false);
-      
+
       // Focus the input field after sending
       setTimeout(() => {
         inputRef.current?.focus();
@@ -139,7 +157,8 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
     const initialMessages: Message[] = [
       {
         role: "assistant",
-        content: "I'm your coding assistant. Ask me specific questions about code implementation and I'll generate code to help you. I'll only provide code without explanations.",
+        content:
+          "I'm your coding assistant. Ask me specific questions about code implementation and I'll generate code to help you. I'll only provide code without explanations.",
       },
     ];
     setMessages(initialMessages);
@@ -150,8 +169,8 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
     // Find the last AI message with code
     const lastAiMessage = [...messages]
       .reverse()
-      .find(msg => msg.role === "assistant");
-      
+      .find((msg) => msg.role === "assistant");
+
     if (lastAiMessage) {
       onApplyCode(lastAiMessage.content);
     }
@@ -162,17 +181,35 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
       <div className="flex justify-between items-center p-3 border-b bg-slate-50">
         <h3 className="font-semibold">AI Coding Assistant</h3>
         <div className="flex items-center gap-2">
+<<<<<<< HEAD
+          <Button
+            size="sm"
+            variant="outline"
+=======
           <Button 
             size="sm" 
             variant="outline" 
+<<<<<<< Updated upstream
+=======
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
+>>>>>>> Stashed changes
             title="Clear conversation history"
             onClick={handleClearHistory}
           >
             <Trash2Icon className="h-4 w-4" />
           </Button>
+<<<<<<< HEAD
+          <Button
+            size="sm"
+            variant="outline"
+=======
           <Button 
             size="sm" 
             variant="outline" 
+<<<<<<< Updated upstream
+=======
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
+>>>>>>> Stashed changes
             title="Apply the last AI code to the editor"
             onClick={handleApplyCode}
           >
@@ -180,7 +217,7 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
           </Button>
         </div>
       </div>
-      
+
       <div className="flex flex-col flex-1 overflow-hidden">
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map((message, index) => (
@@ -207,16 +244,25 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
             <div className="flex justify-start">
               <div className="max-w-[80%] rounded-lg p-3 bg-slate-100">
                 <div className="flex space-x-2">
-                  <div className="w-2 h-2 rounded-full bg-slate-300 animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <div className="w-2 h-2 rounded-full bg-slate-300 animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <div className="w-2 h-2 rounded-full bg-slate-300 animate-bounce" style={{ animationDelay: "300ms" }} />
+                  <div
+                    className="w-2 h-2 rounded-full bg-slate-300 animate-bounce"
+                    style={{ animationDelay: "0ms" }}
+                  />
+                  <div
+                    className="w-2 h-2 rounded-full bg-slate-300 animate-bounce"
+                    style={{ animationDelay: "150ms" }}
+                  />
+                  <div
+                    className="w-2 h-2 rounded-full bg-slate-300 animate-bounce"
+                    style={{ animationDelay: "300ms" }}
+                  />
                 </div>
               </div>
             </div>
           )}
           <div ref={messagesEndRef} />
         </div>
-        
+
         <div className="p-4 border-t mt-auto shrink-0">
           <div className="flex gap-2">
             <Input
@@ -228,10 +274,14 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
             />
+<<<<<<< HEAD
+            <Button disabled={isLoading || !input.trim()} onClick={handleSend}>
+=======
             <Button 
               disabled={isLoading || !input.trim()}
               onClick={handleSend}
             >
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
               <SendIcon className="h-4 w-4" />
             </Button>
           </div>
@@ -239,6 +289,6 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
       </div>
     </Card>
   );
-};
+}
 
-export default AIChatPanel; 
+export default AIChatPanel;

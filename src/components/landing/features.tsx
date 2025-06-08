@@ -1,14 +1,20 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  Users, 
-  Brain, 
-  Code, 
-  BarChart3, 
-  Clock, 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Users,
+  Brain,
+  Code,
+  BarChart3,
+  Clock,
   Shield,
   Zap,
   Target,
-  MessageSquare
+  MessageSquare,
 } from "lucide-react";
 
 export default function Features() {
@@ -16,66 +22,75 @@ export default function Features() {
     {
       icon: Users,
       title: "AI Interviewers",
-      description: "Create customizable AI interviewers with different personalities and expertise areas to conduct consistent, unbiased interviews.",
+      description:
+        "Create customizable AI interviewers with different personalities and expertise areas to conduct consistent, unbiased interviews.",
       color: "text-indigo-600",
-      bgColor: "bg-indigo-100"
+      bgColor: "bg-indigo-100",
     },
     {
       icon: Code,
       title: "Coding Assessments",
-      description: "LeetCode-style coding challenges with real-time execution, multiple programming languages, and automated scoring.",
+      description:
+        "LeetCode-style coding challenges with real-time execution, multiple programming languages, and automated scoring.",
       color: "text-purple-600",
-      bgColor: "bg-purple-100"
+      bgColor: "bg-purple-100",
     },
     {
       icon: Brain,
       title: "Smart Analytics",
-      description: "AI-powered analysis of communication skills, technical abilities, and overall candidate performance with detailed insights.",
+      description:
+        "AI-powered analysis of communication skills, technical abilities, and overall candidate performance with detailed insights.",
       color: "text-green-600",
-      bgColor: "bg-green-100"
+      bgColor: "bg-green-100",
     },
     {
       icon: BarChart3,
       title: "Comprehensive Scoring",
-      description: "Combined scoring system that evaluates both behavioral interviews and coding assessments for holistic candidate evaluation.",
+      description:
+        "Combined scoring system that evaluates both behavioral interviews and coding assessments for holistic candidate evaluation.",
       color: "text-blue-600",
-      bgColor: "bg-blue-100"
+      bgColor: "bg-blue-100",
     },
     {
       icon: Clock,
       title: "Scalable Interviews",
-      description: "Conduct multiple interviews simultaneously without scheduling conflicts or interviewer availability constraints.",
+      description:
+        "Conduct multiple interviews simultaneously without scheduling conflicts or interviewer availability constraints.",
       color: "text-orange-600",
-      bgColor: "bg-orange-100"
+      bgColor: "bg-orange-100",
     },
     {
       icon: Shield,
       title: "Consistent Evaluation",
-      description: "Eliminate interviewer bias and ensure every candidate gets the same fair, standardized interview experience.",
+      description:
+        "Eliminate interviewer bias and ensure every candidate gets the same fair, standardized interview experience.",
       color: "text-red-600",
-      bgColor: "bg-red-100"
+      bgColor: "bg-red-100",
     },
     {
       icon: Zap,
       title: "Real-time Execution",
-      description: "Execute code in 13+ programming languages with immediate feedback and comprehensive test case validation.",
+      description:
+        "Execute code in 13+ programming languages with immediate feedback and comprehensive test case validation.",
       color: "text-yellow-600",
-      bgColor: "bg-yellow-100"
+      bgColor: "bg-yellow-100",
     },
     {
       icon: Target,
       title: "Custom Questions",
-      description: "Generate interview questions automatically from job descriptions or create custom questions tailored to your needs.",
+      description:
+        "Generate interview questions automatically from job descriptions or create custom questions tailored to your needs.",
       color: "text-pink-600",
-      bgColor: "bg-pink-100"
+      bgColor: "bg-pink-100",
     },
     {
       icon: MessageSquare,
       title: "Detailed Transcripts",
-      description: "Complete interview transcripts with AI analysis, communication scoring, and actionable insights for better hiring decisions.",
+      description:
+        "Complete interview transcripts with AI analysis, communication scoring, and actionable insights for better hiring decisions.",
       color: "text-teal-600",
-      bgColor: "bg-teal-100"
-    }
+      bgColor: "bg-teal-100",
+    },
   ];
 
   return (
@@ -87,8 +102,9 @@ export default function Features() {
             Powerful Features for Modern Hiring
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Everything you need to conduct professional, scalable, and insightful interviews 
-            that help you identify the best talent for your organization.
+            Everything you need to conduct professional, scalable, and
+            insightful interviews that help you identify the best talent for
+            your organization.
           </p>
         </div>
 
@@ -96,14 +112,26 @@ export default function Features() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => {
             const IconComponent = feature.icon;
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+
+            return (
+              <Card
+                key={index}
+=======
+>>>>>>> Stashed changes
             
 return (
               <Card 
                 key={index} 
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
                 className="group hover:shadow-lg transition-all duration-300 border-0 shadow-md hover:-translate-y-1"
               >
                 <CardHeader className="pb-4">
-                  <div className={`w-12 h-12 rounded-lg ${feature.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  <div
+                    className={`w-12 h-12 rounded-lg ${feature.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+                  >
                     <IconComponent className={`w-6 h-6 ${feature.color}`} />
                   </div>
                   <CardTitle className="text-xl font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">
@@ -126,14 +154,14 @@ return (
             Ready to revolutionize your hiring process?
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a 
-              href="#screenshots" 
+            <a
+              href="#screenshots"
               className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200"
             >
               See It In Action
             </a>
-            <a 
-              href="#contact" 
+            <a
+              href="#contact"
               className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200"
             >
               Get In Touch
@@ -143,4 +171,4 @@ return (
       </div>
     </section>
   );
-} 
+}

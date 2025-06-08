@@ -4,14 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
-import { 
-  Mail, 
-  Phone, 
-  Linkedin, 
-  Github,
-  Twitter,
-  ArrowUp
-} from "lucide-react";
+import { Mail, Phone, Linkedin, Github, Twitter, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CONTACT_INFO, COMPANY_INFO } from "@/lib/contact";
 
@@ -21,7 +14,17 @@ function NewsletterSignup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+<<<<<<< Updated upstream
     if (!email.trim()) {return;}
+=======
+<<<<<<< HEAD
+    if (!email.trim()) {
+      return;
+    }
+=======
+    if (!email.trim()) {return;}
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
+>>>>>>> Stashed changes
 
     setIsSubmitting(true);
 
@@ -67,7 +70,7 @@ function NewsletterSignup() {
             required
             onChange={(e) => setEmail(e.target.value)}
           />
-          <Button 
+          <Button
             type="submit"
             disabled={isSubmitting || !email.trim()}
             className="bg-indigo-600 hover:bg-indigo-700 px-6 disabled:opacity-50"
@@ -88,7 +91,7 @@ export default function Footer() {
       { name: "Features", href: "#features" },
       { name: "How it Works", href: "#how-it-works" },
       { name: "Screenshots", href: "#screenshots" },
-      { name: "Pricing", href: "#contact" }
+      { name: "Pricing", href: "#contact" },
     ],
     company: [
       { name: "About Us", href: "#" },
@@ -101,24 +104,24 @@ export default function Footer() {
       // { name: "API Reference", href: "#" },
       { name: "Support", href: "#contact" },
       // { name: "Blog", href: "#" }
-    ]
+    ],
   };
 
   const socialLinks = [
     {
       name: "LinkedIn",
       href: CONTACT_INFO.linkedinUrl,
-      icon: Linkedin
+      icon: Linkedin,
     },
     {
       name: "Email",
       href: `mailto:${CONTACT_INFO.email}`,
-      icon: Mail
-    }
+      icon: Mail,
+    },
   ];
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -138,16 +141,16 @@ export default function Footer() {
               />
               <span className="text-xl font-bold">{COMPANY_INFO.name}</span>
             </div>
-            
+
             <p className="text-gray-300 mb-6 leading-relaxed">
               {COMPANY_INFO.description}
             </p>
-            
+
             {/* Contact Info */}
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-indigo-400" />
-                <a 
+                <a
                   href={`mailto:${CONTACT_INFO.email}`}
                   className="text-gray-300 hover:text-white transition-colors duration-200"
                 >
@@ -156,7 +159,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-indigo-400" />
-                <a 
+                <a
                   href={`tel:${CONTACT_INFO.phone}`}
                   className="text-gray-300 hover:text-white transition-colors duration-200"
                 >
@@ -233,13 +236,27 @@ export default function Footer() {
             <div className="flex items-center space-x-4">
               {socialLinks.map((social) => {
                 const IconComponent = social.icon;
+<<<<<<< Updated upstream
                 
 return (
+=======
+<<<<<<< HEAD
+
+                return (
+=======
+                
+return (
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
+>>>>>>> Stashed changes
                   <a
                     key={social.name}
                     href={social.href}
                     target={social.name === "LinkedIn" ? "_blank" : undefined}
-                    rel={social.name === "LinkedIn" ? "noopener noreferrer" : undefined}
+                    rel={
+                      social.name === "LinkedIn"
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
                     className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-indigo-600 transition-colors duration-200"
                     aria-label={social.name}
                   >
@@ -264,4 +281,4 @@ return (
       </div>
     </footer>
   );
-} 
+}

@@ -1,10 +1,5 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useAuth, useOrganization } from "@clerk/nextjs";
-import { CodingQuestionService } from "@/services/codingQuestions.service";
-import { CodingQuestionFormData, Difficulty, TestCase } from "@/types/codingQuestion";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -13,9 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {
+  CodingQuestionFormData,
+  Difficulty,
+  TestCase,
+} from "@/types/codingQuestion";
+import { PlusIcon, Trash2Icon } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -23,11 +22,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAuth, useOrganization } from "@clerk/nextjs";
+
+import { Button } from "@/components/ui/button";
+import { CodingQuestionService } from "@/services/codingQuestions.service";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import ReactMarkdown from "react-markdown";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useCodingQuestions } from "@/contexts/codingQuestions.context";
-import { Trash2Icon, PlusIcon } from "lucide-react";
-import ReactMarkdown from "react-markdown";
 
 interface Props {
   isOpen: boolean;
@@ -35,11 +40,11 @@ interface Props {
   editingQuestion?: number | null;
 }
 
-const CreateQuestionModal: React.FC<Props> = ({
+function CreateQuestionModal({
   isOpen,
   onClose,
   editingQuestion = null,
-}) => {
+}: Props) {
   const { userId } = useAuth();
   const { organization } = useOrganization();
   const { fetchCodingQuestions } = useCodingQuestions();
@@ -63,14 +68,16 @@ const CreateQuestionModal: React.FC<Props> = ({
     is_active: true,
   };
 
-  const [formData, setFormData] = useState<CodingQuestionFormData>(initialFormData);
+  const [formData, setFormData] =
+    useState<CodingQuestionFormData>(initialFormData);
 
   useEffect(() => {
     const loadQuestion = async () => {
       if (editingQuestion) {
         setIsEditing(true);
         setLoading(true);
-        const question = await CodingQuestionService.getQuestion(editingQuestion);
+        const question =
+          await CodingQuestionService.getQuestion(editingQuestion);
         if (question) {
           setFormData({
             title: question.title,
@@ -145,8 +152,18 @@ const CreateQuestionModal: React.FC<Props> = ({
   const removeTestCase = (index: number) => {
     if (formData.test_cases.length <= 1) {
       toast.error("You need at least one test case");
+<<<<<<< Updated upstream
       
 return;
+=======
+<<<<<<< HEAD
+
+      return;
+=======
+      
+return;
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
+>>>>>>> Stashed changes
     }
     const updatedTestCases = [...formData.test_cases];
     updatedTestCases.splice(index, 1);
@@ -159,13 +176,70 @@ return;
   const handleSubmit = async () => {
     if (!userId) {
       toast.error("Authentication error. Please try again.");
+<<<<<<< Updated upstream
       
 return;
+=======
+<<<<<<< HEAD
+
+      return;
+=======
+      
+return;
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
+>>>>>>> Stashed changes
     }
 
     // Validation
     if (!formData.title.trim()) {
       toast.error("Title is required");
+<<<<<<< Updated upstream
+      
+return;
+    }
+    if (!formData.description.trim()) {
+      toast.error("Description is required");
+      
+return;
+    }
+    if (!formData.input_format.trim()) {
+      toast.error("Input format is required");
+      
+return;
+    }
+    if (!formData.output_format.trim()) {
+      toast.error("Output format is required");
+      
+return;
+    }
+    if (!formData.example_explanation.trim()) {
+      toast.error("Example explanation is required");
+=======
+<<<<<<< HEAD
+
+      return;
+    }
+    if (!formData.description.trim()) {
+      toast.error("Description is required");
+
+      return;
+    }
+    if (!formData.input_format.trim()) {
+      toast.error("Input format is required");
+
+      return;
+    }
+    if (!formData.output_format.trim()) {
+      toast.error("Output format is required");
+
+      return;
+    }
+    if (!formData.example_explanation.trim()) {
+      toast.error("Example explanation is required");
+
+      return;
+=======
+>>>>>>> Stashed changes
       
 return;
     }
@@ -188,11 +262,24 @@ return;
       toast.error("Example explanation is required");
       
 return;
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
     }
-    if (formData.test_cases.some(tc => !tc.input.trim() || !tc.output.trim())) {
+    if (
+      formData.test_cases.some((tc) => !tc.input.trim() || !tc.output.trim())
+    ) {
       toast.error("All test cases must have both input and output");
+<<<<<<< Updated upstream
       
 return;
+=======
+<<<<<<< HEAD
+
+      return;
+=======
+      
+return;
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
+>>>>>>> Stashed changes
     }
 
     setLoading(true);
@@ -218,7 +305,17 @@ return;
     }
   };
 
+<<<<<<< Updated upstream
   if (!isOpen) {return null;}
+=======
+<<<<<<< HEAD
+  if (!isOpen) {
+    return null;
+  }
+=======
+  if (!isOpen) {return null;}
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
+>>>>>>> Stashed changes
 
   const formattedDescription = `
 **Question Title:** ${formData.title || "Question title goes here..."}
@@ -398,7 +495,19 @@ ${formData.example_explanation || "Example explanation..."}
                           placeholder="Expected output for this test case"
                           rows={2}
                           onChange={(e) =>
+<<<<<<< Updated upstream
                             handleTestCaseChange(index, "output", e.target.value)
+=======
+<<<<<<< HEAD
+                            handleTestCaseChange(
+                              index,
+                              "output",
+                              e.target.value
+                            )
+=======
+                            handleTestCaseChange(index, "output", e.target.value)
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
+>>>>>>> Stashed changes
                           }
                         />
                       </div>
@@ -435,12 +544,23 @@ ${formData.example_explanation || "Example explanation..."}
             Cancel
           </Button>
           <Button disabled={loading} onClick={handleSubmit}>
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+            {loading
+              ? "Saving..."
+              : isEditing
+                ? "Update Question"
+                : "Create Question"}
+=======
+>>>>>>> Stashed changes
             {loading ? "Saving..." : isEditing ? "Update Question" : "Create Question"}
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
           </Button>
         </CardFooter>
       </Card>
     </div>
   );
-};
+}
 
-export default CreateQuestionModal; 
+export default CreateQuestionModal;

@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import * as DialogPrimitive from "@radix-ui/react-dialog"
-import { cn } from "@/lib/utils"
-import { Cross2Icon } from "@radix-ui/react-icons"
+import * as React from "react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { cn } from "@/lib/utils";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
-const Dialog = DialogPrimitive.Root
+const Dialog = DialogPrimitive.Root;
 
-const DialogTrigger = DialogPrimitive.Trigger
+const DialogTrigger = DialogPrimitive.Trigger;
 
-const DialogPortal = DialogPrimitive.Portal
+const DialogPortal = DialogPrimitive.Portal;
 
-const DialogClose = DialogPrimitive.Close
+const DialogClose = DialogPrimitive.Close;
 
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
@@ -25,8 +25,8 @@ const DialogOverlay = React.forwardRef<
     )}
     {...props}
   />
-))
-DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
+));
+DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
@@ -49,13 +49,29 @@ const DialogContent = React.forwardRef<
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
-))
-DialogContent.displayName = DialogPrimitive.Content.displayName
+));
+DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 function DialogHeader({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+  return (
+    <div
+      className={cn(
+        "flex flex-col space-y-1.5 text-center sm:text-left",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+DialogHeader.displayName = "DialogHeader";
+=======
+>>>>>>> Stashed changes
   return <div
     className={cn(
       "flex flex-col space-y-1.5 text-center sm:text-left",
@@ -65,11 +81,28 @@ function DialogHeader({
   />
 }
 DialogHeader.displayName = "DialogHeader"
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
 
 function DialogFooter({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+  return (
+    <div
+      className={cn(
+        "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+DialogFooter.displayName = "DialogFooter";
+=======
+>>>>>>> Stashed changes
   return <div
     className={cn(
       "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
@@ -79,6 +112,7 @@ function DialogFooter({
   />
 }
 DialogFooter.displayName = "DialogFooter"
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
 
 const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
@@ -92,8 +126,8 @@ const DialogTitle = React.forwardRef<
     )}
     {...props}
   />
-))
-DialogTitle.displayName = DialogPrimitive.Title.displayName
+));
+DialogTitle.displayName = DialogPrimitive.Title.displayName;
 
 const DialogDescription = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Description>,
@@ -104,8 +138,8 @@ const DialogDescription = React.forwardRef<
     className={cn("text-sm text-muted-foreground", className)}
     {...props}
   />
-))
-DialogDescription.displayName = DialogPrimitive.Description.displayName
+));
+DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
 export {
   Dialog,
@@ -118,4 +152,4 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
-}
+};

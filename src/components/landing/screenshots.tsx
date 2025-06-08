@@ -6,16 +6,16 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Users, 
-  Brain, 
-  Code, 
-  MessageCircle, 
-  BarChart3, 
+import {
+  Users,
+  Brain,
+  Code,
+  MessageCircle,
+  BarChart3,
   Settings,
   ChevronLeft,
   ChevronRight,
-  Play
+  Play,
 } from "lucide-react";
 
 export default function Screenshots() {
@@ -25,72 +25,114 @@ export default function Screenshots() {
     {
       id: "interviews",
       title: "Interview Management",
-      description: "Create and manage interviews with custom objectives, questions, and AI interviewers. Set up coding assessments and track candidate progress.",
+      description:
+        "Create and manage interviews with custom objectives, questions, and AI interviewers. Set up coding assessments and track candidate progress.",
       image: "/application_screenshots/Interviews.png",
       icon: MessageCircle,
       category: "Dashboard",
-      features: ["Custom Interview Setup", "AI Interviewer Selection", "Assessment Integration", "Progress Tracking"]
+      features: [
+        "Custom Interview Setup",
+        "AI Interviewer Selection",
+        "Assessment Integration",
+        "Progress Tracking",
+      ],
     },
     {
       id: "interviewers",
       title: "AI Interviewers",
-      description: "Design AI interviewers with unique personalities, expertise areas, and interview styles tailored to your specific hiring needs.",
+      description:
+        "Design AI interviewers with unique personalities, expertise areas, and interview styles tailored to your specific hiring needs.",
       image: "/application_screenshots/Interviewers.png",
       icon: Users,
       category: "Dashboard",
-      features: ["Personality Customization", "Expertise Areas", "Voice & Style", "Interview Templates"]
+      features: [
+        "Personality Customization",
+        "Expertise Areas",
+        "Voice & Style",
+        "Interview Templates",
+      ],
     },
     {
       id: "questions",
       title: "Coding Questions",
-      description: "Create comprehensive coding questions with test cases, difficulty levels, and detailed explanations for technical assessments.",
+      description:
+        "Create comprehensive coding questions with test cases, difficulty levels, and detailed explanations for technical assessments.",
       image: "/application_screenshots/Questions.png",
       icon: Code,
       category: "Dashboard",
-      features: ["Custom Test Cases", "Difficulty Levels", "Multiple Languages", "Detailed Explanations"]
+      features: [
+        "Custom Test Cases",
+        "Difficulty Levels",
+        "Multiple Languages",
+        "Detailed Explanations",
+      ],
     },
     {
       id: "assessments",
       title: "Assessment Builder",
-      description: "Build comprehensive coding assessments by selecting questions, setting time limits, and configuring evaluation criteria.",
+      description:
+        "Build comprehensive coding assessments by selecting questions, setting time limits, and configuring evaluation criteria.",
       image: "/application_screenshots/Assessments.png",
       icon: BarChart3,
       category: "Dashboard",
-      features: ["Question Selection", "Time Management", "Scoring Criteria", "Assessment Analytics"]
+      features: [
+        "Question Selection",
+        "Time Management",
+        "Scoring Criteria",
+        "Assessment Analytics",
+      ],
     },
     {
       id: "live-interview",
       title: "Live Interview Experience",
-      description: "Candidates engage in natural conversations with AI interviewers in a professional, user-friendly interface.",
+      description:
+        "Candidates engage in natural conversations with AI interviewers in a professional, user-friendly interface.",
       image: "/application_screenshots/Live_Interview.png",
       icon: MessageCircle,
       category: "Candidate Experience",
-      features: ["Natural Conversation", "Real-time Audio", "Professional Interface", "Seamless Experience"]
+      features: [
+        "Natural Conversation",
+        "Real-time Audio",
+        "Professional Interface",
+        "Seamless Experience",
+      ],
     },
     {
       id: "live-coding",
       title: "Live Coding Assessment",
-      description: "LeetCode-style coding environment with real-time execution, multiple programming languages, and instant feedback.",
+      description:
+        "LeetCode-style coding environment with real-time execution, multiple programming languages, and instant feedback.",
       image: "/application_screenshots/Live_Coding.png",
       icon: Code,
       category: "Candidate Experience",
-      features: ["Monaco Code Editor", "13+ Languages", "Real-time Execution", "Instant Feedback"]
-    }
+      features: [
+        "Monaco Code Editor",
+        "13+ Languages",
+        "Real-time Execution",
+        "Instant Feedback",
+      ],
+    },
   ];
 
   const categories = ["All", "Dashboard", "Candidate Experience"];
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const filteredScreenshots = selectedCategory === "All" 
-    ? screenshots 
-    : screenshots.filter(screenshot => screenshot.category === selectedCategory);
+  const filteredScreenshots =
+    selectedCategory === "All"
+      ? screenshots
+      : screenshots.filter(
+          (screenshot) => screenshot.category === selectedCategory
+        );
 
   const nextSlide = () => {
     setActiveTab((prev) => (prev + 1) % filteredScreenshots.length);
   };
 
   const prevSlide = () => {
-    setActiveTab((prev) => (prev - 1 + filteredScreenshots.length) % filteredScreenshots.length);
+    setActiveTab(
+      (prev) =>
+        (prev - 1 + filteredScreenshots.length) % filteredScreenshots.length
+    );
   };
 
   return (
@@ -102,17 +144,30 @@ export default function Screenshots() {
             See CognitoAI in Action
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Explore our intuitive interface and powerful features that make AI-powered 
-            interviews accessible and effective for organizations of all sizes.
+            Explore our intuitive interface and powerful features that make
+            AI-powered interviews accessible and effective for organizations of
+            all sizes.
           </p>
-          
+
           {/* Category Filter */}
           <div className="flex flex-wrap justify-center gap-2 mb-8">
             {categories.map((category) => (
               <Button
                 key={category}
                 variant={selectedCategory === category ? "default" : "outline"}
+<<<<<<< Updated upstream
                 className={selectedCategory === category ? "bg-indigo-600 hover:bg-indigo-700" : ""}
+=======
+<<<<<<< HEAD
+                className={
+                  selectedCategory === category
+                    ? "bg-indigo-600 hover:bg-indigo-700"
+                    : ""
+                }
+=======
+                className={selectedCategory === category ? "bg-indigo-600 hover:bg-indigo-700" : ""}
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
+>>>>>>> Stashed changes
                 onClick={() => {
                   setSelectedCategory(category);
                   setActiveTab(0);
@@ -136,7 +191,7 @@ export default function Screenshots() {
                 className="w-full h-auto"
                 priority
               />
-              
+
               {/* Navigation Arrows */}
               <Button
                 variant="outline"
@@ -146,7 +201,7 @@ export default function Screenshots() {
               >
                 <ChevronLeft className="w-5 h-5" />
               </Button>
-              
+
               <Button
                 variant="outline"
                 size="icon"
@@ -155,7 +210,7 @@ export default function Screenshots() {
               >
                 <ChevronRight className="w-5 h-5" />
               </Button>
-              
+
               {/* Category Badge */}
               <Badge className="absolute top-4 left-4 bg-indigo-600 hover:bg-indigo-700">
                 {filteredScreenshots[activeTab].category}
@@ -170,20 +225,34 @@ export default function Screenshots() {
             <div className="flex items-center mb-4">
               {(() => {
                 const IconComponent = filteredScreenshots[activeTab].icon;
+<<<<<<< Updated upstream
                 
 return <IconComponent className="w-8 h-8 text-indigo-600 mr-3" />;
+=======
+<<<<<<< HEAD
+
+                return (
+                  <IconComponent className="w-8 h-8 text-indigo-600 mr-3" />
+                );
+=======
+                
+return <IconComponent className="w-8 h-8 text-indigo-600 mr-3" />;
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
+>>>>>>> Stashed changes
               })()}
               <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
                 {filteredScreenshots[activeTab].title}
               </h3>
             </div>
-            
+
             <p className="text-lg text-gray-600 mb-6 leading-relaxed">
               {filteredScreenshots[activeTab].description}
             </p>
-            
+
             <div className="space-y-3">
-              <h4 className="font-semibold text-gray-900 mb-3">Key Features:</h4>
+              <h4 className="font-semibold text-gray-900 mb-3">
+                Key Features:
+              </h4>
               {filteredScreenshots[activeTab].features.map((feature, index) => (
                 <div key={index} className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-indigo-600 rounded-full" />
@@ -192,30 +261,48 @@ return <IconComponent className="w-8 h-8 text-indigo-600 mr-3" />;
               ))}
             </div>
           </div>
-          
+
           {/* Thumbnail Navigation */}
           <div className="grid grid-cols-2 gap-4">
             {filteredScreenshots.map((screenshot, index) => {
               const IconComponent = screenshot.icon;
+<<<<<<< Updated upstream
               
 return (
+=======
+<<<<<<< HEAD
+
+              return (
+=======
+              
+return (
+>>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
+>>>>>>> Stashed changes
                 <Card
                   key={screenshot.id}
                   className={`cursor-pointer transition-all duration-300 ${
-                    index === activeTab 
-                      ? "ring-2 ring-indigo-500 shadow-lg" 
+                    index === activeTab
+                      ? "ring-2 ring-indigo-500 shadow-lg"
                       : "hover:shadow-md"
                   }`}
                   onClick={() => setActiveTab(index)}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-center mb-2">
-                      <IconComponent className={`w-5 h-5 mr-2 ${
-                        index === activeTab ? "text-indigo-600" : "text-gray-500"
-                      }`} />
-                      <h4 className={`font-medium text-sm ${
-                        index === activeTab ? "text-indigo-600" : "text-gray-700"
-                      }`}>
+                      <IconComponent
+                        className={`w-5 h-5 mr-2 ${
+                          index === activeTab
+                            ? "text-indigo-600"
+                            : "text-gray-500"
+                        }`}
+                      />
+                      <h4
+                        className={`font-medium text-sm ${
+                          index === activeTab
+                            ? "text-indigo-600"
+                            : "text-gray-700"
+                        }`}
+                      >
                         {screenshot.title}
                       </h4>
                     </div>
@@ -241,22 +328,29 @@ return (
             Ready to Experience CognitoAI?
           </h3>
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-            Join forward-thinking companies that are already transforming their hiring 
-            process with AI-powered interviews and assessments.
+            Join forward-thinking companies that are already transforming their
+            hiring process with AI-powered interviews and assessments.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/sign-up">
-              <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-4 h-auto">
+              <Button
+                size="lg"
+                className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-4 h-auto"
+              >
                 <Play className="mr-2 w-5 h-5" />
                 Start Free Trial
               </Button>
             </Link>
-            <Button 
-              variant="outline" 
-              size="lg" 
+            <Button
+              variant="outline"
+              size="lg"
               className="text-lg px-8 py-4 h-auto border-2"
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() =>
+                document
+                  .getElementById("contact")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
             >
               Schedule Demo
             </Button>
@@ -265,4 +359,4 @@ return (
       </div>
     </section>
   );
-} 
+}
