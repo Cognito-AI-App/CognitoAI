@@ -540,7 +540,8 @@ function InterviewHome({ params, searchParams }: Props) {
                                               if (codingScore !== null) {
                                                 return Math.round((behavioralScore + codingScore) / 2);
                                               }
-                                              return behavioralScore;
+                                              
+return behavioralScore;
                                             })()}
                                           </span>
                                         </div>

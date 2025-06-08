@@ -47,7 +47,8 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error("Error inserting contact message:", error);
-      return NextResponse.json(
+      
+return NextResponse.json(
         { error: "Failed to submit message" },
         { status: 500 }
       );
@@ -62,7 +63,8 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     console.error("Error in contact message API:", error);
-    return NextResponse.json(
+    
+return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
     );

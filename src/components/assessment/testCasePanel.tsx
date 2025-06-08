@@ -44,9 +44,9 @@ const TestCasePanel: React.FC<TestCasePanelProps> = ({
             </>
           )}
           <Button 
-            onClick={() => onRunTest()} 
-            disabled={isSubmitting}
+            disabled={isSubmitting} 
             size="sm"
+            onClick={() => onRunTest()}
           >
             <Play className="h-4 w-4 mr-1" /> Run All Tests
           </Button>
@@ -125,8 +125,8 @@ const TestCasePanel: React.FC<TestCasePanelProps> = ({
                   <Button 
                     size="sm" 
                     variant="outline" 
-                    onClick={() => onRunTest(index)}
                     disabled={isSubmitting}
+                    onClick={() => onRunTest(index)}
                   >
                     <Play className="h-3 w-3 mr-1" /> Run
                   </Button>

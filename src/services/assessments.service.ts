@@ -13,13 +13,15 @@ export const AssessmentService = {
 
       if (error) {
         console.error("Error fetching assessments:", error);
-        return [];
+        
+return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAllAssessments:", error);
-      return [];
+      
+return [];
     }
   },
 
@@ -33,13 +35,15 @@ export const AssessmentService = {
 
       if (error) {
         console.error("Error fetching assessment:", error);
-        return null;
+        
+return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in getAssessment:", error);
-      return null;
+      
+return null;
     }
   },
 
@@ -61,13 +65,15 @@ export const AssessmentService = {
 
       if (error) {
         console.error("Error creating assessment:", error);
-        return null;
+        
+return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in createAssessment:", error);
-      return null;
+      
+return null;
     }
   },
 
@@ -85,13 +91,15 @@ export const AssessmentService = {
 
       if (error) {
         console.error("Error updating assessment:", error);
-        return null;
+        
+return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in updateAssessment:", error);
-      return null;
+      
+return null;
     }
   },
 
@@ -101,13 +109,15 @@ export const AssessmentService = {
 
       if (error) {
         console.error("Error deleting assessment:", error);
-        return false;
+        
+return false;
       }
 
       return true;
     } catch (error) {
       console.error("Error in deleteAssessment:", error);
-      return false;
+      
+return false;
     }
   },
 
@@ -123,13 +133,15 @@ export const AssessmentService = {
 
       if (error) {
         console.error("Error fetching organization assessments:", error);
-        return [];
+        
+return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentsForOrganization:", error);
-      return [];
+      
+return [];
     }
   },
   
@@ -143,13 +155,15 @@ export const AssessmentService = {
 
       if (error) {
         console.error("Error fetching user assessments:", error);
-        return [];
+        
+return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentsForUser:", error);
-      return [];
+      
+return [];
     }
   },
   
@@ -169,13 +183,15 @@ export const AssessmentService = {
 
       if (error) {
         console.error("Error fetching assessments:", error);
-        return [];
+        
+return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentsForUserOrOrganization:", error);
-      return [];
+      
+return [];
     }
   },
 
@@ -192,13 +208,15 @@ export const AssessmentService = {
 
       if (error) {
         console.error("Error creating assessment response:", error);
-        return null;
+        
+return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in createAssessmentResponse:", error);
-      return null;
+      
+return null;
     }
   },
 
@@ -216,13 +234,15 @@ export const AssessmentService = {
 
       if (error) {
         console.error("Error updating assessment response:", error);
-        return null;
+        
+return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in updateAssessmentResponse:", error);
-      return null;
+      
+return null;
     }
   },
 
@@ -238,13 +258,15 @@ export const AssessmentService = {
 
       if (error) {
         console.error("Error fetching assessment responses:", error);
-        return [];
+        
+return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentResponsesForInterview:", error);
-      return [];
+      
+return [];
     }
   },
 
@@ -262,13 +284,15 @@ export const AssessmentService = {
 
       if (error) {
         console.error("Error fetching assessment responses for email:", error);
-        return [];
+        
+return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentResponsesForEmail:", error);
-      return [];
+      
+return [];
     }
   },
 }; 

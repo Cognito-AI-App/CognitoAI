@@ -324,10 +324,10 @@ function EditInterview({ interview }: EditInterviewProps) {
             <h3 className="text-sm font-medium mr-3">Include Coding Assessment:</h3>
             <Switch
               checked={hasAssessment}
-              onCheckedChange={setHasAssessment}
               className={`ml-4 border-2 border-gray-300 ${
                 hasAssessment ? "bg-indigo-600" : "bg-white"
               }`}
+              onCheckedChange={setHasAssessment}
             />
           </div>
         </div>

@@ -38,9 +38,9 @@ function CodingQuestions() {
         {[1, 2, 3].map((i) => (
           <Card key={i} className="animate-pulse">
             <CardContent className="p-4">
-              <div className="h-6 bg-gray-300 rounded w-3/4 mb-3"></div>
-              <div className="h-4 bg-gray-300 rounded w-1/4 mb-6"></div>
-              <div className="h-10 bg-gray-300 rounded w-full"></div>
+              <div className="h-6 bg-gray-300 rounded w-3/4 mb-3" />
+              <div className="h-4 bg-gray-300 rounded w-1/4 mb-6" />
+              <div className="h-10 bg-gray-300 rounded w-full" />
             </CardContent>
           </Card>
         ))}
@@ -61,8 +61,8 @@ function CodingQuestions() {
             </h3>
           </div>
           <Button 
-            onClick={handleCreateQuestion}
             className="bg-indigo-600 hover:bg-indigo-700"
+            onClick={handleCreateQuestion}
           >
             <PlusIcon className="mr-2 h-4 w-4" /> Create Question
           </Button>
@@ -80,8 +80,8 @@ function CodingQuestions() {
                   Create your first coding question to get started
                 </p>
                 <Button 
-                  onClick={handleCreateQuestion}
                   className="bg-indigo-600 hover:bg-indigo-700"
+                  onClick={handleCreateQuestion}
                 >
                   <PlusIcon className="mr-2 h-4 w-4" /> Create Question
                 </Button>
@@ -117,8 +117,8 @@ function CodingQuestions() {
 
       <CreateQuestionModal 
         isOpen={isCreateModalOpen} 
-        onClose={() => setIsCreateModalOpen(false)}
         editingQuestion={editingQuestionId}
+        onClose={() => setIsCreateModalOpen(false)}
       />
     </main>
   );

@@ -21,7 +21,7 @@ function NewsletterSignup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return;
+    if (!email.trim()) {return;}
 
     setIsSubmitting(true);
 
@@ -57,15 +57,15 @@ function NewsletterSignup() {
         <p className="text-gray-300 mb-4">
           Get the latest updates on AI-powered hiring and new features.
         </p>
-        <form onSubmit={handleSubmit} className="flex space-x-2">
+        <form className="flex space-x-2" onSubmit={handleSubmit}>
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
-            required
             disabled={isSubmitting}
             className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
+            required
+            onChange={(e) => setEmail(e.target.value)}
           />
           <Button 
             type="submit"
@@ -233,7 +233,8 @@ export default function Footer() {
             <div className="flex items-center space-x-4">
               {socialLinks.map((social) => {
                 const IconComponent = social.icon;
-                return (
+                
+return (
                   <a
                     key={social.name}
                     href={social.href}
@@ -252,8 +253,8 @@ export default function Footer() {
             <Button
               variant="outline"
               size="sm"
-              onClick={scrollToTop}
               className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white"
+              onClick={scrollToTop}
             >
               <ArrowUp className="w-4 h-4 mr-2" />
               Back to Top

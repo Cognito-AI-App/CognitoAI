@@ -13,13 +13,15 @@ export const CodingQuestionService = {
 
       if (error) {
         console.error("Error fetching coding questions:", error);
-        return [];
+        
+return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAllQuestions:", error);
-      return [];
+      
+return [];
     }
   },
 
@@ -33,13 +35,15 @@ export const CodingQuestionService = {
 
       if (error) {
         console.error("Error fetching coding question:", error);
-        return null;
+        
+return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in getQuestion:", error);
-      return null;
+      
+return null;
     }
   },
 
@@ -61,13 +65,15 @@ export const CodingQuestionService = {
 
       if (error) {
         console.error("Error creating coding question:", error);
-        return null;
+        
+return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in createQuestion:", error);
-      return null;
+      
+return null;
     }
   },
 
@@ -85,13 +91,15 @@ export const CodingQuestionService = {
 
       if (error) {
         console.error("Error updating coding question:", error);
-        return null;
+        
+return null;
       }
 
       return data;
     } catch (error) {
       console.error("Error in updateQuestion:", error);
-      return null;
+      
+return null;
     }
   },
 
@@ -104,13 +112,15 @@ export const CodingQuestionService = {
 
       if (error) {
         console.error("Error deleting coding question:", error);
-        return false;
+        
+return false;
       }
 
       return true;
     } catch (error) {
       console.error("Error in deleteQuestion:", error);
-      return false;
+      
+return false;
     }
   },
 
@@ -124,13 +134,15 @@ export const CodingQuestionService = {
 
       if (error) {
         console.error("Error fetching organization questions:", error);
-        return [];
+        
+return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getQuestionsForOrganization:", error);
-      return [];
+      
+return [];
     }
   },
   
@@ -144,13 +156,15 @@ export const CodingQuestionService = {
 
       if (error) {
         console.error("Error fetching user questions:", error);
-        return [];
+        
+return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getQuestionsForUser:", error);
-      return [];
+      
+return [];
     }
   },
   
@@ -170,13 +184,15 @@ export const CodingQuestionService = {
 
       if (error) {
         console.error("Error fetching questions:", error);
-        return [];
+        
+return [];
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getQuestionsForUserOrOrganization:", error);
-      return [];
+      
+return [];
     }
   }
 }; 
