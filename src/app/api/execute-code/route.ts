@@ -145,7 +145,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Error executing code:", error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json(
+    
+return NextResponse.json(
       { error: `Error executing code: ${errorMessage}` },
       { status: 500 }
     );

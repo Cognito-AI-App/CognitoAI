@@ -35,7 +35,7 @@ type AssessmentProps = {
   interview: Interview;
 };
 
-const Assessment = ({ interview }: AssessmentProps) => {
+function Assessment({ interview }: AssessmentProps) {
   const router = useRouter();
   const { interviewId } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
@@ -168,9 +168,11 @@ const Assessment = ({ interview }: AssessmentProps) => {
         setTimeRemaining(prev => {
           if (prev <= 1) {
             submitAssessment();
-            return 0;
+            
+return 0;
           }
-          return prev - 1;
+          
+return prev - 1;
         });
       }, 1000);
     }
@@ -187,7 +189,8 @@ const Assessment = ({ interview }: AssessmentProps) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    
+return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   // Handle code change for current question
@@ -196,7 +199,7 @@ const Assessment = ({ interview }: AssessmentProps) => {
     setCode(newCode);
     
     // Make sure responses array is initialized
-    if (responses.length === 0 || currentQuestionIndex < 0) return;
+    if (responses.length === 0 || currentQuestionIndex < 0) {return;}
     
     // Update responses array
     const updatedResponses = [...responses];
@@ -219,7 +222,7 @@ const Assessment = ({ interview }: AssessmentProps) => {
 
   // Handle test run for current question
   const handleRunTests = async (testIndex?: number) => {
-    if (!questions[currentQuestionIndex]) return;
+    if (!questions[currentQuestionIndex]) {return;}
     
     setSubmitting(true);
     
@@ -236,7 +239,8 @@ const Assessment = ({ interview }: AssessmentProps) => {
       // Make sure we have code to run
       if (!currentResponse.code || !currentResponse.code.trim()) {
         toast.error("Please write some code before running tests");
-        return;
+        
+return;
       }
       
       const result = await CodeExecutionService.executeCode(
@@ -269,7 +273,7 @@ const Assessment = ({ interview }: AssessmentProps) => {
 
   // Create assessment response with user info
   const createAssessmentResponse = async () => {
-    if (!assessment) return null;
+    if (!assessment) {return null;}
     
     try {
       // Calculate total score based on responses
@@ -321,10 +325,12 @@ const Assessment = ({ interview }: AssessmentProps) => {
       
       const response = await AssessmentService.createAssessmentResponse(payload);
       setAssessmentResponse(response);
-      return response;
+      
+return response;
     } catch (error) {
       console.error("Error creating assessment response:", error);
-      return null;
+      
+return null;
     }
   };
 
@@ -386,20 +392,23 @@ const Assessment = ({ interview }: AssessmentProps) => {
     // If name and email were already set from sessionStorage, just close the dialog
     if (name.trim() && email.trim()) {
       setIsInfoDialogOpen(false);
-      return;
+      
+return;
     }
     
     // Otherwise validate the entered data
     if (!name.trim() || !email.trim()) {
       toast.error("Please enter your name and email");
-      return;
+      
+return;
     }
     
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       toast.error("Please enter a valid email address");
-      return;
+      
+return;
     }
     
     setIsInfoDialogOpen(false);
@@ -432,7 +441,7 @@ const Assessment = ({ interview }: AssessmentProps) => {
     setCode(generatedCode);
     
     // Make sure responses array is initialized
-    if (responses.length === 0 || currentQuestionIndex < 0) return;
+    if (responses.length === 0 || currentQuestionIndex < 0) {return;}
     
     // Update responses array
     const updatedResponses = [...responses];
@@ -498,7 +507,7 @@ const Assessment = ({ interview }: AssessmentProps) => {
                             'bg-red-600'
                           }`} 
                           style={{ width: `${percentScore}%` }}
-                        ></div>
+                         />
                       </div>
                     </div>
                   );
@@ -509,15 +518,15 @@ const Assessment = ({ interview }: AssessmentProps) => {
           
           {!isFeedbackSubmitted ? (
             <Button 
-              onClick={() => setIsFeedbackDialogOpen(true)}
               className="mt-6 bg-indigo-600 text-white"
+              onClick={() => setIsFeedbackDialogOpen(true)}
             >
               Provide Feedback
             </Button>
           ) : (
             <Button 
-              onClick={() => router.push(`/call/${interviewId}`)}
               className="mt-6"
+              onClick={() => router.push(`/call/${interviewId}`)}
             >
               Return to Interview
             </Button>
@@ -527,8 +536,8 @@ const Assessment = ({ interview }: AssessmentProps) => {
             <DialogContent>
               <FeedbackForm
                 email={email}
-                onSubmit={handleFeedbackSubmit}
                 interview={interview}
+                onSubmit={handleFeedbackSubmit}
               />
             </DialogContent>
           </Dialog>
@@ -542,7 +551,7 @@ const Assessment = ({ interview }: AssessmentProps) => {
       <div className="h-[88vh] flex items-center justify-center">
         <div className="text-center">
           <div className="mb-4">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" />
           </div>
           <p>Loading assessment...</p>
         </div>
@@ -589,8 +598,8 @@ const Assessment = ({ interview }: AssessmentProps) => {
                 id="name"
                 className="w-full p-2 border rounded-md"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
                 placeholder="John Doe"
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div>
@@ -602,14 +611,14 @@ const Assessment = ({ interview }: AssessmentProps) => {
                 id="email"
                 className="w-full p-2 border rounded-md"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 placeholder="john@example.com"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <Button 
               className="w-full" 
-              onClick={startAssessment}
               disabled={!name || !email}
+              onClick={startAssessment}
             >
               Start Assessment
             </Button>
@@ -634,8 +643,8 @@ const Assessment = ({ interview }: AssessmentProps) => {
             </div>
             <Button 
               variant="destructive" 
-              onClick={submitAssessment}
               disabled={submitting}
+              onClick={submitAssessment}
             >
               End Assessment
             </Button>
@@ -647,8 +656,8 @@ const Assessment = ({ interview }: AssessmentProps) => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => navigateQuestion(-1)}
             disabled={currentQuestionIndex === 0}
+            onClick={() => navigateQuestion(-1)}
           >
             <ArrowLeftIcon className="h-4 w-4 mr-1" /> Previous
           </Button>
@@ -660,8 +669,8 @@ const Assessment = ({ interview }: AssessmentProps) => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => navigateQuestion(1)}
             disabled={currentQuestionIndex === questions.length - 1}
+            onClick={() => navigateQuestion(1)}
           >
             Next <ArrowRightIcon className="h-4 w-4 ml-1" />
           </Button>
@@ -686,10 +695,10 @@ const Assessment = ({ interview }: AssessmentProps) => {
                 <EditorPanel
                   code={code}
                   language={currentLanguage}
+                  isSubmitting={submitting}
                   onCodeChange={handleCodeChange}
                   onLanguageChange={handleLanguageChange}
                   onRunCode={() => handleRunTests()}
-                  isSubmitting={submitting}
                 />
               </TabsContent>
               
@@ -698,8 +707,8 @@ const Assessment = ({ interview }: AssessmentProps) => {
                   <TestCasePanel
                     question={questions[currentQuestionIndex]}
                     result={responses[currentQuestionIndex].result}
-                    onRunTest={handleRunTests}
                     isSubmitting={submitting}
+                    onRunTest={handleRunTests}
                   />
                 )}
               </TabsContent>
@@ -710,9 +719,9 @@ const Assessment = ({ interview }: AssessmentProps) => {
             {questions[currentQuestionIndex] && (
               <AIChatPanel 
                 question={questions[currentQuestionIndex]}
-                onApplyCode={handleApplyAICode}
                 questionIndex={currentQuestionIndex}
                 currentCode={code}
+                onApplyCode={handleApplyAICode}
               />
             )}
           </div>
@@ -720,6 +729,6 @@ const Assessment = ({ interview }: AssessmentProps) => {
       </div>
     </>
   );
-};
+}
 
 export default Assessment; 

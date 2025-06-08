@@ -17,14 +17,14 @@ type EditorPanelProps = {
   isSubmitting: boolean;
 };
 
-const EditorPanel = ({
+function EditorPanel({
   code,
   language,
   onCodeChange,
   onLanguageChange,
   onRunCode,
   isSubmitting
-}: EditorPanelProps) => {
+}: EditorPanelProps) {
   const editorRef = useRef<any>(null);
   const monacoRef = useRef<Monaco | null>(null);
   const [theme, setTheme] = useState<string>("vs-dark");
@@ -158,9 +158,9 @@ const EditorPanel = ({
         </div>
         
         <Button 
-          onClick={onRunCode} 
-          disabled={isSubmitting}
+          disabled={isSubmitting} 
           className="gap-2"
+          onClick={onRunCode}
         >
           <Play className="h-4 w-4" />
           Run
@@ -174,8 +174,6 @@ const EditorPanel = ({
           language={language.value}
           value={code}
           theme={theme}
-          onChange={handleCodeChange}
-          onMount={handleEditorDidMount}
           options={{
             fontSize: fontSize,
             minimap: { enabled: false },
@@ -185,10 +183,12 @@ const EditorPanel = ({
             wordWrap: "on",
             readOnly: isSubmitting,
           }}
+          onChange={handleCodeChange}
+          onMount={handleEditorDidMount}
         />
       </div>
     </Card>
   );
-};
+}
 
 export default EditorPanel; 

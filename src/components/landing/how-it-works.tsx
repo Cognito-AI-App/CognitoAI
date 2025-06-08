@@ -85,12 +85,13 @@ export default function HowItWorks() {
         {/* Steps */}
         <div className="relative">
           {/* Connection Line */}
-          <div className="hidden lg:block absolute top-24 left-0 right-0 h-0.5 bg-gradient-to-r from-indigo-200 via-purple-200 via-green-200 via-blue-200 to-orange-200"></div>
+          <div className="hidden lg:block absolute top-24 left-0 right-0 h-0.5 bg-gradient-to-r from-indigo-200 via-purple-200 via-green-200 via-blue-200 to-orange-200" />
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 relative">
             {steps.map((step, index) => {
               const IconComponent = step.icon;
-              return (
+              
+return (
                 <div key={index} className="relative">
                   <Card className={`border-2 ${step.borderColor} hover:shadow-lg transition-all duration-300 bg-white`}>
                     <CardContent className="p-6 text-center">

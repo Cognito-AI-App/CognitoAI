@@ -165,21 +165,25 @@ const CreateAssessmentModal: React.FC<Props> = ({
   const handleSubmit = async () => {
     if (!userId) {
       toast.error("Authentication error. Please try again.");
-      return;
+      
+return;
     }
 
     // Validation
     if (!formData.name.trim()) {
       toast.error("Name is required");
-      return;
+      
+return;
     }
     if (!formData.description || !formData.description.trim()) {
       toast.error("Description is required");
-      return;
+      
+return;
     }
     if (formData.questions.length === 0) {
       toast.error("You must select at least one question");
-      return;
+      
+return;
     }
 
     setLoading(true);
@@ -205,7 +209,7 @@ const CreateAssessmentModal: React.FC<Props> = ({
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {return null;}
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
@@ -227,8 +231,8 @@ const CreateAssessmentModal: React.FC<Props> = ({
                 id="name"
                 name="name"
                 value={formData.name}
-                onChange={handleInputChange}
                 placeholder="Enter a name for the assessment"
+                onChange={handleInputChange}
               />
             </div>
 
@@ -238,9 +242,9 @@ const CreateAssessmentModal: React.FC<Props> = ({
                 id="description"
                 name="description"
                 value={formData.description || ""}
-                onChange={handleInputChange}
                 placeholder="Describe the purpose of this assessment"
                 rows={3}
+                onChange={handleInputChange}
               />
             </div>
 
@@ -270,8 +274,8 @@ const CreateAssessmentModal: React.FC<Props> = ({
                   type="number"
                   min="1"
                   value={formData.time_duration}
-                  onChange={handleInputChange}
                   placeholder="30"
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -331,7 +335,8 @@ const CreateAssessmentModal: React.FC<Props> = ({
                 <div className="space-y-2">
                   {formData.questions.map((id) => {
                     const question = availableQuestions.find((q) => q.id === id);
-                    return (
+                    
+return (
                       <div
                         key={id}
                         className="flex justify-between items-center p-2 border rounded-md"
@@ -359,10 +364,10 @@ const CreateAssessmentModal: React.FC<Props> = ({
         </CardContent>
 
         <CardFooter className="flex justify-between border-t p-4">
-          <Button variant="outline" onClick={onClose} disabled={loading}>
+          <Button variant="outline" disabled={loading} onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit} disabled={loading}>
+          <Button disabled={loading} onClick={handleSubmit}>
             {loading ? "Saving..." : isEditing ? "Update Assessment" : "Create Assessment"}
           </Button>
         </CardFooter>

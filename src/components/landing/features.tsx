@@ -96,7 +96,8 @@ export default function Features() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => {
             const IconComponent = feature.icon;
-            return (
+            
+return (
               <Card 
                 key={index} 
                 className="group hover:shadow-lg transition-all duration-300 border-0 shadow-md hover:-translate-y-1"

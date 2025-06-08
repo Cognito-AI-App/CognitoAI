@@ -154,7 +154,8 @@ export default function Contact() {
             <div className="space-y-4 mb-8">
               {contactMethods.map((method, index) => {
                 const IconComponent = method.icon;
-                return (
+                
+return (
                   <a
                     key={index}
                     href={method.href}
@@ -188,7 +189,8 @@ export default function Contact() {
               <h4 className="font-semibold text-gray-900 mb-4">Why Contact Us?</h4>
               {features.map((feature, index) => {
                 const IconComponent = feature.icon;
-                return (
+                
+return (
                   <div key={index} className="flex items-start space-x-3">
                     <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0 mt-1">
                       <IconComponent className="w-4 h-4 text-indigo-600" />
@@ -211,7 +213,7 @@ export default function Contact() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -221,12 +223,12 @@ export default function Contact() {
                       id="first_name"
                       name="first_name"
                       type="text"
-                      required
                       value={formData.first_name}
-                      onChange={handleInputChange}
                       className="w-full"
                       placeholder="John"
                       disabled={isSubmitting}
+                      required
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div>
@@ -237,12 +239,12 @@ export default function Contact() {
                       id="last_name"
                       name="last_name"
                       type="text"
-                      required
                       value={formData.last_name}
-                      onChange={handleInputChange}
                       className="w-full"
                       placeholder="Doe"
                       disabled={isSubmitting}
+                      required
+                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
@@ -255,12 +257,12 @@ export default function Contact() {
                     id="email"
                     name="email"
                     type="email"
-                    required
                     value={formData.email}
-                    onChange={handleInputChange}
                     className="w-full"
                     placeholder="john.doe@company.com"
                     disabled={isSubmitting}
+                    required
+                    onChange={handleInputChange}
                   />
                 </div>
 
@@ -273,10 +275,10 @@ export default function Contact() {
                     name="company"
                     type="text"
                     value={formData.company}
-                    onChange={handleInputChange}
                     className="w-full"
                     placeholder="Your Company Name"
                     disabled={isSubmitting}
+                    onChange={handleInputChange}
                   />
                 </div>
 
@@ -289,10 +291,10 @@ export default function Contact() {
                     name="phone"
                     type="tel"
                     value={formData.phone}
-                    onChange={handleInputChange}
                     className="w-full"
                     placeholder="+1 (555) 123-4567"
                     disabled={isSubmitting}
+                    onChange={handleInputChange}
                   />
                 </div>
 
@@ -304,12 +306,12 @@ export default function Contact() {
                     id="subject"
                     name="subject"
                     type="text"
-                    required
                     value={formData.subject}
-                    onChange={handleInputChange}
                     className="w-full"
                     placeholder="How can we help you?"
                     disabled={isSubmitting}
+                    required
+                    onChange={handleInputChange}
                   />
                 </div>
 
@@ -320,13 +322,13 @@ export default function Contact() {
                   <Textarea
                     id="message"
                     name="message"
-                    required
                     rows={4}
                     value={formData.message}
-                    onChange={handleInputChange}
                     className="w-full"
                     placeholder="Tell us about your hiring needs and how CognitoAI can help..."
                     disabled={isSubmitting}
+                    required
+                    onChange={handleInputChange}
                   />
                 </div>
 

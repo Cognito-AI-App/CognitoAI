@@ -145,7 +145,8 @@ const CreateQuestionModal: React.FC<Props> = ({
   const removeTestCase = (index: number) => {
     if (formData.test_cases.length <= 1) {
       toast.error("You need at least one test case");
-      return;
+      
+return;
     }
     const updatedTestCases = [...formData.test_cases];
     updatedTestCases.splice(index, 1);
@@ -158,33 +159,40 @@ const CreateQuestionModal: React.FC<Props> = ({
   const handleSubmit = async () => {
     if (!userId) {
       toast.error("Authentication error. Please try again.");
-      return;
+      
+return;
     }
 
     // Validation
     if (!formData.title.trim()) {
       toast.error("Title is required");
-      return;
+      
+return;
     }
     if (!formData.description.trim()) {
       toast.error("Description is required");
-      return;
+      
+return;
     }
     if (!formData.input_format.trim()) {
       toast.error("Input format is required");
-      return;
+      
+return;
     }
     if (!formData.output_format.trim()) {
       toast.error("Output format is required");
-      return;
+      
+return;
     }
     if (!formData.example_explanation.trim()) {
       toast.error("Example explanation is required");
-      return;
+      
+return;
     }
     if (formData.test_cases.some(tc => !tc.input.trim() || !tc.output.trim())) {
       toast.error("All test cases must have both input and output");
-      return;
+      
+return;
     }
 
     setLoading(true);
@@ -210,7 +218,7 @@ const CreateQuestionModal: React.FC<Props> = ({
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {return null;}
 
   const formattedDescription = `
 **Question Title:** ${formData.title || "Question title goes here..."}
@@ -268,8 +276,8 @@ ${formData.example_explanation || "Example explanation..."}
                   id="title"
                   name="title"
                   value={formData.title}
-                  onChange={handleInputChange}
                   placeholder="Enter a title for the question"
+                  onChange={handleInputChange}
                 />
               </div>
 
@@ -296,9 +304,9 @@ ${formData.example_explanation || "Example explanation..."}
                   id="description"
                   name="description"
                   value={formData.description}
-                  onChange={handleInputChange}
                   placeholder="Describe the problem in detail (supports markdown)"
                   rows={5}
+                  onChange={handleInputChange}
                 />
               </div>
 
@@ -308,9 +316,9 @@ ${formData.example_explanation || "Example explanation..."}
                   id="input_format"
                   name="input_format"
                   value={formData.input_format}
-                  onChange={handleInputChange}
                   placeholder="Describe the format of the input (supports markdown)"
                   rows={3}
+                  onChange={handleInputChange}
                 />
               </div>
 
@@ -320,9 +328,9 @@ ${formData.example_explanation || "Example explanation..."}
                   id="output_format"
                   name="output_format"
                   value={formData.output_format}
-                  onChange={handleInputChange}
                   placeholder="Describe the format of the output (supports markdown)"
                   rows={3}
+                  onChange={handleInputChange}
                 />
               </div>
 
@@ -332,9 +340,9 @@ ${formData.example_explanation || "Example explanation..."}
                   id="example_explanation"
                   name="example_explanation"
                   value={formData.example_explanation}
-                  onChange={handleInputChange}
                   placeholder="Explain the example solution (supports markdown)"
                   rows={3}
+                  onChange={handleInputChange}
                 />
               </div>
 
@@ -374,11 +382,11 @@ ${formData.example_explanation || "Example explanation..."}
                         <Textarea
                           id={`input-${index}`}
                           value={testCase.input}
+                          placeholder="Input for this test case"
+                          rows={2}
                           onChange={(e) =>
                             handleTestCaseChange(index, "input", e.target.value)
                           }
-                          placeholder="Input for this test case"
-                          rows={2}
                         />
                       </div>
 
@@ -387,11 +395,11 @@ ${formData.example_explanation || "Example explanation..."}
                         <Textarea
                           id={`output-${index}`}
                           value={testCase.output}
+                          placeholder="Expected output for this test case"
+                          rows={2}
                           onChange={(e) =>
                             handleTestCaseChange(index, "output", e.target.value)
                           }
-                          placeholder="Expected output for this test case"
-                          rows={2}
                         />
                       </div>
 
@@ -423,10 +431,10 @@ ${formData.example_explanation || "Example explanation..."}
         </div>
 
         <CardFooter className="flex justify-between border-t p-4">
-          <Button variant="outline" onClick={onClose} disabled={loading}>
+          <Button variant="outline" disabled={loading} onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit} disabled={loading}>
+          <Button disabled={loading} onClick={handleSubmit}>
             {loading ? "Saving..." : isEditing ? "Update Question" : "Create Question"}
           </Button>
         </CardFooter>

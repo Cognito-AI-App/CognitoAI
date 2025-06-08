@@ -53,7 +53,8 @@ export async function POST(request: NextRequest) {
 
         if (error) {
           console.error("Error reactivating subscription:", error);
-          return NextResponse.json(
+          
+return NextResponse.json(
             { error: "Failed to subscribe" },
             { status: 500 }
           );
@@ -80,7 +81,8 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error("Error inserting newsletter subscription:", error);
-      return NextResponse.json(
+      
+return NextResponse.json(
         { error: "Failed to subscribe" },
         { status: 500 }
       );
@@ -95,7 +97,8 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     console.error("Error in newsletter subscription API:", error);
-    return NextResponse.json(
+    
+return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
     );

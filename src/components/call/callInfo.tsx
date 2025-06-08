@@ -211,19 +211,19 @@ function CallInfo({
             <div className="flex items-center gap-3">
               {isComplete ? (
                 <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-1" />
                   Completed
                 </span>
               ) : (
                 <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
-                  <div className="w-2 h-2 bg-yellow-500 rounded-full mr-1"></div>
+                  <div className="w-2 h-2 bg-yellow-500 rounded-full mr-1" />
                   Incomplete
                 </span>
               )}
               
               {tabSwitches > 0 && (
                 <span className="bg-orange-100 text-orange-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
-                  <div className="w-2 h-2 bg-orange-500 rounded-full mr-1"></div>
+                  <div className="w-2 h-2 bg-orange-500 rounded-full mr-1" />
                   {tabSwitches} tab switch{tabSwitches !== 1 ? 'es' : ''}
                 </span>
               )}
@@ -248,7 +248,7 @@ function CallInfo({
                     'bg-red-600'
                   }`} 
                   style={{ width: `${response.score || 0}%` }}
-                ></div>
+                 />
               </div>
             </div>
             
@@ -267,7 +267,7 @@ function CallInfo({
                           passRate >= 80 ? 'bg-green-500' : 
                           passRate >= 50 ? 'bg-yellow-500' : 
                           'bg-red-500'
-                        }`}></div>
+                        }`} />
                         <span className="text-xs font-medium">Q{index + 1}: {passRate}%</span>
                       </div>
                     );
@@ -305,7 +305,7 @@ function CallInfo({
                       'bg-red-600'
                     }`}
                     style={{ width: `${passRate}%` }}
-                  ></div>
+                   />
                 </div>
                 {(questionResponse.result.stderr || questionResponse.result.compile_output) && (
                   <div className="mt-2 text-xs text-red-600 bg-red-50 p-2 rounded">

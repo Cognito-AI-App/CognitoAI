@@ -38,9 +38,9 @@ function Assessments() {
         {[1, 2, 3].map((i) => (
           <Card key={i} className="animate-pulse">
             <CardContent className="p-4">
-              <div className="h-6 bg-gray-300 rounded w-3/4 mb-3"></div>
-              <div className="h-4 bg-gray-300 rounded w-1/4 mb-6"></div>
-              <div className="h-10 bg-gray-300 rounded w-full"></div>
+              <div className="h-6 bg-gray-300 rounded w-3/4 mb-3" />
+              <div className="h-4 bg-gray-300 rounded w-1/4 mb-6" />
+              <div className="h-10 bg-gray-300 rounded w-full" />
             </CardContent>
           </Card>
         ))}
@@ -61,8 +61,8 @@ function Assessments() {
             </h3>
           </div>
           <Button 
-            onClick={handleCreateAssessment}
             className="bg-indigo-600 hover:bg-indigo-700"
+            onClick={handleCreateAssessment}
           >
             <PlusIcon className="mr-2 h-4 w-4" /> Create Assessment
           </Button>
@@ -80,8 +80,8 @@ function Assessments() {
                   Create your first coding assessment to get started
                 </p>
                 <Button 
-                  onClick={handleCreateAssessment}
                   className="bg-indigo-600 hover:bg-indigo-700"
+                  onClick={handleCreateAssessment}
                 >
                   <PlusIcon className="mr-2 h-4 w-4" /> Create Assessment
                 </Button>
@@ -117,8 +117,8 @@ function Assessments() {
 
       <CreateAssessmentModal 
         isOpen={isCreateModalOpen} 
-        onClose={() => setIsCreateModalOpen(false)}
         editingAssessment={editingAssessmentId}
+        onClose={() => setIsCreateModalOpen(false)}
       />
     </main>
   );

@@ -112,11 +112,11 @@ export default function Screenshots() {
               <Button
                 key={category}
                 variant={selectedCategory === category ? "default" : "outline"}
+                className={selectedCategory === category ? "bg-indigo-600 hover:bg-indigo-700" : ""}
                 onClick={() => {
                   setSelectedCategory(category);
                   setActiveTab(0);
                 }}
-                className={selectedCategory === category ? "bg-indigo-600 hover:bg-indigo-700" : ""}
               >
                 {category}
               </Button>
@@ -170,7 +170,8 @@ export default function Screenshots() {
             <div className="flex items-center mb-4">
               {(() => {
                 const IconComponent = filteredScreenshots[activeTab].icon;
-                return <IconComponent className="w-8 h-8 text-indigo-600 mr-3" />;
+                
+return <IconComponent className="w-8 h-8 text-indigo-600 mr-3" />;
               })()}
               <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
                 {filteredScreenshots[activeTab].title}
@@ -185,7 +186,7 @@ export default function Screenshots() {
               <h4 className="font-semibold text-gray-900 mb-3">Key Features:</h4>
               {filteredScreenshots[activeTab].features.map((feature, index) => (
                 <div key={index} className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
+                  <div className="w-2 h-2 bg-indigo-600 rounded-full" />
                   <span className="text-gray-700">{feature}</span>
                 </div>
               ))}
@@ -196,7 +197,8 @@ export default function Screenshots() {
           <div className="grid grid-cols-2 gap-4">
             {filteredScreenshots.map((screenshot, index) => {
               const IconComponent = screenshot.icon;
-              return (
+              
+return (
                 <Card
                   key={screenshot.id}
                   className={`cursor-pointer transition-all duration-300 ${

@@ -221,8 +221,8 @@ function DetailsPopup({
               <h3 className="text-sm font-medium mr-3">Anonymous Interview:</h3>
               <Switch
                 checked={isAnonymous}
-                onCheckedChange={setIsAnonymous}
                 className="bg-indigo-600"
+                onCheckedChange={setIsAnonymous}
               />
             </div>
             <FileUpload
@@ -288,8 +288,8 @@ function DetailsPopup({
               <h3 className="text-sm font-medium mr-3">Include Coding Assessment:</h3>
               <Switch
                 checked={hasAssessment}
-                onCheckedChange={setHasAssessment}
                 className="bg-indigo-600"
+                onCheckedChange={setHasAssessment}
               />
             </div>
           </div>

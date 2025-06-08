@@ -67,7 +67,7 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
   }, [messages, questionIndex]);
 
   const handleSend = async () => {
-    if (!input.trim()) return;
+    if (!input.trim()) {return;}
 
     const userMessage: Message = {
       role: "user",
@@ -165,16 +165,16 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
           <Button 
             size="sm" 
             variant="outline" 
-            onClick={handleClearHistory}
             title="Clear conversation history"
+            onClick={handleClearHistory}
           >
             <Trash2Icon className="h-4 w-4" />
           </Button>
           <Button 
             size="sm" 
             variant="outline" 
-            onClick={handleApplyCode}
             title="Apply the last AI code to the editor"
+            onClick={handleApplyCode}
           >
             <DownloadIcon className="h-4 w-4 mr-1" /> Apply Code
           </Button>
@@ -222,15 +222,15 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
             <Input
               ref={inputRef}
               value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
               placeholder="Ask for help with your code..."
               disabled={isLoading}
               className="flex-1"
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             <Button 
-              onClick={handleSend}
               disabled={isLoading || !input.trim()}
+              onClick={handleSend}
             >
               <SendIcon className="h-4 w-4" />
             </Button>
