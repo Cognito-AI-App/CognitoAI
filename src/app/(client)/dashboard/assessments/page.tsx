@@ -2,12 +2,7 @@
 
 import React, { useState } from "react";
 import { useAssessments } from "@/contexts/assessments.context";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PlusIcon, ClipboardListIcon } from "lucide-react";
@@ -25,9 +20,7 @@ function Assessments() {
   const { assessments, loading } = useAssessments();
   const router = useRouter();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [editingAssessmentId, setEditingAssessmentId] = useState<number | null>(
-    null
-  );
+  const [editingAssessmentId, setEditingAssessmentId] = useState<number | null>(null);
 
   const handleCreateAssessment = () => {
     setEditingAssessmentId(null);
@@ -67,14 +60,7 @@ function Assessments() {
               Create and manage coding assessments for interviews
             </h3>
           </div>
-<<<<<<< HEAD
-          <Button
-=======
           <Button 
-<<<<<<< Updated upstream
-=======
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
             className="bg-indigo-600 hover:bg-indigo-700"
             onClick={handleCreateAssessment}
           >
@@ -89,20 +75,11 @@ function Assessments() {
             {assessments.length === 0 ? (
               <div className="col-span-full flex flex-col items-center justify-center p-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
                 <ClipboardListIcon className="h-12 w-12 text-gray-400 mb-3" />
-                <h3 className="text-lg font-medium text-gray-600 mb-1">
-                  No assessments yet
-                </h3>
+                <h3 className="text-lg font-medium text-gray-600 mb-1">No assessments yet</h3>
                 <p className="text-sm text-gray-500 mb-4 text-center">
                   Create your first coding assessment to get started
                 </p>
-<<<<<<< HEAD
-                <Button
-=======
                 <Button 
-<<<<<<< Updated upstream
-=======
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
                   className="bg-indigo-600 hover:bg-indigo-700"
                   onClick={handleCreateAssessment}
                 >
@@ -111,24 +88,20 @@ function Assessments() {
               </div>
             ) : (
               assessments.map((assessment) => (
-                <Card
-                  key={assessment.id}
+                <Card 
+                  key={assessment.id} 
                   className="cursor-pointer hover:shadow-md transition-shadow"
                   onClick={() => handleEditAssessment(assessment.id)}
                 >
                   <CardContent className="p-4">
                     <div className="flex justify-between items-start mb-2">
-                      <CardTitle className="text-lg">
-                        {assessment.name}
-                      </CardTitle>
-                      <Badge
-                        className={difficultyColors[assessment.difficulty]}
-                      >
+                      <CardTitle className="text-lg">{assessment.name}</CardTitle>
+                      <Badge className={difficultyColors[assessment.difficulty]}>
                         {assessment.difficulty}
                       </Badge>
                     </div>
                     <CardDescription className="line-clamp-2 mb-4">
-                      {assessment.description || "No description provided"}
+                      {assessment.description || 'No description provided'}
                     </CardDescription>
                     <div className="flex justify-between text-xs text-gray-500">
                       <span>{assessment.question_count} questions</span>
@@ -142,16 +115,8 @@ function Assessments() {
         )}
       </div>
 
-<<<<<<< HEAD
-      <CreateAssessmentModal
-        isOpen={isCreateModalOpen}
-=======
       <CreateAssessmentModal 
         isOpen={isCreateModalOpen} 
-<<<<<<< Updated upstream
-=======
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
         editingAssessment={editingAssessmentId}
         onClose={() => setIsCreateModalOpen(false)}
       />
@@ -159,4 +124,4 @@ function Assessments() {
   );
 }
 
-export default Assessments;
+export default Assessments; 

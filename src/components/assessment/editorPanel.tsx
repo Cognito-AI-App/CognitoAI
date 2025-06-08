@@ -1,18 +1,12 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import Editor, { Monaco } from "@monaco-editor/react";
+import { useState, useEffect, useRef } from 'react';
+import Editor, { Monaco } from '@monaco-editor/react';
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
-import { Play } from "lucide-react";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Play } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
-import { languageOptions, LanguageOption } from "./languageOptions";
+import { languageOptions, LanguageOption } from './languageOptions';
 
 type EditorPanelProps = {
   code: string;
@@ -29,14 +23,7 @@ function EditorPanel({
   onCodeChange,
   onLanguageChange,
   onRunCode,
-<<<<<<< HEAD
-  isSubmitting,
-=======
   isSubmitting
-<<<<<<< Updated upstream
-=======
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
 }: EditorPanelProps) {
   const editorRef = useRef<any>(null);
   const monacoRef = useRef<Monaco | null>(null);
@@ -57,19 +44,22 @@ function EditorPanel({
   const handleEditorDidMount = (editor: any, monaco: Monaco) => {
     editorRef.current = editor;
     monacoRef.current = monaco;
-
+    
     // Set up editor
     editor.focus();
-
+    
     // Set initial value
     if (code) {
       editor.setValue(code);
     }
-
+    
     // Add keyboard shortcut for running code (Ctrl+Enter or Cmd+Enter)
-    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
-      onRunCode();
-    });
+    editor.addCommand(
+      monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
+      () => {
+        onRunCode();
+      }
+    );
 
     // Configure editor for a better coding experience
     monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
@@ -87,11 +77,9 @@ function EditorPanel({
   const handleLanguageChange = (value: string) => {
     // Store previous language
     setPreviousLanguage(language.value);
-
+    
     // Find selected language
-    const selectedLanguage = languageOptions.find(
-      (lang) => lang.value === value
-    );
+    const selectedLanguage = languageOptions.find(lang => lang.value === value);
     if (selectedLanguage) {
       // Notify parent component of language change
       onLanguageChange(selectedLanguage);
@@ -100,11 +88,7 @@ function EditorPanel({
 
   // Effect to update editor language highlighting
   useEffect(() => {
-    if (
-      editorRef.current &&
-      monacoRef.current &&
-      language.value !== previousLanguage
-    ) {
+    if (editorRef.current && monacoRef.current && language.value !== previousLanguage) {
       // Properly access the Monaco editor API through our saved reference
       const editor = editorRef.current;
       const model = editor.getModel();
@@ -127,7 +111,10 @@ function EditorPanel({
     <Card className="flex flex-col h-full">
       <div className="flex justify-between items-center p-3 border-b bg-slate-50">
         <div className="flex items-center gap-2">
-          <Select value={language.value} onValueChange={handleLanguageChange}>
+          <Select
+            value={language.value}
+            onValueChange={handleLanguageChange}
+          >
             <SelectTrigger className="w-[220px]">
               <SelectValue placeholder="Select language" />
             </SelectTrigger>
@@ -139,7 +126,7 @@ function EditorPanel({
               ))}
             </SelectContent>
           </Select>
-
+          
           <Select
             value={fontSize.toString()}
             onValueChange={(value) => setFontSize(parseInt(value))}
@@ -155,8 +142,11 @@ function EditorPanel({
               ))}
             </SelectContent>
           </Select>
-
-          <Select value={theme} onValueChange={setTheme}>
+          
+          <Select
+            value={theme}
+            onValueChange={setTheme}
+          >
             <SelectTrigger className="w-[150px]">
               <SelectValue placeholder="Select theme" />
             </SelectTrigger>
@@ -166,22 +156,17 @@ function EditorPanel({
             </SelectContent>
           </Select>
         </div>
-<<<<<<< HEAD
-
-        <Button disabled={isSubmitting} className="gap-2" onClick={onRunCode}>
-=======
         
         <Button 
           disabled={isSubmitting} 
           className="gap-2"
           onClick={onRunCode}
         >
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
           <Play className="h-4 w-4" />
           Run
         </Button>
       </div>
-
+      
       <div className="flex-1 min-h-0">
         <Editor
           height="100%"
@@ -206,4 +191,4 @@ function EditorPanel({
   );
 }
 
-export default EditorPanel;
+export default EditorPanel; 

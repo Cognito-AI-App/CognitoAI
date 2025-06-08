@@ -1,9 +1,5 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import {
-  Assessment,
-  AssessmentFormData,
-  AssessmentResponse,
-} from "@/types/assessment";
+import { Assessment, AssessmentFormData, AssessmentResponse } from "@/types/assessment";
 
 const supabase = createClientComponentClient();
 
@@ -17,35 +13,15 @@ export const AssessmentService = {
 
       if (error) {
         console.error("Error fetching assessments:", error);
-<<<<<<< Updated upstream
         
 return [];
-=======
-<<<<<<< HEAD
-
-        return [];
-=======
-        
-return [];
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAllAssessments:", error);
-<<<<<<< Updated upstream
       
 return [];
-=======
-<<<<<<< HEAD
-
-      return [];
-=======
-      
-return [];
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
   },
 
@@ -59,35 +35,15 @@ return [];
 
       if (error) {
         console.error("Error fetching assessment:", error);
-<<<<<<< Updated upstream
         
 return null;
-=======
-<<<<<<< HEAD
-
-        return null;
-=======
-        
-return null;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
       }
 
       return data;
     } catch (error) {
       console.error("Error in getAssessment:", error);
-<<<<<<< Updated upstream
       
 return null;
-=======
-<<<<<<< HEAD
-
-      return null;
-=======
-      
-return null;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
   },
 
@@ -109,35 +65,15 @@ return null;
 
       if (error) {
         console.error("Error creating assessment:", error);
-<<<<<<< Updated upstream
         
 return null;
-=======
-<<<<<<< HEAD
-
-        return null;
-=======
-        
-return null;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
       }
 
       return data;
     } catch (error) {
       console.error("Error in createAssessment:", error);
-<<<<<<< Updated upstream
       
 return null;
-=======
-<<<<<<< HEAD
-
-      return null;
-=======
-      
-return null;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
   },
 
@@ -155,35 +91,15 @@ return null;
 
       if (error) {
         console.error("Error updating assessment:", error);
-<<<<<<< Updated upstream
         
 return null;
-=======
-<<<<<<< HEAD
-
-        return null;
-=======
-        
-return null;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
       }
 
       return data;
     } catch (error) {
       console.error("Error in updateAssessment:", error);
-<<<<<<< Updated upstream
       
 return null;
-=======
-<<<<<<< HEAD
-
-      return null;
-=======
-      
-return null;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
   },
 
@@ -193,35 +109,15 @@ return null;
 
       if (error) {
         console.error("Error deleting assessment:", error);
-<<<<<<< Updated upstream
         
 return false;
-=======
-<<<<<<< HEAD
-
-        return false;
-=======
-        
-return false;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
       }
 
       return true;
     } catch (error) {
       console.error("Error in deleteAssessment:", error);
-<<<<<<< Updated upstream
       
 return false;
-=======
-<<<<<<< HEAD
-
-      return false;
-=======
-      
-return false;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
   },
 
@@ -237,38 +133,18 @@ return false;
 
       if (error) {
         console.error("Error fetching organization assessments:", error);
-<<<<<<< Updated upstream
         
 return [];
-=======
-<<<<<<< HEAD
-
-        return [];
-=======
-        
-return [];
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentsForOrganization:", error);
-<<<<<<< Updated upstream
       
 return [];
-=======
-<<<<<<< HEAD
-
-      return [];
-=======
-      
-return [];
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
   },
-
+  
   getAssessmentsForUser: async (userId: string): Promise<Assessment[]> => {
     try {
       const { data, error } = await supabase
@@ -279,88 +155,43 @@ return [];
 
       if (error) {
         console.error("Error fetching user assessments:", error);
-<<<<<<< Updated upstream
         
 return [];
-=======
-<<<<<<< HEAD
-
-        return [];
-=======
-        
-return [];
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentsForUser:", error);
-<<<<<<< Updated upstream
       
 return [];
-=======
-<<<<<<< HEAD
-
-      return [];
-=======
-      
-return [];
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
   },
-
-  getAssessmentsForUserOrOrganization: async (
-    userId: string,
-    organizationId: string | null
-  ): Promise<Assessment[]> => {
+  
+  getAssessmentsForUserOrOrganization: async (userId: string, organizationId: string | null): Promise<Assessment[]> => {
     try {
-      let query = supabase.from("assessment").select("*");
-
+      let query = supabase
+        .from("assessment")
+        .select("*");
+      
       if (organizationId) {
-        query = query.or(
-          `organization_id.eq.${organizationId},user_id.eq.${userId}`
-        );
+        query = query.or(`organization_id.eq.${organizationId},user_id.eq.${userId}`);
       } else {
         query = query.eq("user_id", userId);
       }
-
-      const { data, error } = await query.order("created_at", {
-        ascending: false,
-      });
+      
+      const { data, error } = await query.order("created_at", { ascending: false });
 
       if (error) {
         console.error("Error fetching assessments:", error);
-<<<<<<< Updated upstream
         
 return [];
-=======
-<<<<<<< HEAD
-
-        return [];
-=======
-        
-return [];
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentsForUserOrOrganization:", error);
-<<<<<<< Updated upstream
       
 return [];
-=======
-<<<<<<< HEAD
-
-      return [];
-=======
-      
-return [];
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
   },
 
@@ -377,35 +208,15 @@ return [];
 
       if (error) {
         console.error("Error creating assessment response:", error);
-<<<<<<< Updated upstream
         
 return null;
-=======
-<<<<<<< HEAD
-
-        return null;
-=======
-        
-return null;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
       }
 
       return data;
     } catch (error) {
       console.error("Error in createAssessmentResponse:", error);
-<<<<<<< Updated upstream
       
 return null;
-=======
-<<<<<<< HEAD
-
-      return null;
-=======
-      
-return null;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
   },
 
@@ -423,35 +234,15 @@ return null;
 
       if (error) {
         console.error("Error updating assessment response:", error);
-<<<<<<< Updated upstream
         
 return null;
-=======
-<<<<<<< HEAD
-
-        return null;
-=======
-        
-return null;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
       }
 
       return data;
     } catch (error) {
       console.error("Error in updateAssessmentResponse:", error);
-<<<<<<< Updated upstream
       
 return null;
-=======
-<<<<<<< HEAD
-
-      return null;
-=======
-      
-return null;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
   },
 
@@ -467,35 +258,15 @@ return null;
 
       if (error) {
         console.error("Error fetching assessment responses:", error);
-<<<<<<< Updated upstream
         
 return [];
-=======
-<<<<<<< HEAD
-
-        return [];
-=======
-        
-return [];
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentResponsesForInterview:", error);
-<<<<<<< Updated upstream
       
 return [];
-=======
-<<<<<<< HEAD
-
-      return [];
-=======
-      
-return [];
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
   },
 
@@ -513,35 +284,15 @@ return [];
 
       if (error) {
         console.error("Error fetching assessment responses for email:", error);
-<<<<<<< Updated upstream
         
 return [];
-=======
-<<<<<<< HEAD
-
-        return [];
-=======
-        
-return [];
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
       }
 
       return data || [];
     } catch (error) {
       console.error("Error in getAssessmentResponsesForEmail:", error);
-<<<<<<< Updated upstream
       
 return [];
-=======
-<<<<<<< HEAD
-
-      return [];
-=======
-      
-return [];
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
   },
-};
+}; 

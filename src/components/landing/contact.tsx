@@ -1,25 +1,24 @@
 "use client";
 
-import { COMPANY_INFO, CONTACT_INFO } from "@/lib/contact";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Clock,
-  Linkedin,
-  Mail,
-  MapPin,
-  MessageSquare,
-  Phone,
-  Send,
-  Users,
-} from "lucide-react";
-
 import { Button } from "@/components/ui/button";
-import { CreateContactMessageRequest } from "@/types/contact";
-import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
 import { useState } from "react";
+import { toast } from "sonner";
+import { 
+  Mail, 
+  Phone, 
+  Linkedin, 
+  MapPin, 
+  Send,
+  MessageSquare,
+  Clock,
+  Users
+} from "lucide-react";
+import { CONTACT_INFO, COMPANY_INFO } from "@/lib/contact";
+import { CreateContactMessageRequest } from "@/types/contact";
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,7 +40,7 @@ export default function Contact() {
       value: CONTACT_INFO.email,
       href: `mailto:${CONTACT_INFO.email}`,
       color: "text-blue-600",
-      bgColor: "bg-blue-100",
+      bgColor: "bg-blue-100"
     },
     {
       icon: Phone,
@@ -50,7 +49,7 @@ export default function Contact() {
       value: CONTACT_INFO.phone,
       href: `tel:${CONTACT_INFO.phone}`,
       color: "text-green-600",
-      bgColor: "bg-green-100",
+      bgColor: "bg-green-100"
     },
     {
       icon: Linkedin,
@@ -59,35 +58,33 @@ export default function Contact() {
       value: "CognitoAI Tech",
       href: CONTACT_INFO.linkedinUrl,
       color: "text-indigo-600",
-      bgColor: "bg-indigo-100",
-    },
+      bgColor: "bg-indigo-100"
+    }
   ];
 
   const features = [
     {
       icon: Clock,
       title: "Quick Response",
-      description: "We respond to all inquiries within 24 hours",
+      description: "We respond to all inquiries within 24 hours"
     },
     {
       icon: Users,
       title: "Expert Support",
-      description: "Get help from our AI and hiring experts",
+      description: "Get help from our AI and hiring experts"
     },
     {
       icon: MessageSquare,
       title: "Personalized Demo",
-      description: "Schedule a custom demo for your team",
-    },
+      description: "Schedule a custom demo for your team"
+    }
   ];
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
-      [name]: value,
+      [name]: value
     }));
   };
 
@@ -107,9 +104,7 @@ export default function Contact() {
       const result = await response.json();
 
       if (response.ok) {
-        toast.success(
-          "Message sent successfully! We'll get back to you within 24 hours."
-        );
+        toast.success("Message sent successfully! We'll get back to you within 24 hours.");
         setFormData({
           first_name: "",
           last_name: "",
@@ -120,9 +115,7 @@ export default function Contact() {
           message: "",
         });
       } else {
-        toast.error(
-          result.error || "Failed to send message. Please try again."
-        );
+        toast.error(result.error || "Failed to send message. Please try again.");
       }
     } catch (error) {
       console.error("Error submitting contact form:", error);
@@ -141,9 +134,8 @@ export default function Contact() {
             Get in Touch
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Ready to transform your hiring process? Contact us to learn more
-            about CognitoAI and schedule a personalized demo for your
-            organization.
+            Ready to transform your hiring process? Contact us to learn more about 
+            CognitoAI and schedule a personalized demo for your organization.
           </p>
         </div>
 
@@ -151,61 +143,38 @@ export default function Contact() {
           {/* Contact Information */}
           <div>
             <h3 className="text-2xl font-bold text-gray-900 mb-6">
-              Let&apos;s Start a Conversation
+              Let's Start a Conversation
             </h3>
             <p className="text-lg text-gray-600 mb-8">
-              Whether you&apos;re looking to streamline your hiring process,
-              need a custom demo, or have questions about our AI-powered
-              interview platform, we&apos;re here to help.
+              Whether you're looking to streamline your hiring process, need a custom demo, 
+              or have questions about our AI-powered interview platform, we're here to help.
             </p>
 
             {/* Contact Methods */}
             <div className="space-y-4 mb-8">
               {contactMethods.map((method, index) => {
                 const IconComponent = method.icon;
-<<<<<<< Updated upstream
                 
 return (
-=======
-<<<<<<< HEAD
-
-                return (
-=======
-                
-return (
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
                   <a
                     key={index}
                     href={method.href}
                     target={method.icon === Linkedin ? "_blank" : undefined}
-                    rel={
-                      method.icon === Linkedin
-                        ? "noopener noreferrer"
-                        : undefined
-                    }
+                    rel={method.icon === Linkedin ? "noopener noreferrer" : undefined}
                     className="block group"
                   >
                     <Card className="hover:shadow-md transition-all duration-300 border-l-4 border-l-indigo-500">
                       <CardContent className="p-4">
                         <div className="flex items-center space-x-4">
-                          <div
-                            className={`w-12 h-12 rounded-lg ${method.bgColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
-                          >
-                            <IconComponent
-                              className={`w-6 h-6 ${method.color}`}
-                            />
+                          <div className={`w-12 h-12 rounded-lg ${method.bgColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
+                            <IconComponent className={`w-6 h-6 ${method.color}`} />
                           </div>
                           <div>
                             <h4 className="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">
                               {method.title}
                             </h4>
-                            <p className="text-sm text-gray-600 mb-1">
-                              {method.description}
-                            </p>
-                            <p className="text-sm font-medium text-indigo-600">
-                              {method.value}
-                            </p>
+                            <p className="text-sm text-gray-600 mb-1">{method.description}</p>
+                            <p className="text-sm font-medium text-indigo-600">{method.value}</p>
                           </div>
                         </div>
                       </CardContent>
@@ -217,34 +186,18 @@ return (
 
             {/* Features */}
             <div className="space-y-4">
-              <h4 className="font-semibold text-gray-900 mb-4">
-                Why Contact Us?
-              </h4>
+              <h4 className="font-semibold text-gray-900 mb-4">Why Contact Us?</h4>
               {features.map((feature, index) => {
                 const IconComponent = feature.icon;
-<<<<<<< Updated upstream
                 
 return (
-=======
-<<<<<<< HEAD
-
-                return (
-=======
-                
-return (
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
                   <div key={index} className="flex items-start space-x-3">
                     <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0 mt-1">
                       <IconComponent className="w-4 h-4 text-indigo-600" />
                     </div>
                     <div>
-                      <h5 className="font-medium text-gray-900">
-                        {feature.title}
-                      </h5>
-                      <p className="text-sm text-gray-600">
-                        {feature.description}
-                      </p>
+                      <h5 className="font-medium text-gray-900">{feature.title}</h5>
+                      <p className="text-sm text-gray-600">{feature.description}</p>
                     </div>
                   </div>
                 );
@@ -263,10 +216,7 @@ return (
               <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label
-                      htmlFor="first_name"
-                      className="block text-sm font-medium text-gray-700 mb-2"
-                    >
+                    <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 mb-2">
                       First Name *
                     </label>
                     <Input
@@ -282,10 +232,7 @@ return (
                     />
                   </div>
                   <div>
-                    <label
-                      htmlFor="last_name"
-                      className="block text-sm font-medium text-gray-700 mb-2"
-                    >
+                    <label htmlFor="last_name" className="block text-sm font-medium text-gray-700 mb-2">
                       Last Name *
                     </label>
                     <Input
@@ -303,10 +250,7 @@ return (
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                     Email Address *
                   </label>
                   <Input
@@ -323,10 +267,7 @@ return (
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="company"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
+                  <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
                     Company
                   </label>
                   <Input
@@ -342,10 +283,7 @@ return (
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="phone"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
                     Phone
                   </label>
                   <Input
@@ -361,10 +299,7 @@ return (
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="subject"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
                     Subject *
                   </label>
                   <Input
@@ -381,10 +316,7 @@ return (
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
                     Message *
                   </label>
                   <Textarea
@@ -400,8 +332,8 @@ return (
                   />
                 </div>
 
-                <Button
-                  type="submit"
+                <Button 
+                  type="submit" 
                   disabled={isSubmitting}
                   className="w-full bg-indigo-600 hover:bg-indigo-700 text-lg py-3 h-auto disabled:opacity-50"
                 >
@@ -410,8 +342,7 @@ return (
                 </Button>
 
                 <p className="text-xs text-gray-500 text-center">
-                  By submitting this form, you agree to our privacy policy and
-                  terms of service.
+                  By submitting this form, you agree to our privacy policy and terms of service.
                 </p>
               </form>
             </CardContent>
@@ -424,28 +355,21 @@ return (
             Ready to Get Started?
           </h3>
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-            Join the growing number of companies using CognitoAI to
-            revolutionize their hiring process with AI-powered interviews.
+            Join the growing number of companies using CognitoAI to revolutionize 
+            their hiring process with AI-powered interviews.
           </p>
-
+          
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/sign-up">
-              <Button
-                size="lg"
-                className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-4 h-auto"
-              >
+              <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-4 h-auto">
                 Start Free Trial
               </Button>
             </Link>
-            <Button
-              variant="outline"
-              size="lg"
+            <Button 
+              variant="outline" 
+              size="lg" 
               className="text-lg px-8 py-4 h-auto border-2"
-              onClick={() =>
-                document
-                  .getElementById("contact")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Schedule Demo
             </Button>
@@ -454,4 +378,4 @@ return (
       </div>
     </section>
   );
-}
+} 

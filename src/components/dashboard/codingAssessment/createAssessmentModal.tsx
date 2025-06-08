@@ -1,5 +1,12 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
+import { useAuth, useOrganization } from "@clerk/nextjs";
+import { AssessmentService } from "@/services/assessments.service";
+import { CodingQuestionService } from "@/services/codingQuestions.service";
+import { AssessmentFormData } from "@/types/assessment";
+import { CodingQuestion, Difficulty } from "@/types/codingQuestion";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,8 +15,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "sonner";
+import { useAssessments } from "@/contexts/assessments.context";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { CodingQuestion, Difficulty } from "@/types/codingQuestion";
+import { Badge } from "@/components/ui/badge";
 import {
   Command,
   CommandEmpty,
@@ -23,27 +42,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import React, { useEffect, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useAuth, useOrganization } from "@clerk/nextjs";
-
-import { AssessmentFormData } from "@/types/assessment";
-import { AssessmentService } from "@/services/assessments.service";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { CodingQuestionService } from "@/services/codingQuestions.service";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
-import { useAssessments } from "@/contexts/assessments.context";
 
 interface Props {
   isOpen: boolean;
@@ -57,19 +56,17 @@ const difficultyColors = {
   hard: "bg-red-100 text-red-800",
 };
 
-function CreateAssessmentModal({
+const CreateAssessmentModal: React.FC<Props> = ({
   isOpen,
   onClose,
   editingAssessment = null,
-}: Props) {
+}) => {
   const { userId } = useAuth();
   const { organization } = useOrganization();
   const { fetchAssessments } = useAssessments();
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [availableQuestions, setAvailableQuestions] = useState<
-    CodingQuestion[]
-  >([]);
+  const [availableQuestions, setAvailableQuestions] = useState<CodingQuestion[]>([]);
   const [open, setOpen] = useState(false);
 
   const initialFormData: AssessmentFormData = {
@@ -87,11 +84,10 @@ function CreateAssessmentModal({
   useEffect(() => {
     const loadQuestions = async () => {
       if (userId) {
-        const questions =
-          await CodingQuestionService.getQuestionsForUserOrOrganization(
-            userId,
-            organization?.id || null
-          );
+        const questions = await CodingQuestionService.getQuestionsForUserOrOrganization(
+          userId,
+          organization?.id || null
+        );
         setAvailableQuestions(questions);
       }
     };
@@ -106,8 +102,7 @@ function CreateAssessmentModal({
       if (editingAssessment) {
         setIsEditing(true);
         setLoading(true);
-        const assessment =
-          await AssessmentService.getAssessment(editingAssessment);
+        const assessment = await AssessmentService.getAssessment(editingAssessment);
         if (assessment) {
           setFormData({
             name: assessment.name,
@@ -170,24 +165,13 @@ function CreateAssessmentModal({
   const handleSubmit = async () => {
     if (!userId) {
       toast.error("Authentication error. Please try again.");
-<<<<<<< Updated upstream
       
 return;
-=======
-<<<<<<< HEAD
-
-      return;
-=======
-      
-return;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
 
     // Validation
     if (!formData.name.trim()) {
       toast.error("Name is required");
-<<<<<<< Updated upstream
       
 return;
     }
@@ -200,35 +184,6 @@ return;
       toast.error("You must select at least one question");
       
 return;
-=======
-<<<<<<< HEAD
-
-      return;
-    }
-    if (!formData.description || !formData.description.trim()) {
-      toast.error("Description is required");
-
-      return;
-    }
-    if (formData.questions.length === 0) {
-      toast.error("You must select at least one question");
-
-      return;
-=======
-      
-return;
-    }
-    if (!formData.description || !formData.description.trim()) {
-      toast.error("Description is required");
-      
-return;
-    }
-    if (formData.questions.length === 0) {
-      toast.error("You must select at least one question");
-      
-return;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
 
     setLoading(true);
@@ -254,25 +209,13 @@ return;
     }
   };
 
-<<<<<<< Updated upstream
   if (!isOpen) {return null;}
-=======
-<<<<<<< HEAD
-  if (!isOpen) {
-    return null;
-  }
-=======
-  if (!isOpen) {return null;}
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
       <Card className="w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
         <CardHeader>
-          <CardTitle>
-            {isEditing ? "Edit" : "Create"} Coding Assessment
-          </CardTitle>
+          <CardTitle>{isEditing ? "Edit" : "Create"} Coding Assessment</CardTitle>
           <CardDescription>
             {isEditing
               ? "Update your coding assessment"
@@ -338,9 +281,7 @@ return;
             </div>
 
             <div>
-              <Label className="mb-2 block">
-                Selected Questions: {formData.questions.length}
-              </Label>
+              <Label className="mb-2 block">Selected Questions: {formData.questions.length}</Label>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <Button
@@ -375,12 +316,8 @@ return;
                                   : "opacity-0"
                               )}
                             />
-                            <span className="flex-1 truncate">
-                              {question.title}
-                            </span>
-                            <Badge
-                              className={difficultyColors[question.difficulty]}
-                            >
+                            <span className="flex-1 truncate">{question.title}</span>
+                            <Badge className={difficultyColors[question.difficulty]}>
                               {question.difficulty}
                             </Badge>
                           </CommandItem>
@@ -397,34 +334,16 @@ return;
                 <Label className="mb-2 block">Selected Questions:</Label>
                 <div className="space-y-2">
                   {formData.questions.map((id) => {
-<<<<<<< Updated upstream
                     const question = availableQuestions.find((q) => q.id === id);
                     
 return (
-=======
-<<<<<<< HEAD
-                    const question = availableQuestions.find(
-                      (q) => q.id === id
-                    );
-
-                    return (
-=======
-                    const question = availableQuestions.find((q) => q.id === id);
-                    
-return (
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
                       <div
                         key={id}
                         className="flex justify-between items-center p-2 border rounded-md"
                       >
                         <span>{question?.title || `Question #${id}`}</span>
                         <div className="flex gap-2">
-                          <Badge
-                            className={
-                              difficultyColors[question?.difficulty || "medium"]
-                            }
-                          >
+                          <Badge className={difficultyColors[question?.difficulty || "medium"]}>
                             {question?.difficulty || "unknown"}
                           </Badge>
                           <Button
@@ -449,23 +368,12 @@ return (
             Cancel
           </Button>
           <Button disabled={loading} onClick={handleSubmit}>
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-            {loading
-              ? "Saving..."
-              : isEditing
-                ? "Update Assessment"
-                : "Create Assessment"}
-=======
->>>>>>> Stashed changes
             {loading ? "Saving..." : isEditing ? "Update Assessment" : "Create Assessment"}
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
           </Button>
         </CardFooter>
       </Card>
     </div>
   );
-}
+};
 
-export default CreateAssessmentModal;
+export default CreateAssessmentModal; 

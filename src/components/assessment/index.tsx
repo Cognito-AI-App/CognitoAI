@@ -1,46 +1,35 @@
 "use client";
 
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  CheckCircleIcon,
-  ClockIcon,
-  XCircleIcon,
-} from "lucide-react";
-import {
-  AssessmentQuestionResponse,
-  AssessmentResponse,
-  Assessment as AssessmentType,
-} from "@/types/assessment";
+import { useState, useEffect, useRef } from "react";
+import { Interview } from "@/types/interview";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { AssessmentService } from "@/services/assessments.service";
+import { CodingQuestionService } from "@/services/codingQuestions.service";
+import CodeExecutionService from "@/services/codeExecution.service";
+import { Assessment as AssessmentType, AssessmentQuestionResponse, AssessmentResponse } from "@/types/assessment";
+import { CodingQuestion } from "@/types/codingQuestion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeftIcon, ArrowRightIcon, ClockIcon, XCircleIcon, CheckCircleIcon } from "lucide-react";
+import EditorPanel from "./editorPanel";
+import QuestionPanel from "./questionPanel";
+import TestCasePanel from "./testCasePanel";
+import AIChatPanel from "./aiChatPanel";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
-import { LanguageOption, getDefaultLanguage } from "./languageOptions";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect, useRef, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-
-import AIChatPanel from "./aiChatPanel";
-import { AssessmentService } from "@/services/assessments.service";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import CodeExecutionService from "@/services/codeExecution.service";
-import { CodingQuestion } from "@/types/codingQuestion";
-import { CodingQuestionService } from "@/services/codingQuestions.service";
-import EditorPanel from "./editorPanel";
-import { FeedbackData } from "@/types/response";
-import { FeedbackForm } from "@/components/call/feedbackForm";
-import { FeedbackService } from "@/services/feedback.service";
-import { Interview } from "@/types/interview";
-import QuestionPanel from "./questionPanel";
-import TestCasePanel from "./testCasePanel";
-import { getStarterCode } from "./codeTemplates";
 import { toast } from "sonner";
 import { useTabSwitchPrevention } from "@/components/call/tabSwitchPrevention";
+import { useParams, useRouter } from "next/navigation";
+import { getStarterCode } from "./codeTemplates";
+import { getDefaultLanguage, LanguageOption } from "./languageOptions";
+import { FeedbackForm } from "@/components/call/feedbackForm";
+import { FeedbackService } from "@/services/feedback.service";
+import { FeedbackData } from "@/types/response";
 
 type AssessmentProps = {
   interview: Interview;
@@ -54,23 +43,19 @@ function Assessment({ interview }: AssessmentProps) {
   const [assessment, setAssessment] = useState<AssessmentType | null>(null);
   const [questions, setQuestions] = useState<CodingQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-  const [currentLanguage, setCurrentLanguage] =
-    useState<LanguageOption>(getDefaultLanguage());
+  const [currentLanguage, setCurrentLanguage] = useState<LanguageOption>(getDefaultLanguage());
   const [code, setCode] = useState<string>("");
   const [responses, setResponses] = useState<AssessmentQuestionResponse[]>([]);
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
-  const [assessmentResponse, setAssessmentResponse] =
-    useState<AssessmentResponse | null>(null);
+  const [assessmentResponse, setAssessmentResponse] = useState<AssessmentResponse | null>(null);
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [isInfoDialogOpen, setIsInfoDialogOpen] = useState<boolean>(true);
   const { tabSwitchCount } = useTabSwitchPrevention();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] =
-    useState<boolean>(false);
-  const [isFeedbackSubmitted, setIsFeedbackSubmitted] =
-    useState<boolean>(false);
+  const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState<boolean>(false);
+  const [isFeedbackSubmitted, setIsFeedbackSubmitted] = useState<boolean>(false);
 
   // Fetch assessment details based on the assessment_id in the interview
   useEffect(() => {
@@ -78,37 +63,33 @@ function Assessment({ interview }: AssessmentProps) {
       if (interview.assessment_id) {
         try {
           // Get user info from sessionStorage if available
-          const storedName = sessionStorage.getItem("interview_user_name");
-          const storedEmail = sessionStorage.getItem("interview_user_email");
-
+          const storedName = sessionStorage.getItem('interview_user_name');
+          const storedEmail = sessionStorage.getItem('interview_user_email');
+          
           if (storedName && storedEmail) {
             setName(storedName);
             setEmail(storedEmail);
             setIsInfoDialogOpen(false); // Skip info dialog if we have the data
           }
-
-          const assessmentData = await AssessmentService.getAssessment(
-            interview.assessment_id
-          );
+          
+          const assessmentData = await AssessmentService.getAssessment(interview.assessment_id);
           if (assessmentData) {
             setAssessment(assessmentData);
-
+            
             // Calculate time remaining in seconds
             const minutes = parseInt(assessmentData.time_duration || "60");
             setTimeRemaining(minutes * 60);
-
+            
             // Fetch all questions
             const questionPromises = assessmentData.questions.map(
               (questionId) => CodingQuestionService.getQuestion(questionId)
             );
             const fetchedQuestions = await Promise.all(questionPromises);
-            const validQuestions = fetchedQuestions.filter(
-              (q) => q !== null
-            ) as CodingQuestion[];
+            const validQuestions = fetchedQuestions.filter(q => q !== null) as CodingQuestion[];
             setQuestions(validQuestions);
-
+            
             // Initialize responses array with default starter code
-            const initialResponses = validQuestions.map((question) => ({
+            const initialResponses = validQuestions.map(question => ({
               question_id: question.id,
               code: "", // We'll set this to default value based on selected language
               language: currentLanguage.value,
@@ -121,17 +102,17 @@ function Assessment({ interview }: AssessmentProps) {
                 memory: null,
                 passed_test_cases: 0,
                 total_test_cases: question.test_cases.length,
-                score: 0,
-              },
+                score: 0
+              }
             }));
             setResponses(initialResponses);
-
+            
             // Set initial code for the first question
             if (validQuestions.length > 0) {
               // Set default starter code based on language
               const starterCode = getStarterCode(currentLanguage.value);
               setCode(starterCode);
-
+              
               // Update first question's code in responses array
               initialResponses[0].code = starterCode;
               setResponses(initialResponses);
@@ -156,27 +137,24 @@ function Assessment({ interview }: AssessmentProps) {
     if (responses.length > 0 && currentQuestionIndex >= 0) {
       // Get the current response for the question
       const currentResponse = responses[currentQuestionIndex];
-
+      
       // Store updated responses
       const updatedResponses = [...responses];
-
+      
       // Check if we already have code for this language
-      if (
-        currentResponse.language === currentLanguage.value &&
-        currentResponse.code
-      ) {
+      if (currentResponse.language === currentLanguage.value && currentResponse.code) {
         // Keep existing code for this language
         setCode(currentResponse.code);
       } else {
         // Set new starter code for the changed language
         const starterCode = getStarterCode(currentLanguage.value);
         setCode(starterCode);
-
+        
         // Update in responses array
         updatedResponses[currentQuestionIndex] = {
           ...updatedResponses[currentQuestionIndex],
           code: starterCode,
-          language: currentLanguage.value,
+          language: currentLanguage.value
         };
         setResponses(updatedResponses);
       }
@@ -187,30 +165,14 @@ function Assessment({ interview }: AssessmentProps) {
   useEffect(() => {
     if (!loading && assessment && !isInfoDialogOpen && !isCompleted) {
       timerRef.current = setInterval(() => {
-        setTimeRemaining((prev) => {
+        setTimeRemaining(prev => {
           if (prev <= 1) {
             submitAssessment();
-<<<<<<< Updated upstream
             
 return 0;
           }
           
 return prev - 1;
-=======
-<<<<<<< HEAD
-
-            return 0;
-          }
-
-          return prev - 1;
-=======
-            
-return 0;
-          }
-          
-return prev - 1;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
         });
       }, 1000);
     }
@@ -227,45 +189,25 @@ return prev - 1;
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-<<<<<<< Updated upstream
     
 return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-=======
-<<<<<<< HEAD
-
-    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-=======
-    
-return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
   };
 
   // Handle code change for current question
   const handleCodeChange = (newCode: string) => {
     // Update the local code state
     setCode(newCode);
-
+    
     // Make sure responses array is initialized
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-    if (responses.length === 0 || currentQuestionIndex < 0) {
-      return;
-    }
-
-=======
->>>>>>> Stashed changes
     if (responses.length === 0 || currentQuestionIndex < 0) {return;}
     
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
     // Update responses array
     const updatedResponses = [...responses];
     if (updatedResponses[currentQuestionIndex]) {
       updatedResponses[currentQuestionIndex] = {
         ...updatedResponses[currentQuestionIndex],
         code: newCode,
-        language: currentLanguage.value,
+        language: currentLanguage.value
       };
       setResponses(updatedResponses);
     }
@@ -274,59 +216,39 @@ return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0
   // Handle language change
   const handleLanguageChange = (language: LanguageOption) => {
     setCurrentLanguage(language);
-
+    
     // The code update will be handled by the useEffect that watches for language changes
   };
 
   // Handle test run for current question
   const handleRunTests = async (testIndex?: number) => {
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-    if (!questions[currentQuestionIndex]) {
-      return;
-    }
-
-=======
->>>>>>> Stashed changes
     if (!questions[currentQuestionIndex]) {return;}
     
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
     setSubmitting(true);
-
+    
     const currentQuestion = questions[currentQuestionIndex];
     const currentResponse = responses[currentQuestionIndex];
     let testCases = currentQuestion.test_cases;
-
+    
     // If a specific test case is selected, only run that one
     if (testIndex !== undefined) {
       testCases = [currentQuestion.test_cases[testIndex]];
     }
-
+    
     try {
       // Make sure we have code to run
       if (!currentResponse.code || !currentResponse.code.trim()) {
         toast.error("Please write some code before running tests");
-<<<<<<< Updated upstream
         
 return;
-=======
-<<<<<<< HEAD
-
-        return;
-=======
-        
-return;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
       }
-
+      
       const result = await CodeExecutionService.executeCode(
-        currentResponse.code,
-        currentLanguage.id,
+        currentResponse.code, 
+        currentLanguage.id, 
         testCases
       );
-
+      
       // Update result in responses
       const updatedResponses = [...responses];
       updatedResponses[currentQuestionIndex] = {
@@ -335,13 +257,11 @@ return;
           ...result,
           passed_test_cases: result.passed_test_cases,
           total_test_cases: currentQuestion.test_cases.length,
-          score: Math.round(
-            (result.passed_test_cases / currentQuestion.test_cases.length) * 100
-          ),
-        },
+          score: Math.round((result.passed_test_cases / currentQuestion.test_cases.length) * 100)
+        }
       };
       setResponses(updatedResponses);
-
+      
       toast.success("Code executed successfully");
     } catch (error) {
       console.error("Error running tests:", error);
@@ -353,55 +273,44 @@ return;
 
   // Create assessment response with user info
   const createAssessmentResponse = async () => {
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-    if (!assessment) {
-      return null;
-    }
-
-=======
->>>>>>> Stashed changes
     if (!assessment) {return null;}
     
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
     try {
       // Calculate total score based on responses
       let totalPassedTestCases = 0;
       let totalTestCases = 0;
-
+      
       // Process current responses and make sure they're up to date
       const finalResponses = [...responses];
-
+      
       // Make sure the current question's code is saved in responses
       finalResponses[currentQuestionIndex] = {
         ...finalResponses[currentQuestionIndex],
         code: code,
-        language: currentLanguage.value,
+        language: currentLanguage.value
       };
-
+      
       // Calculate total score and add question titles to responses
       finalResponses.forEach((response, index) => {
         // Add test results data
         totalPassedTestCases += response.result.passed_test_cases || 0;
         totalTestCases += response.result.total_test_cases || 0;
-
+        
         // Find corresponding question and add title
-        const question = questions.find((q) => q.id === response.question_id);
+        const question = questions.find(q => q.id === response.question_id);
         if (question) {
           finalResponses[index] = {
             ...finalResponses[index],
-            question_title: question.title, // Add question title to response
+            question_title: question.title // Add question title to response
           };
         }
       });
-
+      
       // Calculate percentage score (0-100)
-      const percentageScore =
-        totalTestCases > 0
-          ? Math.round((totalPassedTestCases / totalTestCases) * 100)
-          : 0;
-
+      const percentageScore = totalTestCases > 0 
+        ? Math.round((totalPassedTestCases / totalTestCases) * 100) 
+        : 0;
+      
       const payload = {
         assessment_id: assessment.id,
         interview_id: interview.id,
@@ -411,36 +320,17 @@ return;
         score: percentageScore,
         total_score: 100, // We're using percentage, so total is always 100
         is_completed: true,
-        tab_switch_count: tabSwitchCount,
+        tab_switch_count: tabSwitchCount
       };
-
-      const response =
-        await AssessmentService.createAssessmentResponse(payload);
+      
+      const response = await AssessmentService.createAssessmentResponse(payload);
       setAssessmentResponse(response);
-<<<<<<< Updated upstream
       
 return response;
     } catch (error) {
       console.error("Error creating assessment response:", error);
       
 return null;
-=======
-<<<<<<< HEAD
-
-      return response;
-    } catch (error) {
-      console.error("Error creating assessment response:", error);
-
-      return null;
-=======
-      
-return response;
-    } catch (error) {
-      console.error("Error creating assessment response:", error);
-      
-return null;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
   };
 
@@ -449,7 +339,7 @@ return null;
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
-
+    
     try {
       setSubmitting(true);
       const response = await createAssessmentResponse();
@@ -475,13 +365,13 @@ return null;
       updatedResponses[currentQuestionIndex] = {
         ...updatedResponses[currentQuestionIndex],
         code: code,
-        language: currentLanguage.value,
+        language: currentLanguage.value
       };
       setResponses(updatedResponses);
-
+      
       // Switch to new question
       setCurrentQuestionIndex(newIndex);
-
+      
       // Load code for new question or set starter code if empty
       if (updatedResponses[newIndex] && updatedResponses[newIndex].code) {
         setCode(updatedResponses[newIndex].code);
@@ -490,78 +380,46 @@ return null;
         setCode(starterCode);
         updatedResponses[newIndex] = {
           ...updatedResponses[newIndex],
-          code: starterCode,
+          code: starterCode
         };
         setResponses(updatedResponses);
       }
     }
   };
-
+  
   // Start assessment after getting user info (if not already provided)
   const startAssessment = () => {
     // If name and email were already set from sessionStorage, just close the dialog
     if (name.trim() && email.trim()) {
       setIsInfoDialogOpen(false);
-<<<<<<< Updated upstream
       
 return;
-=======
-<<<<<<< HEAD
-
-      return;
-=======
-      
-return;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
-
+    
     // Otherwise validate the entered data
     if (!name.trim() || !email.trim()) {
       toast.error("Please enter your name and email");
-<<<<<<< Updated upstream
       
 return;
-=======
-<<<<<<< HEAD
-
-      return;
-=======
-      
-return;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
-
+    
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       toast.error("Please enter a valid email address");
-<<<<<<< Updated upstream
       
 return;
-=======
-<<<<<<< HEAD
-
-      return;
-=======
-      
-return;
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
     }
-
+    
     setIsInfoDialogOpen(false);
   };
-
+  
   // Function to handle feedback submission
-  const handleFeedbackSubmit = async (
-    formData: Omit<FeedbackData, "interview_id">
-  ) => {
+  const handleFeedbackSubmit = async (formData: Omit<FeedbackData, "interview_id">) => {
     try {
       const result = await FeedbackService.submitFeedback({
         ...formData,
-        interview_id: interview.id,
+        interview_id: interview.id
       });
 
       if (result) {
@@ -581,31 +439,21 @@ return;
   const handleApplyAICode = (generatedCode: string) => {
     // Update the local code state
     setCode(generatedCode);
-
+    
     // Make sure responses array is initialized
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-    if (responses.length === 0 || currentQuestionIndex < 0) {
-      return;
-    }
-
-=======
->>>>>>> Stashed changes
     if (responses.length === 0 || currentQuestionIndex < 0) {return;}
     
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
     // Update responses array
     const updatedResponses = [...responses];
     if (updatedResponses[currentQuestionIndex]) {
       updatedResponses[currentQuestionIndex] = {
         ...updatedResponses[currentQuestionIndex],
         code: generatedCode,
-        language: currentLanguage.value,
+        language: currentLanguage.value
       };
       setResponses(updatedResponses);
     }
-
+    
     toast.success("AI code applied to editor");
   };
 
@@ -617,10 +465,9 @@ return;
           <CheckCircleIcon className="mx-auto h-16 w-16 text-green-500 mb-4" />
           <h2 className="text-2xl font-bold mb-4">Assessment Completed!</h2>
           <p className="mb-6">
-            Thank you for completing the assessment. Your responses have been
-            recorded.
+            Thank you for completing the assessment. Your responses have been recorded.
           </p>
-
+          
           {/* Overall Score */}
           <div className="mb-6 p-4 bg-indigo-50 rounded-lg">
             <h3 className="text-xl font-semibold mb-2">Your Overall Score</h3>
@@ -628,68 +475,30 @@ return;
               {assessmentResponse?.score || 0}/100
             </div>
           </div>
-
+          
           {/* Per Question Breakdown */}
-          {assessmentResponse?.responses &&
-            assessmentResponse.responses.length > 0 && (
-              <div className="mt-6 text-left">
-                <h3 className="text-lg font-semibold mb-3 text-center">
-                  Score Breakdown
-                </h3>
-                <div className="space-y-3">
-                  {assessmentResponse.responses.map((response, index) => {
-                    const question = questions.find(
-                      (q) => q.id === response.question_id
-                    );
-                    const percentScore =
-                      response.result.total_test_cases > 0
-                        ? Math.round(
-                            (response.result.passed_test_cases /
-                              response.result.total_test_cases) *
-                              100
-                          )
-                        : 0;
-
-                    return (
-                      <div
-                        key={index}
-                        className="p-3 border rounded-md flex flex-col"
-                      >
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="font-medium">
-                            Question {index + 1}: {question?.title || "Unknown"}
-                          </span>
-                          <span
-                            className={`px-2 py-1 rounded-full text-sm font-medium ${
-                              percentScore >= 80
-                                ? "bg-green-100 text-green-800"
-                                : percentScore >= 50
-                                  ? "bg-yellow-100 text-yellow-800"
-                                  : "bg-red-100 text-red-800"
-                            }`}
-                          >
-                            {response.result.passed_test_cases}/
-                            {response.result.total_test_cases} Tests Passed
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2.5">
-                          <div
-                            className={`h-2.5 rounded-full ${
-                              percentScore >= 80
-                                ? "bg-green-600"
-                                : percentScore >= 50
-                                  ? "bg-yellow-500"
-                                  : "bg-red-600"
-                            }`}
-                            style={{ width: `${percentScore}%` }}
-                          />
-                        </div>
+          {assessmentResponse?.responses && assessmentResponse.responses.length > 0 && (
+            <div className="mt-6 text-left">
+              <h3 className="text-lg font-semibold mb-3 text-center">Score Breakdown</h3>
+              <div className="space-y-3">
+                {assessmentResponse.responses.map((response, index) => {
+                  const question = questions.find(q => q.id === response.question_id);
+                  const percentScore = response.result.total_test_cases > 0
+                    ? Math.round((response.result.passed_test_cases / response.result.total_test_cases) * 100)
+                    : 0;
+                  
+                  return (
+                    <div key={index} className="p-3 border rounded-md flex flex-col">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="font-medium">Question {index + 1}: {question?.title || 'Unknown'}</span>
+                        <span className={`px-2 py-1 rounded-full text-sm font-medium ${
+                          percentScore >= 80 ? 'bg-green-100 text-green-800' : 
+                          percentScore >= 50 ? 'bg-yellow-100 text-yellow-800' : 
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {response.result.passed_test_cases}/{response.result.total_test_cases} Tests Passed
+                        </span>
                       </div>
-<<<<<<< HEAD
-                    );
-                  })}
-                </div>
-=======
                       <div className="w-full bg-gray-200 rounded-full h-2.5">
                         <div 
                           className={`h-2.5 rounded-full ${
@@ -703,44 +512,27 @@ return;
                     </div>
                   );
                 })}
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
               </div>
-            )}
-
+            </div>
+          )}
+          
           {!isFeedbackSubmitted ? (
-<<<<<<< HEAD
-            <Button
-=======
             <Button 
-<<<<<<< Updated upstream
-=======
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
               className="mt-6 bg-indigo-600 text-white"
               onClick={() => setIsFeedbackDialogOpen(true)}
             >
               Provide Feedback
             </Button>
           ) : (
-<<<<<<< HEAD
-            <Button
-=======
             <Button 
-<<<<<<< Updated upstream
-=======
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
               className="mt-6"
               onClick={() => router.push(`/call/${interviewId}`)}
             >
               Return to Interview
             </Button>
           )}
-
-          <Dialog
-            open={isFeedbackDialogOpen}
-            onOpenChange={setIsFeedbackDialogOpen}
-          >
+          
+          <Dialog open={isFeedbackDialogOpen} onOpenChange={setIsFeedbackDialogOpen}>
             <DialogContent>
               <FeedbackForm
                 email={email}
@@ -772,7 +564,7 @@ return;
       <div className="h-[88vh] flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">No Assessment Available</h2>
-          <p>This interview doesn&apos;t have an assessment attached.</p>
+          <p>This interview doesn't have an assessment attached.</p>
         </div>
       </div>
     );
@@ -793,10 +585,7 @@ return;
           <DialogHeader>
             <DialogTitle>Start Assessment</DialogTitle>
             <DialogDescription>
-              You are about to start the coding assessment for {interview.name}.
-              You will have {assessment.time_duration} minutes to complete{" "}
-              {assessment.question_count}{" "}
-              {assessment.question_count === 1 ? "question" : "questions"}.
+              You are about to start the coding assessment for {interview.name}. You will have {assessment.time_duration} minutes to complete {assessment.question_count} {assessment.question_count === 1 ? "question" : "questions"}.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-4">
@@ -826,16 +615,8 @@ return;
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-<<<<<<< HEAD
-            <Button
-              className="w-full"
-=======
             <Button 
               className="w-full" 
-<<<<<<< Updated upstream
-=======
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
               disabled={!name || !email}
               onClick={startAssessment}
             >
@@ -858,20 +639,10 @@ return;
           <div className="flex items-center gap-4">
             <div className="flex items-center">
               <ClockIcon className="mr-2 h-5 w-5 text-red-500" />
-              <span className="font-mono font-bold">
-                {formatTime(timeRemaining)}
-              </span>
+              <span className="font-mono font-bold">{formatTime(timeRemaining)}</span>
             </div>
-<<<<<<< HEAD
-            <Button
-              variant="destructive"
-=======
             <Button 
               variant="destructive" 
-<<<<<<< Updated upstream
-=======
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
->>>>>>> Stashed changes
               disabled={submitting}
               onClick={submitAssessment}
             >
@@ -890,11 +661,11 @@ return;
           >
             <ArrowLeftIcon className="h-4 w-4 mr-1" /> Previous
           </Button>
-
+          
           <span className="mx-2">
             Question {currentQuestionIndex + 1} of {questions.length}
           </span>
-
+          
           <Button
             variant="outline"
             size="sm"
@@ -912,21 +683,15 @@ return;
               <QuestionPanel question={questions[currentQuestionIndex]} />
             )}
           </div>
-
+          
           <div className="col-span-6 flex flex-col overflow-hidden">
-            <Tabs
-              defaultValue="editor"
-              className="flex-1 flex flex-col overflow-hidden"
-            >
+            <Tabs defaultValue="editor" className="flex-1 flex flex-col overflow-hidden">
               <TabsList className="justify-start mb-2 shrink-0">
                 <TabsTrigger value="editor">Code Editor</TabsTrigger>
                 <TabsTrigger value="tests">Test Results</TabsTrigger>
               </TabsList>
-
-              <TabsContent
-                value="editor"
-                className="flex-1 overflow-hidden data-[state=active]:flex-1"
-              >
+              
+              <TabsContent value="editor" className="flex-1 overflow-hidden data-[state=active]:flex-1">
                 <EditorPanel
                   code={code}
                   language={currentLanguage}
@@ -936,22 +701,6 @@ return;
                   onRunCode={() => handleRunTests()}
                 />
               </TabsContent>
-<<<<<<< HEAD
-
-              <TabsContent
-                value="tests"
-                className="flex-1 overflow-auto data-[state=active]:flex-1"
-              >
-                {questions[currentQuestionIndex] &&
-                  responses[currentQuestionIndex] && (
-                    <TestCasePanel
-                      question={questions[currentQuestionIndex]}
-                      result={responses[currentQuestionIndex].result}
-                      isSubmitting={submitting}
-                      onRunTest={handleRunTests}
-                    />
-                  )}
-=======
               
               <TabsContent value="tests" className="flex-1 overflow-auto data-[state=active]:flex-1">
                 {questions[currentQuestionIndex] && responses[currentQuestionIndex] && (
@@ -962,14 +711,13 @@ return;
                     onRunTest={handleRunTests}
                   />
                 )}
->>>>>>> ac82acc8749d2a121575bb19c95ac73a8063e21a
               </TabsContent>
             </Tabs>
           </div>
-
+          
           <div className="col-span-3 bg-white rounded-lg border shadow overflow-hidden">
             {questions[currentQuestionIndex] && (
-              <AIChatPanel
+              <AIChatPanel 
                 question={questions[currentQuestionIndex]}
                 questionIndex={currentQuestionIndex}
                 currentCode={code}
@@ -983,4 +731,4 @@ return;
   );
 }
 
-export default Assessment;
+export default Assessment; 
